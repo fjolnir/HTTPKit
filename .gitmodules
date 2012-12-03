@@ -1,0 +1,6 @@
+[submodule "Dependencies/AsyncSocket"]
+	path = Dependencies/AsyncSocket
+	url = https://github.com/robbiehanson/CocoaAsyncSocket.git
+[submodule "Dependencies/CocoaOniguruma"]
+	path = Dependencies/CocoaOniguruma
+	url = https://github.com/psychs/cocoaoniguruma.git
