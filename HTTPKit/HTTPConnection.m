@@ -261,8 +261,8 @@
         startOfs = ofs;
 
         // Read segment contents
-        // We read the file, looking for \r\n, when one is encountered,
-        // we backtrack by the length of the boundary, and compare
+        // We read the file, looking for --; when encountered,
+        // we compare the following data with the boundary
         char *p0, *p1;
         while(ofs < bytesRead) {
             p0 = buf+ofs;
