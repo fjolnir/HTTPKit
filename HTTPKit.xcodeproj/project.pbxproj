@@ -9,8 +9,68 @@
 /* Begin PBXBuildFile section */
 		C799C7B2166A75CD00289CA9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7B1166A75CD00289CA9 /* Cocoa.framework */; };
 		C799C7BC166A75CD00289CA9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C799C7BA166A75CD00289CA9 /* InfoPlist.strings */; };
-		C799C7C0166A75CD00289CA9 /* HTTPKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C799C7BF166A75CD00289CA9 /* HTTPKit.m */; };
+		C799CA32166A772300289CA9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799CA31166A772300289CA9 /* Security.framework */; };
+		C799CA35166A774300289CA9 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA33166A774300289CA9 /* HTTP.h */; };
+		C799CA36166A774300289CA9 /* HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA34166A774300289CA9 /* HTTP.m */; };
+		C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA37166A782B00289CA9 /* HTTPConnection.h */; };
+		C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; };
+		C799CA45166B190A00289CA9 /* HTTPURLMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA43166B190A00289CA9 /* HTTPURLMatcher.h */; };
+		C799CA46166B190A00289CA9 /* HTTPURLMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA44166B190A00289CA9 /* HTTPURLMatcher.m */; };
+		C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
+		C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EA0166B6E7F00D9FABD /* mongoose.h */; };
+		C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
+		C7B39EAF166B72FC00D9FABD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EAE166B72FC00D9FABD /* main.m */; };
+		C7B39EB3166B72FC00D9FABD /* test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C7B39EB2166B72FC00D9FABD /* test.1 */; };
+		C7B39EB7166B730900D9FABD /* HTTPKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7AE166A75CD00289CA9 /* HTTPKit.framework */; };
+		C7B39EE8166BBE1600D9FABD /* OnigRegexp.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ECE166BBE1600D9FABD /* OnigRegexp.h */; };
+		C7B39EE9166BBE1600D9FABD /* OnigRegexp.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ECF166BBE1600D9FABD /* OnigRegexp.m */; };
+		C7B39EEA166BBE1600D9FABD /* OnigRegexpUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ED0166BBE1600D9FABD /* OnigRegexpUtility.h */; };
+		C7B39EEB166BBE1600D9FABD /* OnigRegexpUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED1166BBE1600D9FABD /* OnigRegexpUtility.m */; };
+		C7B39EEC166BBE1600D9FABD /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ED3166BBE1600D9FABD /* config.h */; };
+		C7B39EED166BBE1600D9FABD /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = C7B39ED4166BBE1600D9FABD /* COPYING */; };
+		C7B39EEE166BBE1600D9FABD /* ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED6166BBE1600D9FABD /* ascii.c */; };
+		C7B39EEF166BBE1600D9FABD /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED7166BBE1600D9FABD /* unicode.c */; };
+		C7B39EF0166BBE1600D9FABD /* utf16_le.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED8166BBE1600D9FABD /* utf16_le.c */; };
+		C7B39EF1166BBE1600D9FABD /* oniguruma.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ED9166BBE1600D9FABD /* oniguruma.h */; };
+		C7B39EF2166BBE1600D9FABD /* regcomp.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDA166BBE1600D9FABD /* regcomp.c */; };
+		C7B39EF3166BBE1600D9FABD /* regenc.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDB166BBE1600D9FABD /* regenc.c */; };
+		C7B39EF4166BBE1600D9FABD /* regenc.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EDC166BBE1600D9FABD /* regenc.h */; };
+		C7B39EF5166BBE1600D9FABD /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDD166BBE1600D9FABD /* regerror.c */; };
+		C7B39EF6166BBE1600D9FABD /* regexec.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDE166BBE1600D9FABD /* regexec.c */; };
+		C7B39EF7166BBE1600D9FABD /* regext.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDF166BBE1600D9FABD /* regext.c */; };
+		C7B39EF8166BBE1600D9FABD /* regint.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EE0166BBE1600D9FABD /* regint.h */; };
+		C7B39EF9166BBE1600D9FABD /* regparse.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE1166BBE1600D9FABD /* regparse.c */; };
+		C7B39EFA166BBE1600D9FABD /* regparse.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EE2166BBE1600D9FABD /* regparse.h */; };
+		C7B39EFB166BBE1600D9FABD /* regsyntax.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE3166BBE1600D9FABD /* regsyntax.c */; };
+		C7B39EFC166BBE1600D9FABD /* regtrav.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE4166BBE1600D9FABD /* regtrav.c */; };
+		C7B39EFD166BBE1600D9FABD /* regversion.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE5166BBE1600D9FABD /* regversion.c */; };
+		C7B39EFE166BBE1600D9FABD /* st.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE6166BBE1600D9FABD /* st.c */; };
+		C7B39EFF166BBE1600D9FABD /* st.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EE7166BBE1600D9FABD /* st.h */; };
+		C7B39F04166C4FCD00D9FABD /* libtranquil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C799CA47166B1AA500289CA9 /* libtranquil.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C7B39EB8166B730C00D9FABD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C799C7A4166A75CD00289CA9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C799C7AD166A75CD00289CA9;
+			remoteInfo = HTTPKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C7B39EA7166B72FC00D9FABD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				C7B39EB3166B72FC00D9FABD /* test.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C799C7AE166A75CD00289CA9 /* HTTPKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HTTPKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -21,8 +81,46 @@
 		C799C7B9166A75CD00289CA9 /* HTTPKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HTTPKit-Info.plist"; sourceTree = "<group>"; };
 		C799C7BB166A75CD00289CA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C799C7BD166A75CD00289CA9 /* HTTPKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HTTPKit-Prefix.pch"; sourceTree = "<group>"; };
-		C799C7BE166A75CD00289CA9 /* HTTPKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPKit.h; sourceTree = "<group>"; };
-		C799C7BF166A75CD00289CA9 /* HTTPKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTTPKit.m; sourceTree = "<group>"; };
+		C799CA31166A772300289CA9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		C799CA33166A774300289CA9 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTP.h; sourceTree = "<group>"; };
+		C799CA34166A774300289CA9 /* HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTP.m; sourceTree = "<group>"; };
+		C799CA37166A782B00289CA9 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
+		C799CA38166A782B00289CA9 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
+		C799CA43166B190A00289CA9 /* HTTPURLMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPURLMatcher.h; sourceTree = "<group>"; };
+		C799CA44166B190A00289CA9 /* HTTPURLMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPURLMatcher.m; sourceTree = "<group>"; };
+		C799CA47166B1AA500289CA9 /* libtranquil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtranquil.a; path = /usr/local/tranquil/lib/libtranquil.a; sourceTree = "<absolute>"; };
+		C7B39E9F166B6E7F00D9FABD /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = mongoose/mongoose.c; sourceTree = "<group>"; };
+		C7B39EA0166B6E7F00D9FABD /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mongoose.h; path = mongoose/mongoose.h; sourceTree = "<group>"; };
+		C7B39EA4166B6EE800D9FABD /* HTTPPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPPrivate.h; sourceTree = "<group>"; };
+		C7B39EA9166B72FC00D9FABD /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7B39EAB166B72FC00D9FABD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C7B39EAE166B72FC00D9FABD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C7B39EB1166B72FC00D9FABD /* test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "test-Prefix.pch"; sourceTree = "<group>"; };
+		C7B39EB2166B72FC00D9FABD /* test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = test.1; sourceTree = "<group>"; };
+		C7B39ECE166BBE1600D9FABD /* OnigRegexp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnigRegexp.h; sourceTree = "<group>"; };
+		C7B39ECF166BBE1600D9FABD /* OnigRegexp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnigRegexp.m; sourceTree = "<group>"; };
+		C7B39ED0166BBE1600D9FABD /* OnigRegexpUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnigRegexpUtility.h; sourceTree = "<group>"; };
+		C7B39ED1166BBE1600D9FABD /* OnigRegexpUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnigRegexpUtility.m; sourceTree = "<group>"; };
+		C7B39ED3166BBE1600D9FABD /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		C7B39ED4166BBE1600D9FABD /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		C7B39ED6166BBE1600D9FABD /* ascii.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ascii.c; sourceTree = "<group>"; };
+		C7B39ED7166BBE1600D9FABD /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unicode.c; sourceTree = "<group>"; };
+		C7B39ED8166BBE1600D9FABD /* utf16_le.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utf16_le.c; sourceTree = "<group>"; };
+		C7B39ED9166BBE1600D9FABD /* oniguruma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oniguruma.h; sourceTree = "<group>"; };
+		C7B39EDA166BBE1600D9FABD /* regcomp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regcomp.c; sourceTree = "<group>"; };
+		C7B39EDB166BBE1600D9FABD /* regenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regenc.c; sourceTree = "<group>"; };
+		C7B39EDC166BBE1600D9FABD /* regenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regenc.h; sourceTree = "<group>"; };
+		C7B39EDD166BBE1600D9FABD /* regerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regerror.c; sourceTree = "<group>"; };
+		C7B39EDE166BBE1600D9FABD /* regexec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regexec.c; sourceTree = "<group>"; };
+		C7B39EDF166BBE1600D9FABD /* regext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regext.c; sourceTree = "<group>"; };
+		C7B39EE0166BBE1600D9FABD /* regint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regint.h; sourceTree = "<group>"; };
+		C7B39EE1166BBE1600D9FABD /* regparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regparse.c; sourceTree = "<group>"; };
+		C7B39EE2166BBE1600D9FABD /* regparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regparse.h; sourceTree = "<group>"; };
+		C7B39EE3166BBE1600D9FABD /* regsyntax.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regsyntax.c; sourceTree = "<group>"; };
+		C7B39EE4166BBE1600D9FABD /* regtrav.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regtrav.c; sourceTree = "<group>"; };
+		C7B39EE5166BBE1600D9FABD /* regversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regversion.c; sourceTree = "<group>"; };
+		C7B39EE6166BBE1600D9FABD /* st.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = st.c; sourceTree = "<group>"; };
+		C7B39EE7166BBE1600D9FABD /* st.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = st.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,7 +128,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C799CA32166A772300289CA9 /* Security.framework in Frameworks */,
 				C799C7B2166A75CD00289CA9 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7B39EA6166B72FC00D9FABD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7B39F04166C4FCD00D9FABD /* libtranquil.a in Frameworks */,
+				C7B39EB7166B730900D9FABD /* HTTPKit.framework in Frameworks */,
+				C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,7 +149,9 @@
 		C799C7A2166A75CD00289CA9 = {
 			isa = PBXGroup;
 			children = (
+				C799C7C6166A766A00289CA9 /* Dependencies */,
 				C799C7B7166A75CD00289CA9 /* HTTPKit */,
+				C7B39EAD166B72FC00D9FABD /* test */,
 				C799C7B0166A75CD00289CA9 /* Frameworks */,
 				C799C7AF166A75CD00289CA9 /* Products */,
 			);
@@ -50,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				C799C7AE166A75CD00289CA9 /* HTTPKit.framework */,
+				C7B39EA9166B72FC00D9FABD /* test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,7 +169,10 @@
 		C799C7B0166A75CD00289CA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C799CA47166B1AA500289CA9 /* libtranquil.a */,
+				C799CA31166A772300289CA9 /* Security.framework */,
 				C799C7B1166A75CD00289CA9 /* Cocoa.framework */,
+				C7B39EAB166B72FC00D9FABD /* Foundation.framework */,
 				C799C7B3166A75CD00289CA9 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -76,8 +191,13 @@
 		C799C7B7166A75CD00289CA9 /* HTTPKit */ = {
 			isa = PBXGroup;
 			children = (
-				C799C7BE166A75CD00289CA9 /* HTTPKit.h */,
-				C799C7BF166A75CD00289CA9 /* HTTPKit.m */,
+				C799CA33166A774300289CA9 /* HTTP.h */,
+				C799CA34166A774300289CA9 /* HTTP.m */,
+				C7B39EA4166B6EE800D9FABD /* HTTPPrivate.h */,
+				C799CA43166B190A00289CA9 /* HTTPURLMatcher.h */,
+				C799CA44166B190A00289CA9 /* HTTPURLMatcher.m */,
+				C799CA37166A782B00289CA9 /* HTTPConnection.h */,
+				C799CA38166A782B00289CA9 /* HTTPConnection.m */,
 				C799C7B8166A75CD00289CA9 /* Supporting Files */,
 			);
 			path = HTTPKit;
@@ -93,6 +213,82 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C799C7C6166A766A00289CA9 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C7B39ECD166BBE1600D9FABD /* Oniguruma */,
+				C7B39EA0166B6E7F00D9FABD /* mongoose.h */,
+				C7B39E9F166B6E7F00D9FABD /* mongoose.c */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		C7B39EAD166B72FC00D9FABD /* test */ = {
+			isa = PBXGroup;
+			children = (
+				C7B39EAE166B72FC00D9FABD /* main.m */,
+				C7B39EB2166B72FC00D9FABD /* test.1 */,
+				C7B39EB0166B72FC00D9FABD /* Supporting Files */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		C7B39EB0166B72FC00D9FABD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C7B39EB1166B72FC00D9FABD /* test-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C7B39ECD166BBE1600D9FABD /* Oniguruma */ = {
+			isa = PBXGroup;
+			children = (
+				C7B39ECE166BBE1600D9FABD /* OnigRegexp.h */,
+				C7B39ECF166BBE1600D9FABD /* OnigRegexp.m */,
+				C7B39ED0166BBE1600D9FABD /* OnigRegexpUtility.h */,
+				C7B39ED1166BBE1600D9FABD /* OnigRegexpUtility.m */,
+				C7B39ED2166BBE1600D9FABD /* oniguruma */,
+			);
+			name = Oniguruma;
+			path = CocoaOniguruma/framework/core;
+			sourceTree = "<group>";
+		};
+		C7B39ED2166BBE1600D9FABD /* oniguruma */ = {
+			isa = PBXGroup;
+			children = (
+				C7B39ED3166BBE1600D9FABD /* config.h */,
+				C7B39ED4166BBE1600D9FABD /* COPYING */,
+				C7B39ED5166BBE1600D9FABD /* enc */,
+				C7B39ED9166BBE1600D9FABD /* oniguruma.h */,
+				C7B39EDA166BBE1600D9FABD /* regcomp.c */,
+				C7B39EDB166BBE1600D9FABD /* regenc.c */,
+				C7B39EDC166BBE1600D9FABD /* regenc.h */,
+				C7B39EDD166BBE1600D9FABD /* regerror.c */,
+				C7B39EDE166BBE1600D9FABD /* regexec.c */,
+				C7B39EDF166BBE1600D9FABD /* regext.c */,
+				C7B39EE0166BBE1600D9FABD /* regint.h */,
+				C7B39EE1166BBE1600D9FABD /* regparse.c */,
+				C7B39EE2166BBE1600D9FABD /* regparse.h */,
+				C7B39EE3166BBE1600D9FABD /* regsyntax.c */,
+				C7B39EE4166BBE1600D9FABD /* regtrav.c */,
+				C7B39EE5166BBE1600D9FABD /* regversion.c */,
+				C7B39EE6166BBE1600D9FABD /* st.c */,
+				C7B39EE7166BBE1600D9FABD /* st.h */,
+			);
+			path = oniguruma;
+			sourceTree = "<group>";
+		};
+		C7B39ED5166BBE1600D9FABD /* enc */ = {
+			isa = PBXGroup;
+			children = (
+				C7B39ED6166BBE1600D9FABD /* ascii.c */,
+				C7B39ED7166BBE1600D9FABD /* unicode.c */,
+				C7B39ED8166BBE1600D9FABD /* utf16_le.c */,
+			);
+			path = enc;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -100,6 +296,18 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C799CA35166A774300289CA9 /* HTTP.h in Headers */,
+				C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */,
+				C799CA45166B190A00289CA9 /* HTTPURLMatcher.h in Headers */,
+				C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */,
+				C7B39EE8166BBE1600D9FABD /* OnigRegexp.h in Headers */,
+				C7B39EEA166BBE1600D9FABD /* OnigRegexpUtility.h in Headers */,
+				C7B39EEC166BBE1600D9FABD /* config.h in Headers */,
+				C7B39EF1166BBE1600D9FABD /* oniguruma.h in Headers */,
+				C7B39EF4166BBE1600D9FABD /* regenc.h in Headers */,
+				C7B39EF8166BBE1600D9FABD /* regint.h in Headers */,
+				C7B39EFA166BBE1600D9FABD /* regparse.h in Headers */,
+				C7B39EFF166BBE1600D9FABD /* st.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +332,24 @@
 			productReference = C799C7AE166A75CD00289CA9 /* HTTPKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		C7B39EA8166B72FC00D9FABD /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7B39EB4166B72FC00D9FABD /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				C7B39EA5166B72FC00D9FABD /* Sources */,
+				C7B39EA6166B72FC00D9FABD /* Frameworks */,
+				C7B39EA7166B72FC00D9FABD /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7B39EB9166B730C00D9FABD /* PBXTargetDependency */,
+			);
+			name = test;
+			productName = test;
+			productReference = C7B39EA9166B72FC00D9FABD /* test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -139,6 +365,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = C799C7A2166A75CD00289CA9;
 			productRefGroup = C799C7AF166A75CD00289CA9 /* Products */;
@@ -146,6 +373,7 @@
 			projectRoot = "";
 			targets = (
 				C799C7AD166A75CD00289CA9 /* HTTPKit */,
+				C7B39EA8166B72FC00D9FABD /* test */,
 			);
 		};
 /* End PBXProject section */
@@ -156,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C799C7BC166A75CD00289CA9 /* InfoPlist.strings in Resources */,
+				C7B39EED166BBE1600D9FABD /* COPYING in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,11 +395,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C799C7C0166A75CD00289CA9 /* HTTPKit.m in Sources */,
+				C799CA36166A774300289CA9 /* HTTP.m in Sources */,
+				C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */,
+				C799CA46166B190A00289CA9 /* HTTPURLMatcher.m in Sources */,
+				C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */,
+				C7B39EE9166BBE1600D9FABD /* OnigRegexp.m in Sources */,
+				C7B39EEB166BBE1600D9FABD /* OnigRegexpUtility.m in Sources */,
+				C7B39EEE166BBE1600D9FABD /* ascii.c in Sources */,
+				C7B39EEF166BBE1600D9FABD /* unicode.c in Sources */,
+				C7B39EF0166BBE1600D9FABD /* utf16_le.c in Sources */,
+				C7B39EF2166BBE1600D9FABD /* regcomp.c in Sources */,
+				C7B39EF3166BBE1600D9FABD /* regenc.c in Sources */,
+				C7B39EF5166BBE1600D9FABD /* regerror.c in Sources */,
+				C7B39EF6166BBE1600D9FABD /* regexec.c in Sources */,
+				C7B39EF7166BBE1600D9FABD /* regext.c in Sources */,
+				C7B39EF9166BBE1600D9FABD /* regparse.c in Sources */,
+				C7B39EFB166BBE1600D9FABD /* regsyntax.c in Sources */,
+				C7B39EFC166BBE1600D9FABD /* regtrav.c in Sources */,
+				C7B39EFD166BBE1600D9FABD /* regversion.c in Sources */,
+				C7B39EFE166BBE1600D9FABD /* st.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7B39EA5166B72FC00D9FABD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7B39EAF166B72FC00D9FABD /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C7B39EB9166B730C00D9FABD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C799C7AD166A75CD00289CA9 /* HTTPKit */;
+			targetProxy = C7B39EB8166B730C00D9FABD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C799C7BA166A75CD00289CA9 /* InfoPlist.strings */ = {
@@ -246,7 +509,15 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HTTPKit/HTTPKit-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/local/tranquil/include;
 				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+					/usr/local/tranquil/lib,
+					/usr/local/tranquil/gmp/lib,
+				);
+				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -261,9 +532,47 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HTTPKit/HTTPKit-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/local/tranquil/include;
 				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+					/usr/local/tranquil/lib,
+					/usr/local/tranquil/gmp/lib,
+				);
+				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		C7B39EB5166B72FC00D9FABD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "test/test-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/tranquil/lib,
+					/usr/local/tranquil/gmp/lib,
+				);
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C7B39EB6166B72FC00D9FABD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "test/test-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/tranquil/lib,
+					/usr/local/tranquil/gmp/lib,
+				);
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -284,6 +593,15 @@
 			buildConfigurations = (
 				C799C7C4166A75CD00289CA9 /* Debug */,
 				C799C7C5166A75CD00289CA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7B39EB4166B72FC00D9FABD /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7B39EB5166B72FC00D9FABD /* Debug */,
+				C7B39EB6166B72FC00D9FABD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
