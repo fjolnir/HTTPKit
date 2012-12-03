@@ -28,6 +28,8 @@ typedef enum {
                to:(NSString *)aValue
    withAttributes:(NSDictionary *)aAttrs;
 - (void)setCookie:(NSString *)aName
+               to:(NSString *)aValue;
+- (void)setCookie:(NSString *)aName
                to:(NSString *)aValue
           expires:(NSDate *)aExpiryDate;
 

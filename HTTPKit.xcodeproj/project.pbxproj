@@ -7,15 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C77D10A5166D0453005B809C /* HTTPKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C77D10A4166D0453005B809C /* HTTPKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799C7B2166A75CD00289CA9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7B1166A75CD00289CA9 /* Cocoa.framework */; };
 		C799C7BC166A75CD00289CA9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C799C7BA166A75CD00289CA9 /* InfoPlist.strings */; };
 		C799CA32166A772300289CA9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799CA31166A772300289CA9 /* Security.framework */; };
-		C799CA35166A774300289CA9 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA33166A774300289CA9 /* HTTP.h */; };
+		C799CA35166A774300289CA9 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA33166A774300289CA9 /* HTTP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799CA36166A774300289CA9 /* HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA34166A774300289CA9 /* HTTP.m */; };
-		C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA37166A782B00289CA9 /* HTTPConnection.h */; };
+		C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA37166A782B00289CA9 /* HTTPConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; };
-		C799CA45166B190A00289CA9 /* HTTPURLMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA43166B190A00289CA9 /* HTTPURLMatcher.h */; };
-		C799CA46166B190A00289CA9 /* HTTPURLMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA44166B190A00289CA9 /* HTTPURLMatcher.m */; };
 		C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
 		C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EA0166B6E7F00D9FABD /* mongoose.h */; };
 		C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
@@ -73,6 +72,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C77D10A4166D0453005B809C /* HTTPKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPKit.h; sourceTree = "<group>"; };
 		C799C7AE166A75CD00289CA9 /* HTTPKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HTTPKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C799C7B1166A75CD00289CA9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C799C7B4166A75CD00289CA9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -86,8 +86,6 @@
 		C799CA34166A774300289CA9 /* HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTP.m; sourceTree = "<group>"; };
 		C799CA37166A782B00289CA9 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
 		C799CA38166A782B00289CA9 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
-		C799CA43166B190A00289CA9 /* HTTPURLMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPURLMatcher.h; sourceTree = "<group>"; };
-		C799CA44166B190A00289CA9 /* HTTPURLMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPURLMatcher.m; sourceTree = "<group>"; };
 		C799CA47166B1AA500289CA9 /* libtranquil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtranquil.a; path = /usr/local/tranquil/lib/libtranquil.a; sourceTree = "<absolute>"; };
 		C7B39E9F166B6E7F00D9FABD /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = mongoose/mongoose.c; sourceTree = "<group>"; };
 		C7B39EA0166B6E7F00D9FABD /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mongoose.h; path = mongoose/mongoose.h; sourceTree = "<group>"; };
@@ -191,11 +189,10 @@
 		C799C7B7166A75CD00289CA9 /* HTTPKit */ = {
 			isa = PBXGroup;
 			children = (
+				C77D10A4166D0453005B809C /* HTTPKit.h */,
 				C799CA33166A774300289CA9 /* HTTP.h */,
 				C799CA34166A774300289CA9 /* HTTP.m */,
 				C7B39EA4166B6EE800D9FABD /* HTTPPrivate.h */,
-				C799CA43166B190A00289CA9 /* HTTPURLMatcher.h */,
-				C799CA44166B190A00289CA9 /* HTTPURLMatcher.m */,
 				C799CA37166A782B00289CA9 /* HTTPConnection.h */,
 				C799CA38166A782B00289CA9 /* HTTPConnection.m */,
 				C799C7B8166A75CD00289CA9 /* Supporting Files */,
@@ -298,7 +295,7 @@
 			files = (
 				C799CA35166A774300289CA9 /* HTTP.h in Headers */,
 				C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */,
-				C799CA45166B190A00289CA9 /* HTTPURLMatcher.h in Headers */,
+				C77D10A5166D0453005B809C /* HTTPKit.h in Headers */,
 				C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */,
 				C7B39EE8166BBE1600D9FABD /* OnigRegexp.h in Headers */,
 				C7B39EEA166BBE1600D9FABD /* OnigRegexpUtility.h in Headers */,
@@ -397,7 +394,6 @@
 			files = (
 				C799CA36166A774300289CA9 /* HTTP.m in Sources */,
 				C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */,
-				C799CA46166B190A00289CA9 /* HTTPURLMatcher.m in Sources */,
 				C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */,
 				C7B39EE9166BBE1600D9FABD /* OnigRegexp.m in Sources */,
 				C7B39EEB166BBE1600D9FABD /* OnigRegexpUtility.m in Sources */,
@@ -604,6 +600,7 @@
 				C7B39EB6166B72FC00D9FABD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

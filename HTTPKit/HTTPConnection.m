@@ -120,6 +120,12 @@
 
 - (void)setCookie:(NSString *)aName
                to:(NSString *)aValue
+{
+    [self setCookie:aName to:aValue withAttributes:nil];
+}
+
+- (void)setCookie:(NSString *)aName
+               to:(NSString *)aValue
    withAttributes:(NSDictionary *)aAttrs
 {
     NSParameterAssert(aName && aValue);
