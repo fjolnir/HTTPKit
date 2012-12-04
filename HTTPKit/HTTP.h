@@ -15,4 +15,5 @@ typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 - (void)handlePOST:(id)aRoute   with:(id)aHandler;
 - (void)handlePUT:(id)aRoute    with:(id)aHandler;
 - (void)handleDELETE:(id)aRoute with:(id)aHandler;
+- (void)handleWebSocket:(id)aHandler;
 @end

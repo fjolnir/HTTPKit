@@ -15,9 +15,12 @@ typedef enum {
 @property(readwrite, weak) HTTP *server;
 @property(readonly, strong) NSDictionary *headers;
 @property(readonly, strong) NSDictionary *requestMultipartSegments;
-@property(readonly, strong) NSData *requestBody;
+@property(readonly, strong, nonatomic) NSData *requestBodyData;
+@property(readonly, strong) NSString *requestBody, *httpAuthUser;
 @property(readonly, strong) NSData *queryString;
-@property(readonly) long requestLength;
+@property(readonly, strong) NSURL *url;
+@property(readonly) long requestLength, remoteIp, remotePort;
+@property(readonly) BOOL requestIsMultipart, isWebSocket, isOpen, isSSL;
 
 - (NSNumber *)writeData:(NSData *)aData;
 - (NSNumber *)writeString:(NSString *)aString;
@@ -36,7 +39,8 @@ typedef enum {
 - (NSString *)requestBodyVar:(NSString *)aName;
 - (NSString *)requestQueryVar:(NSString *)aName;
 
-- (BOOL)requestIsMultipart;
 - (NSString *)requestHeader:(NSString *)aName;
 - (void)setResponseHeader:(NSString *)aHeader to:(NSString *)aValue;
+
+- (void)close;
 @end

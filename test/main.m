@@ -22,6 +22,16 @@ int main(int argc, const char * argv[])
         [http listenOnPort:8081 onError:^(id reason) {
             NSLog(@"Error: %@", reason);
         }];
+        [http handleWebSocket:^id (HTTPConnection *connection) {
+            if(!connection.isOpen) {
+                NSLog(@"Socket closed");
+                return nil;
+            }
+            NSLog(@"WebSocket message '%@' from %ld", connection.requestBody, connection.remoteIp);
+            if([connection.requestBody isEqual:@"exit"])
+                [connection close];
+            return [connection.requestBody capitalizedString];
+        }];
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate distantFuture]];
     }
     return 0;

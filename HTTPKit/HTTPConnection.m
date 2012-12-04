@@ -5,7 +5,7 @@
 
 @interface HTTPConnection () {
     NSMutableData *_responseData;
-    NSData *_requestBody;
+    NSData *_requestBodyData;
     long _requestLength;
     NSMutableDictionary *_cookiesToWrite, *_responseHeaders, *_requestMultipartSegments;
 }
@@ -33,6 +33,7 @@
         return nil;
     _status = 200;
     _reason = @"OK";
+    _isOpen = YES;
     _responseData = [NSMutableData new];
     _requestLength = -1;
     _cookiesToWrite = [NSMutableDictionary new];
@@ -65,8 +66,26 @@
     return header;
 }
 
+- (void *)_writeWebSocketReply
+{
+    if(!_isWebSocket)
+        return "";
+    unsigned long len = (int)[_responseData length];
+    if(len > 125) {
+        fprintf(stderr, "WebSocket reply too long, closing socket\n");
+        return "";
+    }
+    char buf[len + 2];
+    buf[0] = 0x81; // text, FIN set
+    buf[1] = len;
+    [_responseData getBytes:buf+2];
+    mg_write(_mgConnection, buf, len+2);
+    return NULL;
+}
 - (void *)_writeResponse
 {
+    if(_isWebSocket)
+        return NULL;
     NSMutableString *headerStr = [NSMutableString stringWithFormat:
                                   @"HTTP/1.1 %d %@\r\n"
                                   @"Content-Length: %ld\r\n",
@@ -89,6 +108,7 @@
 
 - (NSNumber *)writeData:(NSData *)aData
 {
+    NSAssert(_isOpen, @"Tried to write data to a closed connection");
     [_responseData appendData:aData];
     return @([aData length]);
 //    int bytesWritten = mg_write(_mgConnection, [aData bytes], [data length]);
@@ -112,6 +132,7 @@
 
 - (NSString *)getCookie:(NSString *)aName
 {
+    NSAssert(!_isWebSocket, @"WebSockets don't support cookies");
     char buf[1024];
     if(mg_get_cookie(_mgConnection, [aName UTF8String], buf, 1024) > 0)
         return [NSString stringWithUTF8String:buf];
@@ -128,6 +149,7 @@
                to:(NSString *)aValue
    withAttributes:(NSDictionary *)aAttrs
 {
+    NSAssert(!_isWebSocket, @"WebSockets don't support cookies");
     NSParameterAssert(aName && aValue);
     _cookiesToWrite[aName] = @{ @"value": aValue, @"attributes": aAttrs ?: @{} };
 }
@@ -171,18 +193,73 @@
     return NO;
 }
 
-- (NSData *)requestBody
+- (NSString *)requestBody
 {
-    if(!_requestBody) {
-        long len = self.requestLength;
-        if([self requestIsMultipart] || len == -1)
+    NSData *body = self.requestBodyData;
+    if([body length])
+        return [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
+    return nil;
+}
+
+- (NSData *)_webSocketMessageBody
+{
+    if(!_isWebSocket)
+        return nil;
+    unsigned char buf[200];
+    int bytesRead, len, msgLen, maskLen;
+    len = 0;
+    for(;;) {
+        if((bytesRead = mg_read(_mgConnection, buf, sizeof(buf)-len)) <= 0)
             return nil;
 
-        NSMutableData *data = [NSMutableData dataWithLength:len];
-        mg_read(_mgConnection, [data mutableBytes], [data length]);
-        _requestBody = data;
+        len += bytesRead;
+        if(len >= 2) {
+            msgLen  = buf[1] & 127;
+            maskLen = (buf[1] & 128) ? 4 : 0;
+            if(msgLen > 125)
+                return nil;
+            if(len >= 2 + maskLen + msgLen)
+                break; // Entire message read
+        }
     }
-    return _requestBody;
+    // Decode the message
+    char decoded[msgLen];
+    for(int i = 0; i < msgLen; ++i) {
+        int xor = maskLen == 0 ?: buf[2 + (i %4)];
+        decoded[i] = buf[i+2+maskLen] ^ xor;
+    }
+    return [NSData dataWithBytes:decoded length:msgLen];
+
+}
+- (NSData *)requestBodyData
+{
+    if(!_requestBodyData) {
+        if(self.requestIsMultipart)
+            return nil;
+        else if(_isWebSocket)
+            _requestBodyData = [self _webSocketMessageBody];
+        else {
+            long len = self.requestLength;
+            if(len == 0)
+                return nil;
+            else if(len > 0) {
+                NSMutableData *data = [NSMutableData dataWithLength:len];
+                mg_read(_mgConnection, [data mutableBytes], [data length]);
+                _requestBodyData = data;
+            } else {
+                NSMutableData *data = [NSMutableData data];
+                void *buf = malloc(1024);
+                int bytesRead;
+                while((bytesRead = mg_read(_mgConnection, buf, 1024))) {
+                    [data appendBytes:buf length:bytesRead];
+                }
+                free(buf);
+                if([data length])
+                    _requestBodyData = data;
+            }
+        }
+    }
+    return _requestBodyData;
 }
 
 - (NSDictionary *)requestMultipartSegments
@@ -318,7 +395,7 @@ doneProcessingSegments:
 
 - (NSString *)requestBodyVar:(NSString *)aName
 {
-    NSData *body = self.requestBody;
+    NSData *body = self.requestBodyData;
     return [self _getVar:aName inBuffer:[body bytes] length:[body length]];
 }
 
@@ -347,5 +424,37 @@ doneProcessingSegments:
     if((h = mg_get_header(_mgConnection, [aName UTF8String])))
         return [NSString stringWithUTF8String:h];
     return nil;
+}
+
+- (void)close
+{
+    _isOpen = NO;
+}
+
+- (NSString *)httpAuthUser
+{
+    if(_mgRequest->remote_user)
+        return [NSString stringWithUTF8String:_mgRequest->remote_user];
+    return nil;
+}
+- (NSURL *)url
+{
+    if(_mgRequest->uri) {
+        NSString *str = [NSString stringWithUTF8String:_mgRequest->uri];
+        return str ? [NSURL URLWithString:str] : nil;
+    }
+    return nil;
+}
+- (long)remoteIp
+{
+    return _mgRequest->remote_ip;
+}
+- (long)remotePort
+{
+    return _mgRequest->remote_port;
+}
+- (BOOL)isSSL
+{
+    return _mgRequest->is_ssl;
 }
 @end

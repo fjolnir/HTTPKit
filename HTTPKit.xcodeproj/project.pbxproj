@@ -505,6 +505,10 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HTTPKit/HTTPKit-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_WEBSOCKET,
+					NO_CGI,
+				);
 				HEADER_SEARCH_PATHS = /usr/local/tranquil/include;
 				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -528,6 +532,10 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HTTPKit/HTTPKit-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_WEBSOCKET,
+					NO_CGI,
+				);
 				HEADER_SEARCH_PATHS = /usr/local/tranquil/include;
 				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (

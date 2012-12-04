@@ -31,6 +31,7 @@ static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
     struct mg_context *_ctx;
     @public
     NSMutableArray *_GETHandlers, *_POSTHandlers, *_PUTHandlers, *_DELETEHandlers;
+    HTTPHandlerBlock _webSocketHandler;
 }
 @end
 
@@ -74,10 +75,39 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
                 [errConn writeFormat:@"Exception: %@", [e reason]];
                 return [errConn _writeResponse];
             }
-            case MG_WEBSOCKET_READY:
+            case MG_WEBSOCKET_CONNECT:
+                if(self->_webSocketHandler)
+                    return NULL;
+                return ""; // Reject
+            case MG_WEBSOCKET_READY: {
+                unsigned char buf[40];
+                buf[0] = 0x81;
+                buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "server ready");
+                mg_write(aConnection, buf, 2 + buf[1]);
+                return ""; // Return value ignored
+            }
             case MG_WEBSOCKET_MESSAGE:
+                connection.isWebSocket = YES;
+                if(self->_webSocketHandler) {
+                    id result;
+                    if((result = self->_webSocketHandler(connection))) {
+                        if(!connection.isOpen)
+                            return ""; // Close
+                        if(result) {
+                            [connection writeString:[result description]];
+                            return [connection _writeWebSocketReply];
+                        }
+                        return NULL;
+                    }
+                    return "";
+                }
+                break;
             case MG_WEBSOCKET_CLOSE:
-                return NULL;
+                connection.isWebSocket = YES;
+                connection.isOpen      = NO;
+                if(self->_webSocketHandler)
+                    self->_webSocketHandler(connection);
+                return ""; // Return value ignored
             case MG_HTTP_ERROR: {
     //            long replyStatus = (intptr_t)requestInfo->ev_data;
             } break;
@@ -168,5 +198,8 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
 {
     [_DELETEHandlers addObject:[self _handlerFromObject:aRoute handlerBlock:aHandler]];
 }
-
+- (void)handleWebSocket:(id)aHandler
+{
+    _webSocketHandler = [aHandler copy];
+}
 @end
