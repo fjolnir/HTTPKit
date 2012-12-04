@@ -3,6 +3,8 @@
 #import "HTTP.h"
 #import "OnigRegexp.h"
 
+#define _ntohll(y) (((uint64_t)ntohl(y)) << 32 | ntohl(y>>32))
+
 @interface HTTPConnection () {
     NSMutableData *_responseData;
     NSData *_requestBodyData;
@@ -205,30 +207,45 @@
 {
     if(!_isWebSocket)
         return nil;
-    unsigned char buf[200];
-    int bytesRead, len, msgLen, maskLen;
-    len = 0;
-    for(;;) {
-        if((bytesRead = mg_read(_mgConnection, buf, sizeof(buf)-len)) <= 0)
+    BOOL masked;
+    uint64_t msgLen;
+    // Discover the message length and allocate a properly sized buffer
+    unsigned char buf[4], mask[4];
+    if(mg_read(_mgConnection, buf, 2) != 2)
+        return nil;
+//    BOOL fin = buf[0] & 128;
+    masked = buf[1] & 128;
+    msgLen = buf[1] & 127;
+    if(msgLen == 126) { // length is a 16bit unsigned next up in the buffer
+        if(mg_read(_mgConnection, buf, 2) != 2)
             return nil;
+        msgLen = ntohs(*(uint16_t*)&buf[0]);
+    } else if(msgLen == 127) { // length is a 64bit unsigned
+        if(mg_read(_mgConnection, buf, 4) != 4)
+            return nil;
+        msgLen = _ntohll(*(uint64_t*)buf);
+    }
+    if(masked) {
+        if(mg_read(_mgConnection, mask, 4) != 4)
+            return nil;
+    }
 
-        len += bytesRead;
-        if(len >= 2) {
-            msgLen  = buf[1] & 127;
-            maskLen = (buf[1] & 128) ? 4 : 0;
-            if(msgLen > 125)
-                return nil;
-            if(len >= 2 + maskLen + msgLen)
-                break; // Entire message read
-        }
+    char *payload = malloc(msgLen);
+    int64_t len;
+    uint64_t bytesRead = 0;
+    while((bytesRead < msgLen) &&
+          (len = mg_read(_mgConnection, payload+bytesRead, msgLen-bytesRead))) {
+        bytesRead += len;
     }
-    // Decode the message
-    char decoded[msgLen];
-    for(int i = 0; i < msgLen; ++i) {
-        int xor = maskLen == 0 ?: buf[2 + (i %4)];
-        decoded[i] = buf[i+2+maskLen] ^ xor;
+    if(len < 0)
+        return nil;
+    // Unmask the payload if needed
+    for(int i = 0; masked && i < msgLen; ++i) {
+        payload[i] ^= mask[i % 4];
     }
-    return [NSData dataWithBytes:decoded length:msgLen];
+    return [NSData dataWithBytesNoCopy:payload
+                                length:msgLen
+                          freeWhenDone:YES];
 
 }
 - (NSData *)requestBodyData
