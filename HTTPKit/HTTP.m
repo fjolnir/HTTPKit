@@ -53,56 +53,65 @@ static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
 
 static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConnection)
 {
-    @autoreleasepool {
-        const struct mg_request_info *requestInfo = mg_get_request_info(aConnection);
-        HTTP *self = (__bridge id)requestInfo->user_data;
-        HTTPConnection *connection = [HTTPConnection withMGConnection:aConnection
-                                                               server:self];
+    // This macro is to avoid allocating a connection when the event doesn't require it
+    #define InitReqInfo() \
+        const struct mg_request_info *requestInfo = mg_get_request_info(aConnection); \
+        HTTP *self = (__bridge id)requestInfo->user_data
+    #define InitConnection() \
+        HTTPConnection *connection = [HTTPConnection withMGConnection:aConnection \
+                                                               server:self]
         switch(aEvent) {
-            case MG_NEW_REQUEST: @try {
-                const char *method = requestInfo->request_method;
-                NSString *url = [NSString stringWithUTF8String:requestInfo->uri];
-                id result = HTTPSentinel;
-                NSArray *handlers;
-                if(strcmp(method, "GET") == 0)
-                    handlers = self->_GETHandlers;
-                else if(strcmp(method, "POST") == 0)
-                    handlers = self->_POSTHandlers;
-                else if(strcmp(method, "PUT") == 0)
-                    handlers = self->_PUTHandlers;
-                else if(strcmp(method, "DELETE") == 0)
-                    handlers = self->_DELETEHandlers;
-                else
-                    [NSException raise:NSInternalInconsistencyException
-                                format:@"Unhandled request type: '%s'", method];
-                for(id<HTTPHandler> handler in handlers) {
-                    if((result = [handler handleConnection:connection
-                                                       URL:url]) != HTTPSentinel) {
-                        [connection writeString:[result description]];
-                        break;
+            case MG_NEW_REQUEST: @autoreleasepool {
+                InitReqInfo();
+                InitConnection();
+                @try {
+                    const char *method = requestInfo->request_method;
+                    NSString *url = [NSString stringWithUTF8String:requestInfo->uri];
+                    id result = HTTPSentinel;
+                    NSArray *handlers;
+                    if(strcmp(method, "GET") == 0)
+                        handlers = self->_GETHandlers;
+                    else if(strcmp(method, "POST") == 0)
+                        handlers = self->_POSTHandlers;
+                    else if(strcmp(method, "PUT") == 0)
+                        handlers = self->_PUTHandlers;
+                    else if(strcmp(method, "DELETE") == 0)
+                        handlers = self->_DELETEHandlers;
+                    else
+                        [NSException raise:NSInternalInconsistencyException
+                                    format:@"Unhandled request type: '%s'", method];
+                    for(id<HTTPHandler> handler in handlers) {
+                        if((result = [handler handleConnection:connection
+                                                           URL:url]) != HTTPSentinel) {
+                            [connection writeString:[result description]];
+                            break;
+                        }
                     }
+                    return result == HTTPSentinel ? NULL : [connection _writeResponse];
+                } @catch(NSException *e) {
+                    HTTPConnection *errConn = [HTTPConnection withMGConnection:aConnection
+                                                                        server:self];
+                    errConn.status = 500;
+                    errConn.reason = @"Internal Server Error";
+                    [errConn writeFormat:@"Exception: %@", [e reason]];
+                    return [errConn _writeResponse];
                 }
-                return result == HTTPSentinel ? NULL : [connection _writeResponse];
-            } @catch(NSException *e) {
-                HTTPConnection *errConn = [HTTPConnection withMGConnection:aConnection
-                                                                    server:self];
-                errConn.status = 500;
-                errConn.reason = @"Internal Server Error";
-                [errConn writeFormat:@"Exception: %@", [e reason]];
-                return [errConn _writeResponse];
             }
-            case MG_WEBSOCKET_CONNECT:
+            case MG_WEBSOCKET_CONNECT: {
+                InitReqInfo();
                 if(self->_webSocketHandler)
                     return NULL;
                 return ""; // Reject
-            case MG_WEBSOCKET_READY: {
+            } case MG_WEBSOCKET_READY: {
                 unsigned char buf[40];
                 buf[0] = 0x81;
                 buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "server ready");
                 mg_write(aConnection, buf, 2 + buf[1]);
                 return ""; // Return value ignored
             }
-            case MG_WEBSOCKET_MESSAGE:
+            case MG_WEBSOCKET_MESSAGE: @autoreleasepool {
+                InitReqInfo();
+                InitConnection();
                 connection.isWebSocket = YES;
                 if(self->_webSocketHandler) {
                     id result;
@@ -118,19 +127,18 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
                     return "";
                 }
                 break;
-            case MG_WEBSOCKET_CLOSE:
+            } case MG_WEBSOCKET_CLOSE: @autoreleasepool {
+                InitReqInfo();
+                InitConnection();
                 connection.isWebSocket = YES;
                 connection.isOpen      = NO;
                 if(self->_webSocketHandler)
                     self->_webSocketHandler(connection);
                 return ""; // Return value ignored
-            case MG_HTTP_ERROR: {
-    //            long replyStatus = (intptr_t)requestInfo->ev_data;
             } break;
             default:
                 break;
         }
-    }
     return NULL;
 }
 
@@ -142,16 +150,23 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
         return nil;
     _GETHandlers  = [NSMutableArray new];
     _POSTHandlers = [NSMutableArray new];
+    _enableKeepAlive = YES;
+    _numberOfThreads = 30;
 
     return self;
 }
 
 - (BOOL)listenOnPort:(NSUInteger)port onError:(HTTPErrorBlock)aErrorHandler
 {
+    char threadStr[5], portStr[8];
+    sprintf(portStr,   "%ld", (unsigned long)port);
+    sprintf(threadStr, "%d",  _numberOfThreads);
     const char *opts[] = {
-        "listening_ports", [[NSString stringWithFormat:@"%ld", (long)port] UTF8String],
-        "enable_directory_listing", _dirListingEnabled ? "yes" : "no",
-        "document_root", [_publicDir UTF8String] ?: ".",
+        "listening_ports",          portStr,
+        "enable_directory_listing", _enableDirListing ? "yes" : "no",
+        "enable_keep_alive",        _enableKeepAlive ? "yes" : "no",
+        "document_root",            [_publicDir UTF8String] ?: ".",
+        "num_threads",              threadStr,
         NULL
     };
     _ctx = mg_start(mongooseCallback, (__bridge void *)self, opts);

@@ -8,7 +8,9 @@ typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 
 @interface HTTP : NSObject
 @property(readwrite, strong) NSString *publicDir;
-@property(readwrite, assign) BOOL dirListingEnabled;
+@property(readwrite, assign) BOOL enableDirListing, enableKeepAlive;
+@property(readwrite, assign) unsigned int numberOfThreads;
+
 - (BOOL)listenOnPort:(NSUInteger)port onError:(HTTPErrorBlock)aErrorHandler;
 
 - (void)handleGET:(id)aRoute    with:(id)aHandler;
