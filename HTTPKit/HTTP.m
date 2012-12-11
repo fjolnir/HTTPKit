@@ -6,18 +6,34 @@
 static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
 
 @protocol HTTPHandler <NSObject>
+@property(readwrite, copy) HTTPHandlerBlock block;
+@property(readwrite, strong) id route;
 - (id)handleConnection:(HTTPConnection *)aConnection URL:(NSString *)URL;
 @end
 
+@interface HTTPHandler_String : NSObject <HTTPHandler>
+@property(readwrite, strong) NSString *route;
+@end
+
+@implementation HTTPHandler_String
+@synthesize block=_block;
+- (id)handleConnection:(HTTPConnection *)aConnection URL:(NSString *)URL
+{
+    if([URL isEqualToString:_route])
+        return [self.block call:aConnection];
+    return HTTPSentinel;
+}
+@end
+
 @interface HTTPHandler_Regex : NSObject <HTTPHandler>
-@property(readwrite, copy) HTTPHandlerBlock block;
-@property(readwrite, strong) OnigRegexp *regex;
+@property(readwrite, strong) OnigRegexp *route;
 @end
 
 @implementation HTTPHandler_Regex
+@synthesize block=_block;
 - (id)handleConnection:(HTTPConnection *)aConnection URL:(NSString *)URL
 {
-    OnigResult *result = [_regex match:URL];
+    OnigResult *result = [_route match:URL];
     if(result) {
         NSMutableArray *args = [[result strings] mutableCopy];
         [args replaceObjectAtIndex:0 withObject:aConnection];
@@ -159,26 +175,34 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
     NSParameterAssert([aObj isKindOfClass:[NSString class]] ||
                       [aObj isKindOfClass:[OnigRegexp class]]);
 
-    HTTPHandler_Regex *handler = [HTTPHandler_Regex new];
+    id<HTTPHandler> handler;
     if([aObj isKindOfClass:[NSString class]]) {
-        // Convert the pattern to a regular expression
-        if(![aObj hasSuffix:@"/"])
-            aObj = [aObj stringByAppendingString:@"/?$"];
-        else
-            aObj = [aObj stringByAppendingString:@"$"];
-        aObj = [aObj replaceAllByRegexp:@"\\*+" withBlock:^(OnigResult *r) {
-            NSParameterAssert([r count] == 1 && [r.strings[0] length] <= 2);
-            return [r.strings[0] length] == 2 ? @"((?:[^/]+/??)+)" : @"([^/]+)";
-        }];
-        NSError *err = nil;
-        handler.regex = [OnigRegexp compile:aObj error:&err];
-        if(err) {
-            [NSException raise:NSInvalidArgumentException
-                        format:@"Couldn't compile Regex '%@'", aObj];
-            return nil;
+        if([aObj rangeOfString:@"*"].location == NSNotFound) {
+            handler = [HTTPHandler_String new];
+            handler.route = aObj;
+        } else {
+            handler = [HTTPHandler_Regex new];
+            // Convert the pattern to a regular expression
+            if(![aObj hasSuffix:@"/"])
+                aObj = [aObj stringByAppendingString:@"/?$"];
+            else
+                aObj = [aObj stringByAppendingString:@"$"];
+            aObj = [aObj replaceAllByRegexp:@"\\*+" withBlock:^(OnigResult *r) {
+                NSParameterAssert([r count] == 1 && [r.strings[0] length] <= 2);
+                return [r.strings[0] length] == 2 ? @"((?:[^/]+/??)+)" : @"([^/]+)";
+            }];
+            NSError *err = nil;
+            handler.route = [OnigRegexp compile:aObj error:&err];
+            if(err) {
+                [NSException raise:NSInvalidArgumentException
+                            format:@"Couldn't compile Regex '%@'", aObj];
+                return nil;
+            }
         }
-    } else
-        handler.regex = aObj;
+    } else {
+        handler = [HTTPHandler_Regex new];
+        handler.route = aObj;
+    }
     handler.block = aBlock;
     return handler;
 }
