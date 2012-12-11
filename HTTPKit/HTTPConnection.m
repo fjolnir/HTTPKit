@@ -87,10 +87,15 @@
 {
     if(_isWebSocket)
         return NULL;
+    char date[80];
+    time_t curtime = time(NULL);
+    strftime(date, sizeof(date), "%a, %d %b %Y %H:%M:%S GMT", gmtime(&curtime));
     NSMutableString *headerStr = [NSMutableString stringWithFormat:
                                   @"HTTP/1.1 %d %@\r\n"
-                                  @"Content-Length: %ld\r\n",
-                                  _status, _reason, (long)[_responseData length]];
+                                  @"Connection: keep-alive\r\n"
+                                  @"Content-Length: %ld\r\n"
+                                  @"Date: %s\r\n",
+                                  _status, _reason, (long)[_responseData length], date];
     for(NSString *header in _responseHeaders) {
         [headerStr appendString:header];
         [headerStr appendString:@": "];
