@@ -1,3 +1,6 @@
 [submodule "Dependencies/CocoaOniguruma"]
 	path = Dependencies/CocoaOniguruma
 	url = https://github.com/psychs/cocoaoniguruma.git
+[submodule "Dependencies/mongoose"]
+	path = Dependencies/mongoose
+	url = https://github.com/fjolnir/mongoose.git
