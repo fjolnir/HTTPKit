@@ -12,7 +12,7 @@ typedef enum {
 @interface HTTPConnection : NSObject
 @property(readwrite, assign) int status;
 @property(readwrite, strong) NSString *reason;
-@property(readwrite, weak) HTTP *server;
+@property(readwrite, unsafe_unretained) HTTP *server;
 @property(readonly, strong) NSDictionary *headers;
 @property(readonly, strong) NSDictionary *requestMultipartSegments;
 @property(readonly, strong, nonatomic) NSData *requestBodyData;

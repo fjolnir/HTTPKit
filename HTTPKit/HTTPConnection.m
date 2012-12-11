@@ -2,6 +2,7 @@
 #import "HTTPPrivate.h"
 #import "HTTP.h"
 #import "OnigRegexp.h"
+#import <Tranquil/Shared/TQBatching.h>
 
 #define _ntohll(y) (((uint64_t)ntohl(y)) << 32 | ntohl(y>>32))
 
@@ -10,6 +11,7 @@
     NSData *_requestBodyData;
     long _requestLength;
     NSMutableDictionary *_cookiesToWrite, *_responseHeaders, *_requestMultipartSegments;
+    TQ_BATCH_IVARS
 }
 - (NSString *)_getVar:(NSString *)aName inBuffer:(const void *)aBuf length:(long)aLen;
 @end
@@ -19,13 +21,8 @@
 {
     HTTPConnection *ret = [self new];
     ret.mgConnection = aConn;
-    struct mg_request_info *req = mg_get_request_info(aConn);
-    ret.mgRequest    = req;
-    ret.server = aServer;
-
-//    const char *h;
-//    if((h = mg_get_header(aConn, "Content-Type")))
-//        ret->_responseHeaders[@"Content-Type"] = [NSString stringWithUTF8String:h];
+    ret.mgRequest    = mg_get_request_info(aConn);
+    ret.server       = aServer;
     return ret;
 }
 
@@ -36,11 +33,13 @@
     _status = 200;
     _reason = @"OK";
     _isOpen = YES;
-    _responseData = [NSMutableData new];
-    _requestLength = -1;
-    _cookiesToWrite = [NSMutableDictionary new];
-    _responseHeaders = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                 @"text/html", @"Content-Type", nil];
+    if(_requestLength != -1) { // Only initialize if this is not a recycled object
+        _requestLength   = -1;
+        _responseData    = [NSMutableData new];
+        _cookiesToWrite  = [NSMutableDictionary new];
+        _responseHeaders = [NSMutableDictionary new];
+    }
+    [_responseHeaders setObject:@"text/html; charset=utf-8" forKey:@"Content-Type"];
     return self;
 }
 
@@ -164,6 +163,7 @@
     struct tm timeStruct;
     localtime_r(&time, &timeStruct);
     char buffer[80];
+    
     strftime(buffer, 80, "%a, %d-%b-%Y %H:%M:%S GMT", &timeStruct);
     NSString *dateStr = [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
     [self setCookie:aName to:aValue withAttributes:@{ @"Expires": dateStr } ];
@@ -473,5 +473,18 @@ doneProcessingSegments:
 - (BOOL)isSSL
 {
     return _mgRequest->is_ssl;
+}
+
+TQ_BATCH_IMPL(HTTPConnection)
+- (void)dealloc
+{
+    [_requestBodyData release];
+    _requestBodyData = nil;
+    _responseData.length = 0;
+    _requestLength = -1;
+    [_cookiesToWrite removeAllObjects];
+    [_responseHeaders removeAllObjects];
+    [_requestMultipartSegments removeAllObjects];
+    TQ_BATCH_DEALLOC
 }
 @end

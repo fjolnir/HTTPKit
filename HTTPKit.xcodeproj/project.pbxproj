@@ -14,7 +14,7 @@
 		C799CA35166A774300289CA9 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA33166A774300289CA9 /* HTTP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799CA36166A774300289CA9 /* HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA34166A774300289CA9 /* HTTP.m */; };
 		C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA37166A782B00289CA9 /* HTTPConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; };
+		C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
 		C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EA0166B6E7F00D9FABD /* mongoose.h */; };
 		C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
