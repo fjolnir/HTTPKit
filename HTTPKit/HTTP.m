@@ -78,8 +78,8 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
                     else if(strcmp(method, "DELETE") == 0)
                         handlers = self->_DELETEHandlers;
                     else
-                        [NSException raise:NSInternalInconsistencyException
-                                    format:@"Unhandled request type: '%s'", method];
+                        return NULL;
+                    
                     for(id<HTTPHandler> handler in handlers) {
                         if((result = [handler handleConnection:connection
                                                            URL:url]) != HTTPSentinel) {
