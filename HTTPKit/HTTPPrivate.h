@@ -1,9 +1,6 @@
 #import "mongoose.h"
-
-#ifdef TRANQUIL_SUPPORT
-#import <Tranquil/Runtime/TQRuntime.h>
-#import <Tranquil/Runtime/TQStubs.h>
-#endif
+#import "HTTPConnection.h"
+#import "NSBlock+TranquilCompatibility.h"
 
 @interface HTTPConnection ()
 @property(readwrite, assign) struct mg_connection *mgConnection;

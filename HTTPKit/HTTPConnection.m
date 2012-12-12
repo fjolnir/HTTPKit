@@ -2,7 +2,7 @@
 #import "HTTPPrivate.h"
 #import "HTTP.h"
 #import "OnigRegexp.h"
-#import <Tranquil/Shared/TQBatching.h>
+#import "FABatching.h"
 
 #define _ntohll(y) (((uint64_t)ntohl(y)) << 32 | ntohl(y>>32))
 
@@ -11,7 +11,7 @@
     NSData *_requestBodyData;
     long _requestLength;
     NSMutableDictionary *_cookiesToWrite, *_responseHeaders, *_requestMultipartSegments;
-    TQ_BATCH_IVARS
+    FA_BATCH_IVARS
 }
 - (NSString *)_getVar:(NSString *)aName inBuffer:(const void *)aBuf length:(long)aLen;
 @end
@@ -480,7 +480,7 @@ doneProcessingSegments:
     return _mgRequest->is_ssl;
 }
 
-TQ_BATCH_IMPL(HTTPConnection)
+FA_BATCH_IMPL(HTTPConnection)
 - (void)dealloc
 {
     [_requestBodyData release];
@@ -490,6 +490,6 @@ TQ_BATCH_IMPL(HTTPConnection)
     [_cookiesToWrite removeAllObjects];
     [_responseHeaders removeAllObjects];
     [_requestMultipartSegments removeAllObjects];
-    TQ_BATCH_DEALLOC
+    FA_BATCH_DEALLOC
 }
 @end

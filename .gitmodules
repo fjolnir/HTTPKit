@@ -4,3 +4,6 @@
 [submodule "Dependencies/mongoose"]
 	path = Dependencies/mongoose
 	url = https://github.com/fjolnir/mongoose.git
+[submodule "Dependencies/FABatching"]
+	path = Dependencies/FABatching
+	url = git://github.com/fjolnir/FABatching.git
