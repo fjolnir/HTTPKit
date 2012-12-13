@@ -263,7 +263,7 @@
         if(self.requestIsMultipart)
             return nil;
         else if(_isWebSocket)
-            _requestBodyData = [self _webSocketMessageBody];
+            self.requestBodyData = [self _webSocketMessageBody];
         else {
             long len = self.requestLength;
             if(len == 0)
@@ -271,7 +271,7 @@
             else if(len > 0) {
                 NSMutableData *data = [NSMutableData dataWithLength:len];
                 mg_read(_mgConnection, [data mutableBytes], [data length]);
-                _requestBodyData = data;
+                self.requestBodyData = data;
             } else {
                 NSMutableData *data = [NSMutableData data];
                 void *buf = malloc(1024);
@@ -281,7 +281,7 @@
                 }
                 free(buf);
                 if([data length])
-                    _requestBodyData = data;
+                    self.requestBodyData = data;
             }
         }
     }
