@@ -13,7 +13,7 @@ HTTPKit is a lightweight framework for building webservers in Objective-C or [Tr
             // Simple "Hello you!" pong
             [http handleGET:@"/hello/*"
                        with:^(HTTPConnection *connection, NSString *name) {
-                return [NSString stringWithFormat:@"Hello %@!", userName];
+                return [NSString stringWithFormat:@"Hello %@!", name];
             }];
             
             // Simplified login example
