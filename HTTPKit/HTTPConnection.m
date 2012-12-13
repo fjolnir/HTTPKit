@@ -23,7 +23,7 @@
     ret.mgConnection = aConn;
     ret.mgRequest    = mg_get_request_info(aConn);
     ret.server       = aServer;
-    return ret;
+    return [ret autorelease];
 }
 
 - (id)init
@@ -48,7 +48,7 @@
     if(![_cookiesToWrite count])
         return nil;
 
-    NSMutableString *header = [NSMutableString new];
+    NSMutableString *header = [NSMutableString string];
     for(NSString *name in _cookiesToWrite) {
         NSDictionary *cookie = _cookiesToWrite[name];
         [header appendString:@"Set-Cookie: "];
@@ -131,7 +131,7 @@
     va_start(args, aFormat);
     NSString *str = [[NSString alloc] initWithFormat:aFormat arguments:args];
     va_end(args);
-    return [self writeString:str];
+    return [self writeString:[str autorelease]];
 }
 
 #pragma mark -
@@ -204,7 +204,7 @@
 {
     NSData *body = self.requestBodyData;
     if([body length])
-        return [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
+        return [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease];
     return nil;
 }
 
@@ -234,16 +234,20 @@
         if(mg_read(_mgConnection, mask, 4) != 4)
             return nil;
     }
+    if(msgLen == 0)
+        return nil;
 
     char *payload = malloc(msgLen);
-    int64_t len;
+    int64_t len = -1;
     uint64_t bytesRead = 0;
     while((bytesRead < msgLen) &&
           (len = mg_read(_mgConnection, payload+bytesRead, msgLen-bytesRead))) {
         bytesRead += len;
     }
-    if(len < 0)
+    if(len < 0) {
+        free(payload);
         return nil;
+    }
     // Unmask the payload if needed
     for(int i = 0; masked && i < msgLen; ++i) {
         payload[i] ^= mask[i % 4];
@@ -318,8 +322,8 @@
             handle = tmpfile();
             assert(handle);
             currSeg = [@{
-                @"handle": [[NSFileHandle alloc] initWithFileDescriptor:fileno(handle)
-                                                         closeOnDealloc:YES]
+                @"handle": [[[NSFileHandle alloc] initWithFileDescriptor:fileno(handle)
+                                                          closeOnDealloc:YES] autorelease]
             } mutableCopy];
 
             // Read name/filename from content-disposition header
@@ -347,6 +351,7 @@
 
             NSAssert(currSeg[@"name"], @"Malformed request");
             _requestMultipartSegments[currSeg[@"name"]] = currSeg;
+            [currSeg release];
 
             // Read Content-Type header
             scanBuf[0] = '\0';
@@ -386,6 +391,7 @@
                     NSString *strVal = [[NSString alloc] initWithData:strData
                                                              encoding:NSUTF8StringEncoding];
                     currSeg[@"value"] = strVal ?: @"invalid encoding";
+                    [strVal release];
                 }
                 if(strncmp(buf+ofs+boundaryLen, "--", 2) != 0)
                     goto newSegment;
@@ -409,10 +415,10 @@ doneProcessingSegments:
     int bytesRead = mg_get_var(aBuf, aLen, [aName UTF8String], buf, aLen);
     if(!bytesRead)
         return nil;
-    return [[NSString alloc] initWithBytesNoCopy:buf
-                                          length:bytesRead
-                                        encoding:NSUTF8StringEncoding
-                                    freeWhenDone:YES];
+    return [[[NSString alloc] initWithBytesNoCopy:buf
+                                           length:bytesRead
+                                         encoding:NSUTF8StringEncoding
+                                     freeWhenDone:YES] autorelease];
 }
 
 - (NSString *)requestBodyVar:(NSString *)aName
