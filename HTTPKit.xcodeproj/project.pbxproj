@@ -515,6 +515,7 @@
 					USE_WEBSOCKET,
 					NO_CGI,
 				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -539,6 +540,7 @@
 					USE_WEBSOCKET,
 					NO_CGI,
 				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
