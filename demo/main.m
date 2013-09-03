@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
-#import "HTTP.h"
+#import <HTTPKit/HTTP.h>
+#import <dispatch/dispatch.h>
 
 int main(int argc, const char * argv[])
 {
@@ -10,7 +11,7 @@ int main(int argc, const char * argv[])
         [http handleGET:@"/hello/*"
                    with:^(HTTPConnection *connection, NSString *name) {
                        return [NSString stringWithFormat:@"Hello %@!", name];
-                   }];
+                  }];
 
         // Simplified login example
         [http handleGET:@"/login"
@@ -23,7 +24,7 @@ int main(int argc, const char * argv[])
                        @"<input type=\"submit\" value=\"Sign in\">"
                        @"</form>";
                    }];
-        
+
         [http handlePOST:@"/login" with:^(HTTPConnection *connection) {
             NSLog(@"logging in user: %@ with password: %@",
                   [connection requestBodyVar:@"username"],
@@ -47,7 +48,7 @@ int main(int argc, const char * argv[])
             fprintf(stderr, "Error starting server: %s", [reason UTF8String]);
             exit(1);
         }];
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate distantFuture]];
+        dispatch_main();
     }
     return 0;
 }

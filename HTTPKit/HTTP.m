@@ -1,7 +1,7 @@
 #import "HTTP.h"
 #import "HTTPConnection.h"
 #import "HTTPPrivate.h"
-#import "OnigRegexp.h"
+#import <CocoaOniguruma/OnigRegexp.h>
 
 static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
 
@@ -20,7 +20,7 @@ static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
 - (id)handleConnection:(HTTPConnection *)aConnection URL:(NSString *)URL
 {
     if([URL isEqualToString:_route])
-        return [self.block call:aConnection];
+        return self.block ? self.block(aConnection) : nil;
     return HTTPSentinel;
 }
 @end
@@ -37,7 +37,7 @@ static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
     if(result) {
         NSMutableArray *args = [[result strings] mutableCopy];
         [args replaceObjectAtIndex:0 withObject:aConnection];
-        return [self.block callWithArguments:args];
+        return CallBlockWithArguments(self.block, args);
     }
     return HTTPSentinel;
 }
@@ -186,7 +186,7 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
 
 - (id<HTTPHandler>)_handlerFromObject:(id)aObj handlerBlock:(id)aBlock
 {
-    NSParameterAssert([aBlock isKindOfClass:[NSBlock class]]);
+    NSParameterAssert([aBlock isKindOfClass:NSClassFromString(@"NSBlock")]);
     NSParameterAssert([aObj isKindOfClass:[NSString class]] ||
                       [aObj isKindOfClass:[OnigRegexp class]]);
 
@@ -202,6 +202,7 @@ static void *mongooseCallback(enum mg_event aEvent, struct mg_connection *aConne
                 aObj = [aObj stringByAppendingString:@"/?$"];
             else
                 aObj = [aObj stringByAppendingString:@"$"];
+
             aObj = [aObj replaceAllByRegexp:@"\\*+" withBlock:^(OnigResult *r) {
                 NSParameterAssert([r count] == 1 && [r.strings[0] length] <= 2);
                 return [r.strings[0] length] == 2 ? @"((?:[^/]+/??)+)" : @"([^/]+)";

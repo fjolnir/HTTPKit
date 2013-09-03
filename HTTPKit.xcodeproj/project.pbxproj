@@ -9,55 +9,62 @@
 /* Begin PBXBuildFile section */
 		C77D10A5166D0453005B809C /* HTTPKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C77D10A4166D0453005B809C /* HTTPKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799C7B2166A75CD00289CA9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7B1166A75CD00289CA9 /* Cocoa.framework */; };
-		C799C7BC166A75CD00289CA9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C799C7BA166A75CD00289CA9 /* InfoPlist.strings */; };
 		C799CA32166A772300289CA9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799CA31166A772300289CA9 /* Security.framework */; };
 		C799CA35166A774300289CA9 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA33166A774300289CA9 /* HTTP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799CA36166A774300289CA9 /* HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA34166A774300289CA9 /* HTTP.m */; };
 		C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA37166A782B00289CA9 /* HTTPConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C79CEA1D17D629EB009675ED /* NSBlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA1B17D629EB009675ED /* NSBlockUtilities.h */; };
+		C79CEA1E17D629EB009675ED /* NSBlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA1C17D629EB009675ED /* NSBlockUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C79CEA1F17D62A13009675ED /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
+		C79CEA2017D62A13009675ED /* HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA34166A774300289CA9 /* HTTP.m */; };
+		C79CEA2117D62A13009675ED /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C79CEA2217D62A13009675ED /* NSBlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA1C17D629EB009675ED /* NSBlockUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C79CEA4017D62A1F009675ED /* OnigRegexp.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA2517D62A1F009675ED /* OnigRegexp.h */; };
+		C79CEA4117D62A1F009675ED /* OnigRegexp.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2617D62A1F009675ED /* OnigRegexp.m */; };
+		C79CEA4217D62A1F009675ED /* OnigRegexpUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA2717D62A1F009675ED /* OnigRegexpUtility.h */; };
+		C79CEA4317D62A1F009675ED /* OnigRegexpUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2817D62A1F009675ED /* OnigRegexpUtility.m */; };
+		C79CEA4417D62A1F009675ED /* ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2A17D62A1F009675ED /* ascii.c */; };
+		C79CEA4517D62A1F009675ED /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA2B17D62A1F009675ED /* config.h */; };
+		C79CEA4617D62A1F009675ED /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = C79CEA2C17D62A1F009675ED /* COPYING */; };
+		C79CEA4717D62A1F009675ED /* oniguruma.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA2D17D62A1F009675ED /* oniguruma.h */; };
+		C79CEA4817D62A1F009675ED /* regcomp.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2E17D62A1F009675ED /* regcomp.c */; };
+		C79CEA4917D62A1F009675ED /* regenc.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2F17D62A1F009675ED /* regenc.c */; };
+		C79CEA4A17D62A1F009675ED /* regenc.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA3017D62A1F009675ED /* regenc.h */; };
+		C79CEA4B17D62A1F009675ED /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3117D62A1F009675ED /* regerror.c */; };
+		C79CEA4C17D62A1F009675ED /* regexec.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3217D62A1F009675ED /* regexec.c */; };
+		C79CEA4D17D62A1F009675ED /* regext.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3317D62A1F009675ED /* regext.c */; };
+		C79CEA4E17D62A1F009675ED /* regint.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA3417D62A1F009675ED /* regint.h */; };
+		C79CEA4F17D62A1F009675ED /* regparse.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3517D62A1F009675ED /* regparse.c */; };
+		C79CEA5017D62A1F009675ED /* regparse.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA3617D62A1F009675ED /* regparse.h */; };
+		C79CEA5117D62A1F009675ED /* regsyntax.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3717D62A1F009675ED /* regsyntax.c */; };
+		C79CEA5217D62A1F009675ED /* regtrav.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3817D62A1F009675ED /* regtrav.c */; };
+		C79CEA5317D62A1F009675ED /* regversion.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3917D62A1F009675ED /* regversion.c */; };
+		C79CEA5417D62A1F009675ED /* st.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3A17D62A1F009675ED /* st.c */; };
+		C79CEA5517D62A1F009675ED /* st.h in Headers */ = {isa = PBXBuildFile; fileRef = C79CEA3B17D62A1F009675ED /* st.h */; };
+		C79CEA5617D62A1F009675ED /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3C17D62A1F009675ED /* unicode.c */; };
+		C79CEA5717D62A1F009675ED /* utf16_le.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3D17D62A1F009675ED /* utf16_le.c */; };
+		C79CEA5917D62A3F009675ED /* OnigRegexp.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2617D62A1F009675ED /* OnigRegexp.m */; };
+		C79CEA5A17D62A3F009675ED /* OnigRegexpUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2817D62A1F009675ED /* OnigRegexpUtility.m */; };
+		C79CEA5B17D62A3F009675ED /* ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2A17D62A1F009675ED /* ascii.c */; };
+		C79CEA5C17D62A3F009675ED /* regcomp.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2E17D62A1F009675ED /* regcomp.c */; };
+		C79CEA5D17D62A3F009675ED /* regenc.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2F17D62A1F009675ED /* regenc.c */; };
+		C79CEA5E17D62A3F009675ED /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3117D62A1F009675ED /* regerror.c */; };
+		C79CEA5F17D62A3F009675ED /* regexec.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3217D62A1F009675ED /* regexec.c */; };
+		C79CEA6017D62A3F009675ED /* regext.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3317D62A1F009675ED /* regext.c */; };
+		C79CEA6117D62A3F009675ED /* regparse.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3517D62A1F009675ED /* regparse.c */; };
+		C79CEA6217D62A3F009675ED /* regsyntax.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3717D62A1F009675ED /* regsyntax.c */; };
+		C79CEA6317D62A3F009675ED /* regtrav.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3817D62A1F009675ED /* regtrav.c */; };
+		C79CEA6417D62A3F009675ED /* regversion.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3917D62A1F009675ED /* regversion.c */; };
+		C79CEA6517D62A3F009675ED /* st.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3A17D62A1F009675ED /* st.c */; };
+		C79CEA6617D62A3F009675ED /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3C17D62A1F009675ED /* unicode.c */; };
+		C79CEA6717D62A3F009675ED /* utf16_le.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3D17D62A1F009675ED /* utf16_le.c */; };
+		C79CEA6A17D62A9B009675ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA6917D62A9B009675ED /* main.m */; };
+		C79CEA6B17D62AA8009675ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA6917D62A9B009675ED /* main.m */; };
 		C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
 		C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EA0166B6E7F00D9FABD /* mongoose.h */; };
 		C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
-		C7B39EAF166B72FC00D9FABD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EAE166B72FC00D9FABD /* main.m */; };
-		C7B39EB3166B72FC00D9FABD /* test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C7B39EB2166B72FC00D9FABD /* test.1 */; };
-		C7B39EB7166B730900D9FABD /* HTTPKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7AE166A75CD00289CA9 /* HTTPKit.framework */; };
-		C7B39EE8166BBE1600D9FABD /* OnigRegexp.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ECE166BBE1600D9FABD /* OnigRegexp.h */; };
-		C7B39EE9166BBE1600D9FABD /* OnigRegexp.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ECF166BBE1600D9FABD /* OnigRegexp.m */; };
-		C7B39EEA166BBE1600D9FABD /* OnigRegexpUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ED0166BBE1600D9FABD /* OnigRegexpUtility.h */; };
-		C7B39EEB166BBE1600D9FABD /* OnigRegexpUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED1166BBE1600D9FABD /* OnigRegexpUtility.m */; };
-		C7B39EEC166BBE1600D9FABD /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ED3166BBE1600D9FABD /* config.h */; };
-		C7B39EED166BBE1600D9FABD /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = C7B39ED4166BBE1600D9FABD /* COPYING */; };
-		C7B39EEE166BBE1600D9FABD /* ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED6166BBE1600D9FABD /* ascii.c */; };
-		C7B39EEF166BBE1600D9FABD /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED7166BBE1600D9FABD /* unicode.c */; };
-		C7B39EF0166BBE1600D9FABD /* utf16_le.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39ED8166BBE1600D9FABD /* utf16_le.c */; };
-		C7B39EF1166BBE1600D9FABD /* oniguruma.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39ED9166BBE1600D9FABD /* oniguruma.h */; };
-		C7B39EF2166BBE1600D9FABD /* regcomp.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDA166BBE1600D9FABD /* regcomp.c */; };
-		C7B39EF3166BBE1600D9FABD /* regenc.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDB166BBE1600D9FABD /* regenc.c */; };
-		C7B39EF4166BBE1600D9FABD /* regenc.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EDC166BBE1600D9FABD /* regenc.h */; };
-		C7B39EF5166BBE1600D9FABD /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDD166BBE1600D9FABD /* regerror.c */; };
-		C7B39EF6166BBE1600D9FABD /* regexec.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDE166BBE1600D9FABD /* regexec.c */; };
-		C7B39EF7166BBE1600D9FABD /* regext.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EDF166BBE1600D9FABD /* regext.c */; };
-		C7B39EF8166BBE1600D9FABD /* regint.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EE0166BBE1600D9FABD /* regint.h */; };
-		C7B39EF9166BBE1600D9FABD /* regparse.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE1166BBE1600D9FABD /* regparse.c */; };
-		C7B39EFA166BBE1600D9FABD /* regparse.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EE2166BBE1600D9FABD /* regparse.h */; };
-		C7B39EFB166BBE1600D9FABD /* regsyntax.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE3166BBE1600D9FABD /* regsyntax.c */; };
-		C7B39EFC166BBE1600D9FABD /* regtrav.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE4166BBE1600D9FABD /* regtrav.c */; };
-		C7B39EFD166BBE1600D9FABD /* regversion.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE5166BBE1600D9FABD /* regversion.c */; };
-		C7B39EFE166BBE1600D9FABD /* st.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39EE6166BBE1600D9FABD /* st.c */; };
-		C7B39EFF166BBE1600D9FABD /* st.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EE7166BBE1600D9FABD /* st.h */; };
-		C7C5F10316783B7100E9628E /* NSBlock+TranquilCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = C7C5F10116783B7100E9628E /* NSBlock+TranquilCompatibility.h */; };
-		C7C5F10416783B7100E9628E /* NSBlock+TranquilCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = C7C5F10216783B7100E9628E /* NSBlock+TranquilCompatibility.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		C7B39EB8166B730C00D9FABD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C799C7A4166A75CD00289CA9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C799C7AD166A75CD00289CA9;
-			remoteInfo = HTTPKit;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		C7B39EA7166B72FC00D9FABD /* CopyFiles */ = {
@@ -66,7 +73,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				C7B39EB3166B72FC00D9FABD /* test.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -79,49 +85,44 @@
 		C799C7B4166A75CD00289CA9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		C799C7B5166A75CD00289CA9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C799C7B6166A75CD00289CA9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C799C7B9166A75CD00289CA9 /* HTTPKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HTTPKit-Info.plist"; sourceTree = "<group>"; };
-		C799C7BB166A75CD00289CA9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C799C7BD166A75CD00289CA9 /* HTTPKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HTTPKit-Prefix.pch"; sourceTree = "<group>"; };
 		C799CA31166A772300289CA9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C799CA33166A774300289CA9 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTP.h; sourceTree = "<group>"; };
 		C799CA34166A774300289CA9 /* HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTP.m; sourceTree = "<group>"; };
 		C799CA37166A782B00289CA9 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
 		C799CA38166A782B00289CA9 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
+		C79CEA1B17D629EB009675ED /* NSBlockUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSBlockUtilities.h; sourceTree = "<group>"; };
+		C79CEA1C17D629EB009675ED /* NSBlockUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSBlockUtilities.m; sourceTree = "<group>"; };
+		C79CEA2517D62A1F009675ED /* OnigRegexp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnigRegexp.h; sourceTree = "<group>"; };
+		C79CEA2617D62A1F009675ED /* OnigRegexp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnigRegexp.m; sourceTree = "<group>"; };
+		C79CEA2717D62A1F009675ED /* OnigRegexpUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnigRegexpUtility.h; sourceTree = "<group>"; };
+		C79CEA2817D62A1F009675ED /* OnigRegexpUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnigRegexpUtility.m; sourceTree = "<group>"; };
+		C79CEA2A17D62A1F009675ED /* ascii.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ascii.c; sourceTree = "<group>"; };
+		C79CEA2B17D62A1F009675ED /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		C79CEA2C17D62A1F009675ED /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		C79CEA2D17D62A1F009675ED /* oniguruma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oniguruma.h; sourceTree = "<group>"; };
+		C79CEA2E17D62A1F009675ED /* regcomp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regcomp.c; sourceTree = "<group>"; };
+		C79CEA2F17D62A1F009675ED /* regenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regenc.c; sourceTree = "<group>"; };
+		C79CEA3017D62A1F009675ED /* regenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regenc.h; sourceTree = "<group>"; };
+		C79CEA3117D62A1F009675ED /* regerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regerror.c; sourceTree = "<group>"; };
+		C79CEA3217D62A1F009675ED /* regexec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regexec.c; sourceTree = "<group>"; };
+		C79CEA3317D62A1F009675ED /* regext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regext.c; sourceTree = "<group>"; };
+		C79CEA3417D62A1F009675ED /* regint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regint.h; sourceTree = "<group>"; };
+		C79CEA3517D62A1F009675ED /* regparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regparse.c; sourceTree = "<group>"; };
+		C79CEA3617D62A1F009675ED /* regparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regparse.h; sourceTree = "<group>"; };
+		C79CEA3717D62A1F009675ED /* regsyntax.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regsyntax.c; sourceTree = "<group>"; };
+		C79CEA3817D62A1F009675ED /* regtrav.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regtrav.c; sourceTree = "<group>"; };
+		C79CEA3917D62A1F009675ED /* regversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regversion.c; sourceTree = "<group>"; };
+		C79CEA3A17D62A1F009675ED /* st.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = st.c; sourceTree = "<group>"; };
+		C79CEA3B17D62A1F009675ED /* st.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = st.h; sourceTree = "<group>"; };
+		C79CEA3C17D62A1F009675ED /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unicode.c; sourceTree = "<group>"; };
+		C79CEA3D17D62A1F009675ED /* utf16_le.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utf16_le.c; sourceTree = "<group>"; };
+		C79CEA6917D62A9B009675ED /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C7B39E9F166B6E7F00D9FABD /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mongoose.c; path = mongoose/mongoose.c; sourceTree = "<group>"; };
 		C7B39EA0166B6E7F00D9FABD /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mongoose.h; path = mongoose/mongoose.h; sourceTree = "<group>"; };
 		C7B39EA4166B6EE800D9FABD /* HTTPPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPPrivate.h; sourceTree = "<group>"; };
 		C7B39EA9166B72FC00D9FABD /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B39EAB166B72FC00D9FABD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C7B39EAE166B72FC00D9FABD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C7B39EB1166B72FC00D9FABD /* test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "test-Prefix.pch"; sourceTree = "<group>"; };
-		C7B39EB2166B72FC00D9FABD /* test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = test.1; sourceTree = "<group>"; };
-		C7B39ECE166BBE1600D9FABD /* OnigRegexp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnigRegexp.h; sourceTree = "<group>"; };
-		C7B39ECF166BBE1600D9FABD /* OnigRegexp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnigRegexp.m; sourceTree = "<group>"; };
-		C7B39ED0166BBE1600D9FABD /* OnigRegexpUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnigRegexpUtility.h; sourceTree = "<group>"; };
-		C7B39ED1166BBE1600D9FABD /* OnigRegexpUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnigRegexpUtility.m; sourceTree = "<group>"; };
-		C7B39ED3166BBE1600D9FABD /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		C7B39ED4166BBE1600D9FABD /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
-		C7B39ED6166BBE1600D9FABD /* ascii.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ascii.c; sourceTree = "<group>"; };
-		C7B39ED7166BBE1600D9FABD /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unicode.c; sourceTree = "<group>"; };
-		C7B39ED8166BBE1600D9FABD /* utf16_le.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utf16_le.c; sourceTree = "<group>"; };
-		C7B39ED9166BBE1600D9FABD /* oniguruma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oniguruma.h; sourceTree = "<group>"; };
-		C7B39EDA166BBE1600D9FABD /* regcomp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regcomp.c; sourceTree = "<group>"; };
-		C7B39EDB166BBE1600D9FABD /* regenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regenc.c; sourceTree = "<group>"; };
-		C7B39EDC166BBE1600D9FABD /* regenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regenc.h; sourceTree = "<group>"; };
-		C7B39EDD166BBE1600D9FABD /* regerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regerror.c; sourceTree = "<group>"; };
-		C7B39EDE166BBE1600D9FABD /* regexec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regexec.c; sourceTree = "<group>"; };
-		C7B39EDF166BBE1600D9FABD /* regext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regext.c; sourceTree = "<group>"; };
-		C7B39EE0166BBE1600D9FABD /* regint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regint.h; sourceTree = "<group>"; };
-		C7B39EE1166BBE1600D9FABD /* regparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regparse.c; sourceTree = "<group>"; };
-		C7B39EE2166BBE1600D9FABD /* regparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regparse.h; sourceTree = "<group>"; };
-		C7B39EE3166BBE1600D9FABD /* regsyntax.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regsyntax.c; sourceTree = "<group>"; };
-		C7B39EE4166BBE1600D9FABD /* regtrav.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regtrav.c; sourceTree = "<group>"; };
-		C7B39EE5166BBE1600D9FABD /* regversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = regversion.c; sourceTree = "<group>"; };
-		C7B39EE6166BBE1600D9FABD /* st.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = st.c; sourceTree = "<group>"; };
-		C7B39EE7166BBE1600D9FABD /* st.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = st.h; sourceTree = "<group>"; };
 		C7C5F10016783AD300E9628E /* FABatching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FABatching.h; path = FABatching/FABatching.h; sourceTree = "<group>"; };
-		C7C5F10116783B7100E9628E /* NSBlock+TranquilCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBlock+TranquilCompatibility.h"; sourceTree = "<group>"; };
-		C7C5F10216783B7100E9628E /* NSBlock+TranquilCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBlock+TranquilCompatibility.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +139,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7B39EB7166B730900D9FABD /* HTTPKit.framework in Frameworks */,
 				C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,7 +151,7 @@
 			children = (
 				C799C7C6166A766A00289CA9 /* Dependencies */,
 				C799C7B7166A75CD00289CA9 /* HTTPKit */,
-				C7B39EAD166B72FC00D9FABD /* test */,
+				C79CEA6817D62A9B009675ED /* demo */,
 				C799C7B0166A75CD00289CA9 /* Frameworks */,
 				C799C7AF166A75CD00289CA9 /* Products */,
 			);
@@ -196,27 +196,16 @@
 				C7B39EA4166B6EE800D9FABD /* HTTPPrivate.h */,
 				C799CA37166A782B00289CA9 /* HTTPConnection.h */,
 				C799CA38166A782B00289CA9 /* HTTPConnection.m */,
-				C7C5F10116783B7100E9628E /* NSBlock+TranquilCompatibility.h */,
-				C7C5F10216783B7100E9628E /* NSBlock+TranquilCompatibility.m */,
-				C799C7B8166A75CD00289CA9 /* Supporting Files */,
+				C79CEA1B17D629EB009675ED /* NSBlockUtilities.h */,
+				C79CEA1C17D629EB009675ED /* NSBlockUtilities.m */,
 			);
 			path = HTTPKit;
-			sourceTree = "<group>";
-		};
-		C799C7B8166A75CD00289CA9 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				C799C7B9166A75CD00289CA9 /* HTTPKit-Info.plist */,
-				C799C7BA166A75CD00289CA9 /* InfoPlist.strings */,
-				C799C7BD166A75CD00289CA9 /* HTTPKit-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		C799C7C6166A766A00289CA9 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				C7B39ECD166BBE1600D9FABD /* Oniguruma */,
+				C79CEA2317D62A1F009675ED /* CocoaOniguruma */,
 				C7B39EA0166B6E7F00D9FABD /* mongoose.h */,
 				C7B39E9F166B6E7F00D9FABD /* mongoose.c */,
 				C7C5F10016783AD300E9628E /* FABatching.h */,
@@ -224,70 +213,52 @@
 			path = Dependencies;
 			sourceTree = "<group>";
 		};
-		C7B39EAD166B72FC00D9FABD /* test */ = {
+		C79CEA2317D62A1F009675ED /* CocoaOniguruma */ = {
 			isa = PBXGroup;
 			children = (
-				C7B39EAE166B72FC00D9FABD /* main.m */,
-				C7B39EB2166B72FC00D9FABD /* test.1 */,
-				C7B39EB0166B72FC00D9FABD /* Supporting Files */,
+				C79CEA2517D62A1F009675ED /* OnigRegexp.h */,
+				C79CEA2617D62A1F009675ED /* OnigRegexp.m */,
+				C79CEA2717D62A1F009675ED /* OnigRegexpUtility.h */,
+				C79CEA2817D62A1F009675ED /* OnigRegexpUtility.m */,
+				C79CEA2917D62A1F009675ED /* oniguruma */,
 			);
-			path = test;
-			sourceTree = "<group>";
+			name = CocoaOniguruma;
+			path = dependencies/CocoaOniguruma;
+			sourceTree = SOURCE_ROOT;
 		};
-		C7B39EB0166B72FC00D9FABD /* Supporting Files */ = {
+		C79CEA2917D62A1F009675ED /* oniguruma */ = {
 			isa = PBXGroup;
 			children = (
-				C7B39EB1166B72FC00D9FABD /* test-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		C7B39ECD166BBE1600D9FABD /* Oniguruma */ = {
-			isa = PBXGroup;
-			children = (
-				C7B39ECE166BBE1600D9FABD /* OnigRegexp.h */,
-				C7B39ECF166BBE1600D9FABD /* OnigRegexp.m */,
-				C7B39ED0166BBE1600D9FABD /* OnigRegexpUtility.h */,
-				C7B39ED1166BBE1600D9FABD /* OnigRegexpUtility.m */,
-				C7B39ED2166BBE1600D9FABD /* oniguruma */,
-			);
-			name = Oniguruma;
-			path = CocoaOniguruma/framework/core;
-			sourceTree = "<group>";
-		};
-		C7B39ED2166BBE1600D9FABD /* oniguruma */ = {
-			isa = PBXGroup;
-			children = (
-				C7B39ED3166BBE1600D9FABD /* config.h */,
-				C7B39ED4166BBE1600D9FABD /* COPYING */,
-				C7B39ED5166BBE1600D9FABD /* enc */,
-				C7B39ED9166BBE1600D9FABD /* oniguruma.h */,
-				C7B39EDA166BBE1600D9FABD /* regcomp.c */,
-				C7B39EDB166BBE1600D9FABD /* regenc.c */,
-				C7B39EDC166BBE1600D9FABD /* regenc.h */,
-				C7B39EDD166BBE1600D9FABD /* regerror.c */,
-				C7B39EDE166BBE1600D9FABD /* regexec.c */,
-				C7B39EDF166BBE1600D9FABD /* regext.c */,
-				C7B39EE0166BBE1600D9FABD /* regint.h */,
-				C7B39EE1166BBE1600D9FABD /* regparse.c */,
-				C7B39EE2166BBE1600D9FABD /* regparse.h */,
-				C7B39EE3166BBE1600D9FABD /* regsyntax.c */,
-				C7B39EE4166BBE1600D9FABD /* regtrav.c */,
-				C7B39EE5166BBE1600D9FABD /* regversion.c */,
-				C7B39EE6166BBE1600D9FABD /* st.c */,
-				C7B39EE7166BBE1600D9FABD /* st.h */,
+				C79CEA2A17D62A1F009675ED /* ascii.c */,
+				C79CEA2B17D62A1F009675ED /* config.h */,
+				C79CEA2C17D62A1F009675ED /* COPYING */,
+				C79CEA2D17D62A1F009675ED /* oniguruma.h */,
+				C79CEA2E17D62A1F009675ED /* regcomp.c */,
+				C79CEA2F17D62A1F009675ED /* regenc.c */,
+				C79CEA3017D62A1F009675ED /* regenc.h */,
+				C79CEA3117D62A1F009675ED /* regerror.c */,
+				C79CEA3217D62A1F009675ED /* regexec.c */,
+				C79CEA3317D62A1F009675ED /* regext.c */,
+				C79CEA3417D62A1F009675ED /* regint.h */,
+				C79CEA3517D62A1F009675ED /* regparse.c */,
+				C79CEA3617D62A1F009675ED /* regparse.h */,
+				C79CEA3717D62A1F009675ED /* regsyntax.c */,
+				C79CEA3817D62A1F009675ED /* regtrav.c */,
+				C79CEA3917D62A1F009675ED /* regversion.c */,
+				C79CEA3A17D62A1F009675ED /* st.c */,
+				C79CEA3B17D62A1F009675ED /* st.h */,
+				C79CEA3C17D62A1F009675ED /* unicode.c */,
+				C79CEA3D17D62A1F009675ED /* utf16_le.c */,
 			);
 			path = oniguruma;
 			sourceTree = "<group>";
 		};
-		C7B39ED5166BBE1600D9FABD /* enc */ = {
+		C79CEA6817D62A9B009675ED /* demo */ = {
 			isa = PBXGroup;
 			children = (
-				C7B39ED6166BBE1600D9FABD /* ascii.c */,
-				C7B39ED7166BBE1600D9FABD /* unicode.c */,
-				C7B39ED8166BBE1600D9FABD /* utf16_le.c */,
+				C79CEA6917D62A9B009675ED /* main.m */,
 			);
-			path = enc;
+			path = demo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,19 +268,19 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C79CEA5517D62A1F009675ED /* st.h in Headers */,
+				C79CEA4717D62A1F009675ED /* oniguruma.h in Headers */,
+				C79CEA4217D62A1F009675ED /* OnigRegexpUtility.h in Headers */,
+				C79CEA4A17D62A1F009675ED /* regenc.h in Headers */,
 				C799CA35166A774300289CA9 /* HTTP.h in Headers */,
 				C799CA39166A782C00289CA9 /* HTTPConnection.h in Headers */,
+				C79CEA5017D62A1F009675ED /* regparse.h in Headers */,
+				C79CEA4017D62A1F009675ED /* OnigRegexp.h in Headers */,
+				C79CEA4517D62A1F009675ED /* config.h in Headers */,
 				C77D10A5166D0453005B809C /* HTTPKit.h in Headers */,
 				C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */,
-				C7B39EE8166BBE1600D9FABD /* OnigRegexp.h in Headers */,
-				C7B39EEA166BBE1600D9FABD /* OnigRegexpUtility.h in Headers */,
-				C7B39EEC166BBE1600D9FABD /* config.h in Headers */,
-				C7B39EF1166BBE1600D9FABD /* oniguruma.h in Headers */,
-				C7B39EF4166BBE1600D9FABD /* regenc.h in Headers */,
-				C7B39EF8166BBE1600D9FABD /* regint.h in Headers */,
-				C7B39EFA166BBE1600D9FABD /* regparse.h in Headers */,
-				C7B39EFF166BBE1600D9FABD /* st.h in Headers */,
-				C7C5F10316783B7100E9628E /* NSBlock+TranquilCompatibility.h in Headers */,
+				C79CEA1D17D629EB009675ED /* NSBlockUtilities.h in Headers */,
+				C79CEA4E17D62A1F009675ED /* regint.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +316,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C7B39EB9166B730C00D9FABD /* PBXTargetDependency */,
 			);
 			name = test;
 			productName = test;
@@ -385,8 +355,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C799C7BC166A75CD00289CA9 /* InfoPlist.strings in Resources */,
-				C7B39EED166BBE1600D9FABD /* COPYING in Resources */,
+				C79CEA4617D62A1F009675ED /* COPYING in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,25 +366,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C79CEA5417D62A1F009675ED /* st.c in Sources */,
+				C79CEA4D17D62A1F009675ED /* regext.c in Sources */,
+				C79CEA5317D62A1F009675ED /* regversion.c in Sources */,
+				C79CEA4C17D62A1F009675ED /* regexec.c in Sources */,
+				C79CEA5717D62A1F009675ED /* utf16_le.c in Sources */,
+				C79CEA4317D62A1F009675ED /* OnigRegexpUtility.m in Sources */,
+				C79CEA4917D62A1F009675ED /* regenc.c in Sources */,
 				C799CA36166A774300289CA9 /* HTTP.m in Sources */,
+				C79CEA4417D62A1F009675ED /* ascii.c in Sources */,
+				C79CEA4F17D62A1F009675ED /* regparse.c in Sources */,
+				C79CEA6A17D62A9B009675ED /* main.m in Sources */,
+				C79CEA5117D62A1F009675ED /* regsyntax.c in Sources */,
 				C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */,
 				C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */,
-				C7B39EE9166BBE1600D9FABD /* OnigRegexp.m in Sources */,
-				C7B39EEB166BBE1600D9FABD /* OnigRegexpUtility.m in Sources */,
-				C7B39EEE166BBE1600D9FABD /* ascii.c in Sources */,
-				C7B39EEF166BBE1600D9FABD /* unicode.c in Sources */,
-				C7B39EF0166BBE1600D9FABD /* utf16_le.c in Sources */,
-				C7B39EF2166BBE1600D9FABD /* regcomp.c in Sources */,
-				C7B39EF3166BBE1600D9FABD /* regenc.c in Sources */,
-				C7B39EF5166BBE1600D9FABD /* regerror.c in Sources */,
-				C7B39EF6166BBE1600D9FABD /* regexec.c in Sources */,
-				C7B39EF7166BBE1600D9FABD /* regext.c in Sources */,
-				C7B39EF9166BBE1600D9FABD /* regparse.c in Sources */,
-				C7B39EFB166BBE1600D9FABD /* regsyntax.c in Sources */,
-				C7B39EFC166BBE1600D9FABD /* regtrav.c in Sources */,
-				C7B39EFD166BBE1600D9FABD /* regversion.c in Sources */,
-				C7B39EFE166BBE1600D9FABD /* st.c in Sources */,
-				C7C5F10416783B7100E9628E /* NSBlock+TranquilCompatibility.m in Sources */,
+				C79CEA5217D62A1F009675ED /* regtrav.c in Sources */,
+				C79CEA4117D62A1F009675ED /* OnigRegexp.m in Sources */,
+				C79CEA1E17D629EB009675ED /* NSBlockUtilities.m in Sources */,
+				C79CEA5617D62A1F009675ED /* unicode.c in Sources */,
+				C79CEA4817D62A1F009675ED /* regcomp.c in Sources */,
+				C79CEA4B17D62A1F009675ED /* regerror.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,30 +393,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7B39EAF166B72FC00D9FABD /* main.m in Sources */,
+				C79CEA6B17D62AA8009675ED /* main.m in Sources */,
+				C79CEA1F17D62A13009675ED /* mongoose.c in Sources */,
+				C79CEA2017D62A13009675ED /* HTTP.m in Sources */,
+				C79CEA5917D62A3F009675ED /* OnigRegexp.m in Sources */,
+				C79CEA5A17D62A3F009675ED /* OnigRegexpUtility.m in Sources */,
+				C79CEA5B17D62A3F009675ED /* ascii.c in Sources */,
+				C79CEA5C17D62A3F009675ED /* regcomp.c in Sources */,
+				C79CEA5D17D62A3F009675ED /* regenc.c in Sources */,
+				C79CEA5E17D62A3F009675ED /* regerror.c in Sources */,
+				C79CEA5F17D62A3F009675ED /* regexec.c in Sources */,
+				C79CEA6017D62A3F009675ED /* regext.c in Sources */,
+				C79CEA6117D62A3F009675ED /* regparse.c in Sources */,
+				C79CEA6217D62A3F009675ED /* regsyntax.c in Sources */,
+				C79CEA6317D62A3F009675ED /* regtrav.c in Sources */,
+				C79CEA6417D62A3F009675ED /* regversion.c in Sources */,
+				C79CEA6517D62A3F009675ED /* st.c in Sources */,
+				C79CEA6617D62A3F009675ED /* unicode.c in Sources */,
+				C79CEA6717D62A3F009675ED /* utf16_le.c in Sources */,
+				C79CEA2117D62A13009675ED /* HTTPConnection.m in Sources */,
+				C79CEA2217D62A13009675ED /* NSBlockUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C7B39EB9166B730C00D9FABD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C799C7AD166A75CD00289CA9 /* HTTPKit */;
-			targetProxy = C7B39EB8166B730C00D9FABD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		C799C7BA166A75CD00289CA9 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C799C7BB166A75CD00289CA9 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		C799C7C1166A75CD00289CA9 /* Debug */ = {
@@ -510,13 +480,14 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HTTPKit/HTTPKit-Prefix.pch";
+				GCC_PREFIX_HEADER = "HTTPKit/framework/HTTPKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					USE_WEBSOCKET,
 					NO_CGI,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
-				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
+				HEADER_SEARCH_PATHS = dependencies;
+				INFOPLIST_FILE = "HTTPKit/framework/HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
@@ -535,13 +506,14 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HTTPKit/HTTPKit-Prefix.pch";
+				GCC_PREFIX_HEADER = "HTTPKit/framework/HTTPKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					USE_WEBSOCKET,
 					NO_CGI,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
-				INFOPLIST_FILE = "HTTPKit/HTTPKit-Info.plist";
+				HEADER_SEARCH_PATHS = dependencies;
+				INFOPLIST_FILE = "HTTPKit/framework/HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
@@ -556,7 +528,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "test/test-Prefix.pch";
+				HEADER_SEARCH_PATHS = dependencies;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -566,7 +538,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "test/test-Prefix.pch";
+				HEADER_SEARCH_PATHS = dependencies;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

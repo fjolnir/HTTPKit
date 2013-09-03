@@ -1,6 +1,6 @@
-#import "mongoose.h"
+#import <mongoose/mongoose.h>
 #import "HTTPConnection.h"
-#import "NSBlock+TranquilCompatibility.h"
+#import "NSBlockUtilities.h"
 
 @interface HTTPConnection ()
 @property(readwrite, assign) struct mg_connection *mgConnection;
