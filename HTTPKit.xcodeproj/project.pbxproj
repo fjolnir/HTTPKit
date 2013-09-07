@@ -64,6 +64,9 @@
 		C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
 		C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EA0166B6E7F00D9FABD /* mongoose.h */; };
 		C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
+		C7F01D0A17DA5B500011D503 /* HTTPWebSocketConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C7F01D0817DA5B500011D503 /* HTTPWebSocketConnection.h */; };
+		C7F01D0B17DA5B500011D503 /* HTTPWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C7F01D0C17DA5D210011D503 /* HTTPWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,6 +126,8 @@
 		C7B39EA9166B72FC00D9FABD /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B39EAB166B72FC00D9FABD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C7C5F10016783AD300E9628E /* FABatching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FABatching.h; path = FABatching/FABatching.h; sourceTree = "<group>"; };
+		C7F01D0817DA5B500011D503 /* HTTPWebSocketConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPWebSocketConnection.h; sourceTree = "<group>"; };
+		C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPWebSocketConnection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +201,8 @@
 				C7B39EA4166B6EE800D9FABD /* HTTPPrivate.h */,
 				C799CA37166A782B00289CA9 /* HTTPConnection.h */,
 				C799CA38166A782B00289CA9 /* HTTPConnection.m */,
+				C7F01D0817DA5B500011D503 /* HTTPWebSocketConnection.h */,
+				C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */,
 				C79CEA1B17D629EB009675ED /* NSBlockUtilities.h */,
 				C79CEA1C17D629EB009675ED /* NSBlockUtilities.m */,
 			);
@@ -278,6 +285,7 @@
 				C79CEA4017D62A1F009675ED /* OnigRegexp.h in Headers */,
 				C79CEA4517D62A1F009675ED /* config.h in Headers */,
 				C77D10A5166D0453005B809C /* HTTPKit.h in Headers */,
+				C7F01D0A17DA5B500011D503 /* HTTPWebSocketConnection.h in Headers */,
 				C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */,
 				C79CEA1D17D629EB009675ED /* NSBlockUtilities.h in Headers */,
 				C79CEA4E17D62A1F009675ED /* regint.h in Headers */,
@@ -377,6 +385,7 @@
 				C79CEA4417D62A1F009675ED /* ascii.c in Sources */,
 				C79CEA4F17D62A1F009675ED /* regparse.c in Sources */,
 				C79CEA6A17D62A9B009675ED /* main.m in Sources */,
+				C7F01D0B17DA5B500011D503 /* HTTPWebSocketConnection.m in Sources */,
 				C79CEA5117D62A1F009675ED /* regsyntax.c in Sources */,
 				C799CA3A166A782C00289CA9 /* HTTPConnection.m in Sources */,
 				C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */,
@@ -403,6 +412,7 @@
 				C79CEA5D17D62A3F009675ED /* regenc.c in Sources */,
 				C79CEA5E17D62A3F009675ED /* regerror.c in Sources */,
 				C79CEA5F17D62A3F009675ED /* regexec.c in Sources */,
+				C7F01D0C17DA5D210011D503 /* HTTPWebSocketConnection.m in Sources */,
 				C79CEA6017D62A3F009675ED /* regext.c in Sources */,
 				C79CEA6117D62A3F009675ED /* regparse.c in Sources */,
 				C79CEA6217D62A3F009675ED /* regsyntax.c in Sources */,
@@ -484,6 +494,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					USE_WEBSOCKET,
 					NO_CGI,
+					DEBUG_TRACE,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				HEADER_SEARCH_PATHS = dependencies;
@@ -528,6 +539,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					USE_WEBSOCKET,
+					NO_CGI,
+				);
 				HEADER_SEARCH_PATHS = dependencies;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -538,6 +555,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_WEBSOCKET,
+					NO_CGI,
+				);
 				HEADER_SEARCH_PATHS = dependencies;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";

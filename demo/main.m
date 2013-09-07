@@ -32,6 +32,33 @@ int main(int argc, const char * argv[])
             return @"Welcome! I trust you so I didn't even check your password.";
         }];
 
+        // SSE
+        [http handleGET:@"/sse" with:^(HTTPConnection *connection) {
+            return @"<script type=\"text/javascript\">"
+                   @"var source = new EventSource('/sse_events');"
+                   @"source.addEventListener('message', function(e) {"
+                       @"console.log('Got message: ' + e.data);"
+                   @"}, false);"
+            @"</script>";
+        }];
+        
+        [http handleGET:@"/sse_events" with:^(HTTPConnection *connection) {
+            [connection makeStreaming];
+            [connection setResponseHeader:@"Content-Type" to:@"text/event-stream"];
+            
+            NSString *lastId = [connection requestHeader:@"Last-Event-ID"];
+            if(lastId)
+                NSLog(@">> Welcome back %@", lastId); // Probably lost the connection, pick up where it left off?
+            
+            while(connection.isOpen) {
+                [connection writeString:@"id: foo\n"
+                                        @"data: Hey!\n\n"];
+                usleep(USEC_PER_SEC*0.5);
+            }
+         
+            return nil;
+        }];
+        
         // WebSocket
         [http handleWebSocket:^id (HTTPConnection *connection) {
             if(!connection.isOpen) {
@@ -45,7 +72,7 @@ int main(int argc, const char * argv[])
         }];
 
         [http listenOnPort:8081 onError:^(id reason) {
-            fprintf(stderr, "Error starting server: %s", [reason UTF8String]);
+            NSLog(@"Error starting server: %@", reason);
             exit(1);
         }];
         dispatch_main();

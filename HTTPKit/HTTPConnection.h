@@ -13,18 +13,21 @@ typedef enum {
 @property(readwrite, assign) int status;
 @property(readwrite, strong) NSString *reason;
 @property(readwrite, unsafe_unretained) HTTP *server;
-@property(readonly, strong) NSDictionary *headers;
 @property(readonly, strong) NSDictionary *requestMultipartSegments;
 @property(readonly, strong, nonatomic) NSData *requestBodyData;
 @property(readonly, strong) NSString *requestBody, *httpAuthUser;
 @property(readonly, strong) NSData *queryString;
 @property(readonly, strong) NSURL *url;
 @property(readonly) long requestLength, remoteIp, remotePort;
-@property(readonly) BOOL requestIsMultipart, isWebSocket, isOpen, isSSL;
+@property(readonly) BOOL requestIsMultipart, isOpen, isSSL, isStreaming;
 
-- (NSNumber *)writeData:(NSData *)aData;
-- (NSNumber *)writeString:(NSString *)aString;
-- (NSNumber *)writeFormat:(NSString *)aFormat, ...;
+- (NSInteger)writeData:(NSData *)aData;
+- (NSInteger)writeString:(NSString *)aString;
+- (NSInteger)writeFormat:(NSString *)aFormat, ...;
+
+// A streaming connection simply flushes after each write
+- (void)makeStreaming;
+- (NSInteger)flushData;
 
 - (NSString *)getCookie:(NSString *)aName;
 - (void)setCookie:(NSString *)aName
@@ -39,6 +42,7 @@ typedef enum {
 - (NSString *)requestBodyVar:(NSString *)aName;
 - (NSString *)requestQueryVar:(NSString *)aName;
 
+- (NSDictionary *)allRequestHeaders;
 - (NSString *)requestHeader:(NSString *)aName;
 - (void)setResponseHeader:(NSString *)aHeader to:(NSString *)aValue;
 

@@ -1,23 +1,13 @@
 #import "HTTPConnection.h"
 #import "HTTPPrivate.h"
 #import "HTTP.h"
-#import <FABatching/FABatching.h>
 #import <CocoaOniguruma/OnigRegexp.h>
 #import <arpa/inet.h>
 
 #define _ntohll(y) (((uint64_t)ntohl(y)) << 32 | ntohl(y>>32))
 
-@interface HTTPConnection () {
-    NSMutableData *_responseData;
-    NSData *_requestBodyData;
-    long _requestLength;
-    NSMutableDictionary *_cookiesToWrite, *_responseHeaders, *_requestMultipartSegments;
-    FA_BATCH_IVARS
-}
-- (NSString *)_getVar:(NSString *)aName inBuffer:(const void *)aBuf length:(long)aLen;
-@end
-
 @implementation HTTPConnection
+
 + (HTTPConnection *)withMGConnection:(struct mg_connection *)aConn server:(HTTP *)aServer
 {
     HTTPConnection *ret = [self new];
@@ -31,9 +21,10 @@
 {
     if(!(self = [super init]))
         return nil;
-    _status = 200;
-    _reason = @"OK";
-    _isOpen = YES;
+    _status      = 200;
+    _reason      = @"OK";
+    _isOpen      = YES;
+    _isStreaming = NO;
     if(_requestLength != -1) { // Only initialize if this is not a recycled object
         _requestLength   = -1;
         _responseData    = [NSMutableData new];
@@ -68,66 +59,96 @@
     return header;
 }
 
-- (void *)_writeWebSocketReply
-{
-    if(!_isWebSocket)
-        return "";
-    unsigned long len = (int)[_responseData length];
-    if(len > 125) {
-        fprintf(stderr, "WebSocket reply too long, closing socket\n");
-        return "";
-    }
-    char buf[len + 2];
-    buf[0] = 0x81; // text, FIN set
-    buf[1] = len;
-    [_responseData getBytes:buf+2 length:len+2];
-    mg_write(_mgConnection, buf, len+2);
-    return NULL;
-}
-- (void *)_writeResponse
-{
-    if(_isWebSocket)
-        return NULL;
-    char date[80];
-    time_t curtime = time(NULL);
-    strftime(date, sizeof(date), "%a, %d %b %Y %H:%M:%S GMT", gmtime(&curtime));
-    NSMutableString *headerStr = [NSMutableString stringWithFormat:
-                                  @"HTTP/1.1 %d %@\r\n"
-                                  @"Connection: keep-alive\r\n"
-                                  @"Content-Length: %ld\r\n"
-                                  @"Date: %s\r\n",
-                                  _status, _reason, (long)[_responseData length], date];
 
-    for(NSString *header in _responseHeaders) {
-        [headerStr appendString:header];
-        [headerStr appendString:@": "];
-        [headerStr appendString:_responseHeaders[header]];
+- (void)makeStreaming
+{
+    _isStreaming = YES;
+}
+
+- (NSInteger)flushData
+{
+    return [self _flushAndClose:!_isStreaming];
+}
+
+- (NSInteger)_flushAndClose:(BOOL)aShouldClose
+{
+    int bytesWritten = 0;
+    if(!_wroteHeaders) {
+        char date[80];
+        time_t curtime = time(NULL);
+        strftime(date, sizeof(date), "%a, %d %b %Y %H:%M:%S GMT", gmtime(&curtime));
+        NSMutableString *headerStr;
+        if(aShouldClose)
+            headerStr = [NSMutableString stringWithFormat:
+                         @"HTTP/1.1 %d %@\r\n"
+                         @"Connection: keep-alive\r\n"
+                         @"Content-Length: %ld\r\n"
+                         @"Date: %s\r\n",
+                         _status, _reason, (long)[_responseData length], date];
+        else
+            headerStr = [NSMutableString stringWithFormat:
+                         @"HTTP/1.1 %d %@\r\n"
+                         @"Connection: keep-alive\r\n"
+                         @"Date: %s\r\n",
+                         _status, _reason, date];
+        
+        for(NSString *header in _responseHeaders) {
+            [headerStr appendString:header];
+            [headerStr appendString:@": "];
+            [headerStr appendString:_responseHeaders[header]];
+            [headerStr appendString:@"\r\n"];
+        }
+        NSString *cookieStr = [self _cookieHeader];
+        if(cookieStr)
+            [headerStr appendString:cookieStr];
         [headerStr appendString:@"\r\n"];
+        
+        const char *bytes = [headerStr UTF8String];
+        size_t byteLen = strlen(bytes);
+        bytesWritten += mg_write(_mgConnection, bytes, byteLen);
+        if(bytesWritten < byteLen)
+            goto invalidConnection;
+        
+        _wroteHeaders = YES;
     }
-    NSString *cookieStr = [self _cookieHeader];
-    if(cookieStr)
-        [headerStr appendString:cookieStr];
-    [headerStr appendString:@"\r\n"];
-    const char *bytes = [headerStr UTF8String];
-    mg_write(_mgConnection, bytes, strlen(bytes));
-    mg_write(_mgConnection, [_responseData bytes], [_responseData length]);
-    return "";
+    
+    if([_responseData length] > 0) {
+        NSUInteger responseLength = [_responseData length];
+        int responseBytesWritten = mg_write(_mgConnection,
+                                            [_responseData bytes],
+                                            responseLength);
+        [_responseData setLength:0];
+        bytesWritten += responseBytesWritten;
+        
+        if(responseBytesWritten < responseLength)
+            goto invalidConnection;
+    }
+    
+    if(aShouldClose)
+        [self close];
+    
+    return bytesWritten;
+
+invalidConnection:
+    [self close];
+    return -1;
 }
 
-- (NSNumber *)writeData:(NSData *)aData
+- (NSInteger)writeData:(NSData *)aData
 {
     NSAssert(_isOpen, @"Tried to write data to a closed connection");
     [_responseData appendData:aData];
-    return @([aData length]);
-//    int bytesWritten = mg_write(_mgConnection, [aData bytes], [data length]);
-    //return @(bytesWritten);
+    if(_isStreaming)
+        return [self flushData];
+    else
+        return [aData length];
 }
 
-- (NSNumber *)writeString:(NSString *)aString
+- (NSInteger)writeString:(NSString *)aString
 {
     return [self writeData:[aString dataUsingEncoding:NSUTF8StringEncoding]];
 }
-- (NSNumber *)writeFormat:(NSString *)aFormat, ...
+- (NSInteger)writeFormat:(NSString *)aFormat, ...
 {
     va_list args;
     va_start(args, aFormat);
@@ -140,9 +161,10 @@
 
 - (NSString *)getCookie:(NSString *)aName
 {
-    NSAssert(!_isWebSocket, @"WebSockets don't support cookies");
+    const char *cookieHedader = mg_get_header(_mgConnection, "Cookie");
     char buf[1024];
-    if(mg_get_cookie(_mgConnection, [aName UTF8String], buf, 1024) > 0)
+    
+    if(cookieHedader && mg_get_cookie(cookieHedader, [aName UTF8String], buf, 1024) > 0)
         return [NSString stringWithUTF8String:buf];
     return nil;
 }
@@ -210,63 +232,12 @@
     return nil;
 }
 
-- (NSData *)_webSocketMessageBody
-{
-    if(!_isWebSocket)
-        return nil;
-    BOOL masked;
-    uint64_t msgLen;
-    // Discover the message length and allocate a properly sized buffer
-    unsigned char buf[4], mask[4];
-    if(mg_read(_mgConnection, buf, 2) != 2)
-        return nil;
-//    BOOL fin = buf[0] & 128;
-    masked = buf[1] & 128;
-    msgLen = buf[1] & 127;
-    if(msgLen == 126) { // length is a 16bit unsigned next up in the buffer
-        if(mg_read(_mgConnection, buf, 2) != 2)
-            return nil;
-        msgLen = ntohs(*(uint16_t*)&buf[0]);
-    } else if(msgLen == 127) { // length is a 64bit unsigned
-        if(mg_read(_mgConnection, buf, 4) != 4)
-            return nil;
-        msgLen = _ntohll(*(uint64_t*)buf);
-    }
-    if(masked) {
-        if(mg_read(_mgConnection, mask, 4) != 4)
-            return nil;
-    }
-    if(msgLen == 0)
-        return nil;
-
-    char *payload = malloc(msgLen);
-    int64_t len = -1;
-    uint64_t bytesRead = 0;
-    while((bytesRead < msgLen) &&
-          (len = mg_read(_mgConnection, payload+bytesRead, msgLen-bytesRead))) {
-        bytesRead += len;
-    }
-    if(len < 0) {
-        free(payload);
-        return nil;
-    }
-    // Unmask the payload if needed
-    for(int i = 0; masked && i < msgLen; ++i) {
-        payload[i] ^= mask[i % 4];
-    }
-    return [NSData dataWithBytesNoCopy:payload
-                                length:msgLen
-                          freeWhenDone:YES];
-
-}
 - (NSData *)requestBodyData
 {
     if(!_requestBodyData) {
         if(self.requestIsMultipart)
             return nil;
-        else if(_isWebSocket)
-            self.requestBodyData = [self _webSocketMessageBody];
-        else {
+        else if(!_isWebSocket) {
             long len = self.requestLength;
             if(len == 0)
                 return nil;
@@ -292,7 +263,8 @@
 
 - (NSDictionary *)requestMultipartSegments
 {
-    return nil; // TODO
+    return nil;
+// TODO
 //    if(_requestMultipartSegments)
 //        return _requestMultipartSegments;
 //    if(![self requestIsMultipart])
@@ -447,6 +419,17 @@
         _responseHeaders[aHeader] = aValue;
     else
         [_responseHeaders removeObjectForKey:aHeader];
+}
+
+- (NSDictionary *)allRequestHeaders
+{
+    struct mg_request_info *info = mg_get_request_info(_mgConnection);
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    for(int i = 0; i < info->num_headers; ++i) {
+        struct mg_header header = info->http_headers[i];
+        headers[@(header.name)] = @(header.value);
+    }
+    return headers;
 }
 
 - (NSString *)requestHeader:(NSString *)aName
