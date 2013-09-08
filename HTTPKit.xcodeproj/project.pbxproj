@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C77D10A5166D0453005B809C /* HTTPKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C77D10A4166D0453005B809C /* HTTPKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C791AA6317DCDC7E00DA458A /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C791AA6217DCDC7E00DA458A /* libssl.dylib */; };
+		C791AA6517DCDC8700DA458A /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C791AA6417DCDC8700DA458A /* libcrypto.dylib */; };
 		C799C7B2166A75CD00289CA9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7B1166A75CD00289CA9 /* Cocoa.framework */; };
 		C799CA32166A772300289CA9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799CA31166A772300289CA9 /* Security.framework */; };
 		C799CA35166A774300289CA9 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C799CA33166A774300289CA9 /* HTTP.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -83,6 +85,8 @@
 
 /* Begin PBXFileReference section */
 		C77D10A4166D0453005B809C /* HTTPKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPKit.h; sourceTree = "<group>"; };
+		C791AA6217DCDC7E00DA458A /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
+		C791AA6417DCDC8700DA458A /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		C799C7AE166A75CD00289CA9 /* HTTPKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HTTPKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C799C7B1166A75CD00289CA9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C799C7B4166A75CD00289CA9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -144,6 +148,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C791AA6517DCDC8700DA458A /* libcrypto.dylib in Frameworks */,
+				C791AA6317DCDC7E00DA458A /* libssl.dylib in Frameworks */,
 				C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -174,6 +180,8 @@
 		C799C7B0166A75CD00289CA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C791AA6417DCDC8700DA458A /* libcrypto.dylib */,
+				C791AA6217DCDC7E00DA458A /* libssl.dylib */,
 				C799CA31166A772300289CA9 /* Security.framework */,
 				C799C7B1166A75CD00289CA9 /* Cocoa.framework */,
 				C7B39EAB166B72FC00D9FABD /* Foundation.framework */,
@@ -504,7 +512,10 @@
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wno-deprecated",
+				);
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -528,7 +539,10 @@
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wno-deprecated",
+				);
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -546,7 +560,10 @@
 				HEADER_SEARCH_PATHS = dependencies;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wno-deprecated",
+				);
 			};
 			name = Debug;
 		};
@@ -561,7 +578,10 @@
 				HEADER_SEARCH_PATHS = dependencies;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wno-deprecated",
+				);
 			};
 			name = Release;
 		};

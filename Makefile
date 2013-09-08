@@ -6,7 +6,7 @@ PRODUCT_NAME = libhttpkit.so
 CFLAGS  = -fblocks -fobjc-nonfragile-abi -fno-constant-cfstrings -I. -Wall -g -O0 -I/usr/local/include -Idependencies -DDEBUG_TRACE -Wno-trigraphs -Wno-shorten-64-to-32
 
 LIB_CFLAGS = -fPIC
-LDFLAGS=-L/usr/local/lib -lobjc -lpthread -ldispatch -lCoreFoundation -lfoundation_lite
+LDFLAGS=-L/usr/local/lib -lobjc -lpthread -ldispatch -lCoreFoundation -lfoundation_lite -lcrypto -lssl
 
 SRC       = HTTPKit/HTTP.m \
             $(wildcard dependencies/CocoaOniguruma/*.m)
