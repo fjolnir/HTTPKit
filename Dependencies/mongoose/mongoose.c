@@ -24,6 +24,7 @@
 #define _LARGEFILE_SOURCE       // Enable 64-bit file offsets
 #define __STDC_FORMAT_MACROS    // <inttypes.h> wants this for C++
 #define __STDC_LIMIT_MACROS     // C++ wants that for INT64_MAX
+#define _GNU_SOURCE
 
 #include <sys/types.h>
 #include <sys/stat.h>
