@@ -2420,7 +2420,6 @@ static void do_ssi_include(struct mg_connection *conn, const char *ssi,
     }
 }
 
-#if !defined(NO_POPEN)
 static void do_ssi_exec(struct mg_connection *conn, char *tag) {
     char cmd[MG_BUF_LEN];
     struct file file = STRUCT_FILE_INITIALIZER;
@@ -2434,7 +2433,6 @@ static void do_ssi_exec(struct mg_connection *conn, char *tag) {
         pclose(file.fp);
     }
 }
-#endif // !NO_POPEN
 
 static int mg_fgetc(struct file *filep, int offset) {
     if (filep->membuf != NULL && offset >=0 && offset < filep->size) {
@@ -2469,10 +2467,8 @@ static void send_ssi_file(struct mg_connection *conn, const char *path,
             } else {
                 if (!memcmp(buf + 5, "include", 7)) {
                     do_ssi_include(conn, path, buf + 12, include_level);
-#if !defined(NO_POPEN)
                 } else if (!memcmp(buf + 5, "exec", 4)) {
                     do_ssi_exec(conn, buf + 9);
-#endif // !NO_POPEN
                 } else {
                     cry(conn, "%s: unknown SSI " "command: \"%s\"", path, buf);
                 }
@@ -2519,8 +2515,8 @@ static void handle_ssi_file_request(struct mg_connection *conn, const char *path
         conn->must_close = 1;
         fclose_on_exec(&file);
         mg_printf(conn, "HTTP/1.1 200 OK\r\n"
-                            "Content-Type: text/html\r\nConnection: %s\r\n\r\n",
-                            suggest_connection_header(conn));
+                        "Content-Type: text/html\r\nConnection: %s\r\n\r\n",
+                        suggest_connection_header(conn));
         send_ssi_file(conn, path, &file, 0);
         mg_fclose(&file);
     }
@@ -2530,8 +2526,8 @@ static void send_options(struct mg_connection *conn) {
     conn->status_code = 200;
 
     mg_printf(conn, "%s", "HTTP/1.1 200 OK\r\n"
-                        "Allow: GET, POST, HEAD, CONNECT, PUT, DELETE, OPTIONS, PROPFIND, MKCOL\r\n"
-                        "DAV: 1\r\n\r\n");
+                    "Allow: GET, POST, HEAD, CONNECT, PUT, DELETE, OPTIONS, PROPFIND, MKCOL\r\n"
+                    "DAV: 1\r\n\r\n");
 }
 
 // Writes PROPFIND properties for a collection element
@@ -2573,12 +2569,12 @@ static void handle_propfind(struct mg_connection *conn, const char *path,
     conn->must_close = 1;
     conn->status_code = 207;
     mg_printf(conn, "HTTP/1.1 207 Multi-Status\r\n"
-                        "Connection: close\r\n"
-                        "Content-Type: text/xml; charset=utf-8\r\n\r\n");
+                    "Connection: close\r\n"
+                    "Content-Type: text/xml; charset=utf-8\r\n\r\n");
 
     conn->num_bytes_sent += mg_printf(conn,
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-            "<d:multistatus xmlns:d='DAV:'>\n");
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+        "<d:multistatus xmlns:d='DAV:'>\n");
 
     // Print properties for the requested resource itself
     print_props(conn, conn->request_info.uri, filep);
@@ -2630,10 +2626,10 @@ static void send_websocket_handshake(struct mg_connection *conn) {
     SHA1_Final((unsigned char *) sha, &sha_ctx);
     base64_encode((unsigned char *) sha, sizeof(sha), b64_sha);
     mg_printf(conn, "%s%s%s",
-                        "HTTP/1.1 101 Switching Protocols\r\n"
-                        "Upgrade: websocket\r\n"
-                        "Connection: Upgrade\r\n"
-                        "Sec-WebSocket-Accept: ", b64_sha, "\r\n\r\n");
+                    "HTTP/1.1 101 Switching Protocols\r\n"
+                    "Upgrade: websocket\r\n"
+                    "Connection: Upgrade\r\n"
+                    "Sec-WebSocket-Accept: ", b64_sha, "\r\n\r\n");
 }
 
 static void read_websocket(struct mg_connection *conn) {
