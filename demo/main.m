@@ -7,6 +7,8 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         HTTP *http = [HTTP new];
         http.enableDirListing = YES;
+        http.extraMIMETypes = @{ @"json": @"application/json" };
+        
         // Simple "Hello you!" pong
         [http handleGET:@"/hello/*"
                    with:^(HTTPConnection *connection, NSString *name) {
@@ -33,15 +35,15 @@ int main(int argc, const char * argv[])
             return @"Welcome! I trust you so I didn't even check your password.";
         }];
         
-        [http handleGET:@"/file"
+        [http handleGET:@"/file.json"
                    with:^id (HTTPConnection *connection) {
-                       [@"Hello!" writeToFile:@"/tmp/test.txt"
-                                   atomically:YES
-                                     encoding:NSUTF8StringEncoding
-                                        error:nil];
-                       [connection serveFileAtPath:@"/tmp/test.txt"];
-                       return nil;
-                   }];
+            [@"{ 'foo': 'bar' }" writeToFile:@"/tmp/test.json"
+                                  atomically:YES
+                                    encoding:NSUTF8StringEncoding
+                                       error:nil];
+            [connection serveFileAtPath:@"/tmp/test.json"];
+            return nil;
+        }];
 
         // SSE
         [http handleGET:@"/sse" with:^id (HTTPConnection *connection) {

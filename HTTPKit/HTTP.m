@@ -185,12 +185,19 @@ static struct mg_callbacks _MongooseCallbacks = {
     char threadStr[5], portStr[8];
     sprintf(portStr,   "%ld", (unsigned long)port);
     sprintf(threadStr, "%d",  _numberOfThreads);
+    
+    NSMutableString *mimeTypes = [NSMutableString new];
+    for(NSString *extension in _extraMIMETypes) {
+        [mimeTypes appendFormat:@".%@=%@,", extension, _extraMIMETypes[extension]];
+    }
+    
     const char *opts[] = {
         "listening_ports",          portStr,
         "enable_directory_listing", _enableDirListing ? "yes" : "no",
         "enable_keep_alive",        _enableKeepAlive ? "yes" : "no",
         "document_root",            [_publicDir UTF8String] ?: ".",
         "num_threads",              threadStr,
+        "extra_mime_types",         [mimeTypes UTF8String],
         NULL
     };
     _ctx = mg_start(&_MongooseCallbacks, (__bridge void *)self, opts);

@@ -10,6 +10,7 @@ typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 @property(readwrite, strong) NSString *publicDir;
 @property(readwrite, assign) BOOL enableDirListing, enableKeepAlive;
 @property(readwrite, assign) unsigned int numberOfThreads;
+@property(readwrite, copy) NSDictionary *extraMIMETypes;
 
 - (BOOL)listenOnPort:(NSUInteger)port onError:(HTTPErrorBlock)aErrorHandler;
 
