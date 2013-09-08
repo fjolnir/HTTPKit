@@ -107,12 +107,6 @@ struct mg_callbacks {
   const char * (*open_file)(const struct mg_connection *,
                              const char *path, size_t *data_len);
 
-  // Called when mongoose is about to serve Lua server page (.lp file), if
-  // Lua support is enabled.
-  // Parameters:
-  //   lua_context: "lua_State *" pointer.
-  void (*init_lua)(struct mg_connection *, void *lua_context);
-
   // Called when mongoose has uploaded a file to a temporary directory as a
   // result of mg_upload() call.
   // Parameters:
@@ -230,20 +224,6 @@ enum {
   WEBSOCKET_OPCODE_PONG = 0xa
 };
 
-
-// Macros for enabling compiler-specific checks for printf-like arguments.
-#undef PRINTF_FORMAT_STRING
-#if defined(_MSC_VER) && _MSC_VER >= 1400
-#include <sal.h>
-#if defined(_MSC_VER) && _MSC_VER > 1400
-#define PRINTF_FORMAT_STRING(s) _Printf_format_string_ s
-#else
-#define PRINTF_FORMAT_STRING(s) __format_string s
-#endif
-#else
-#define PRINTF_FORMAT_STRING(s) s
-#endif
-
 #ifdef __GNUC__
 #define PRINTF_ARGS(x, y) __attribute__((format(printf, x, y)))
 #else
@@ -254,7 +234,7 @@ enum {
 //
 // Works exactly like mg_write(), but allows to do message formatting.
 int mg_printf(struct mg_connection *,
-              PRINTF_FORMAT_STRING(const char *fmt), ...) PRINTF_ARGS(2, 3);
+              const char *fmt, ...) PRINTF_ARGS(2, 3);
 
 
 // Send contents of the entire file together with HTTP headers.
@@ -315,42 +295,10 @@ int mg_get_var(const char *data, size_t data_len,
 int mg_get_cookie(const char *cookie, const char *var_name,
                   char *buf, size_t buf_len);
 
-
-// Download data from the remote web server.
-//   host: host name to connect to, e.g. "foo.com", or "10.12.40.1".
-//   port: port number, e.g. 80.
-//   use_ssl: wether to use SSL connection.
-//   error_buffer, error_buffer_size: error message placeholder.
-//   request_fmt,...: HTTP request.
-// Return:
-//   On success, valid pointer to the new connection, suitable for mg_read().
-//   On error, NULL. error_buffer contains error message.
-// Example:
-//   char ebuf[100];
-//   struct mg_connection *conn;
-//   conn = mg_download("google.com", 80, 0, ebuf, sizeof(ebuf),
-//                      "%s", "GET / HTTP/1.0\r\nHost: google.com\r\n\r\n");
-struct mg_connection *mg_download(const char *host, int port, int use_ssl,
-                                  char *error_buffer, size_t error_buffer_size,
-                                  PRINTF_FORMAT_STRING(const char *request_fmt),
-                                  ...) PRINTF_ARGS(6, 7);
-
-
-// Close the connection opened by mg_download().
-void mg_close_connection(struct mg_connection *conn);
-
-
-// File upload functionality. Each uploaded file gets saved into a temporary
-// file and MG_UPLOAD event is sent.
-// Return number of uploaded files.
-int mg_upload(struct mg_connection *conn, const char *destination_dir);
-
-
 // Convenience function -- create detached thread.
 // Return: 0 on success, non-0 on error.
 typedef void * (*mg_thread_func_t)(void *);
 int mg_start_thread(mg_thread_func_t f, void *p);
-
 
 // Return builtin mime type for the given file name.
 // For unrecognized extensions, "text/plain" is returned.

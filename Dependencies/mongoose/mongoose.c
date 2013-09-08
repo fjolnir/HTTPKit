@@ -319,8 +319,7 @@ static void sockaddr_to_string(char *buf, size_t len, const union usa *usa) {
 #endif
 }
 
-static void cry(struct mg_connection *conn,
-                PRINTF_FORMAT_STRING(const char *fmt), ...) PRINTF_ARGS(2, 3);
+static void cry(struct mg_connection *conn, const char *fmt, ...) PRINTF_ARGS(2, 3);
 
 // Print error message to the opened error log stream.
 static void cry(struct mg_connection *conn, const char *fmt, ...) {
@@ -459,8 +458,7 @@ static int mg_vsnprintf(struct mg_connection *conn, char *buf, size_t buflen,
 }
 
 static int mg_snprintf(struct mg_connection *conn, char *buf, size_t buflen,
-                       PRINTF_FORMAT_STRING(const char *fmt), ...)
-    PRINTF_ARGS(4, 5);
+                       const char *fmt, ...) PRINTF_ARGS(4, 5);
 
 static int mg_snprintf(struct mg_connection *conn, char *buf, size_t buflen,
                        const char *fmt, ...) {
@@ -643,8 +641,7 @@ static const char *suggest_connection_header(const struct mg_connection *conn) {
 }
 
 static void send_http_error(struct mg_connection *, int, const char *,
-                            PRINTF_FORMAT_STRING(const char *fmt), ...)
-    PRINTF_ARGS(4, 5);
+                            const char *fmt, ...) PRINTF_ARGS(4, 5);
 
 
 static void send_http_error(struct mg_connection *conn, int status,
@@ -2874,122 +2871,6 @@ static uint32_t get_remote_ip(const struct mg_connection *conn) {
     return ntohl(* (uint32_t *) &conn->client.rsa.sin.sin_addr);
 }
 
-
-int mg_upload(struct mg_connection *conn, const char *destination_dir) {
-    const char *content_type_header, *boundary_start;
-    char buf[MG_BUF_LEN], path[PATH_MAX], fname[1024], boundary[100], *s;
-    FILE *fp;
-    int bl, n, i, j, headers_len, boundary_len, eof,
-        len = 0, num_uploaded_files = 0;
-
-    // Request looks like this:
-    //
-    // POST /upload HTTP/1.1
-    // Host: 127.0.0.1:8080
-    // Content-Length: 244894
-    // Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryRVr
-    //
-    // ------WebKitFormBoundaryRVr
-    // Content-Disposition: form-data; name="file"; filename="accum.png"
-    // Content-Type: image/png
-    //
-    //    <89>PNG
-    //    <PNG DATA>
-    // ------WebKitFormBoundaryRVr
-
-    // Extract boundary string from the Content-Type header
-    if ((content_type_header = mg_get_header(conn, "Content-Type")) == NULL ||
-            (boundary_start = mg_strcasestr(content_type_header,
-                                                                            "boundary=")) == NULL ||
-            (sscanf(boundary_start, "boundary=\"%99[^\"]\"", boundary) == 0 &&
-             sscanf(boundary_start, "boundary=%99s", boundary) == 0) ||
-            boundary[0] == '\0') {
-        return num_uploaded_files;
-    }
-
-    boundary_len = strlen(boundary);
-    bl = boundary_len + 4;    // \r\n--<boundary>
-    for (;;) {
-        // Pull in headers
-        assert(len >= 0 && len <= (int) sizeof(buf));
-        while ((n = mg_read(conn, buf + len, sizeof(buf) - len)) > 0) {
-            len += n;
-        }
-        if ((headers_len = get_request_len(buf, len)) <= 0) {
-            break;
-        }
-
-        // Fetch file name.
-        fname[0] = '\0';
-        for (i = j = 0; i < headers_len; i++) {
-            if (buf[i] == '\r' && buf[i + 1] == '\n') {
-                buf[i] = buf[i + 1] = '\0';
-                // TODO(lsm): don't expect filename to be the 3rd field,
-                // parse the header properly instead.
-                sscanf(&buf[j], "Content-Disposition: %*s %*s filename=\"%1023[^\"]",
-                             fname);
-                j = i + 2;
-            }
-        }
-
-        // Give up if the headers are not what we expect
-        if (fname[0] == '\0') {
-            break;
-        }
-
-        // Move data to the beginning of the buffer
-        assert(len >= headers_len);
-        memmove(buf, &buf[headers_len], len - headers_len);
-        len -= headers_len;
-
-        // We open the file with exclusive lock held. This guarantee us
-        // there is no other thread can save into the same file simultaneously.
-        fp = NULL;
-        // Construct destination file name. Do not allow paths to have slashes.
-        if ((s = strrchr(fname, '/')) == NULL &&
-                (s = strrchr(fname, '\\')) == NULL) {
-            s = fname;
-        }
-
-        // Open file in binary mode. TODO: set an exclusive lock.
-        snprintf(path, sizeof(path), "%s/%s", destination_dir, s);
-        if ((fp = fopen(path, "wb")) == NULL) {
-            break;
-        }
-
-        // Read POST data, write into file until boundary is found.
-        eof = n = 0;
-        do {
-            len += n;
-            for (i = 0; i < len - bl; i++) {
-                if (!memcmp(&buf[i], "\r\n--", 4) &&
-                        !memcmp(&buf[i + 4], boundary, boundary_len)) {
-                    // Found boundary, that's the end of file data.
-                    fwrite(buf, 1, i, fp);
-                    eof = 1;
-                    memmove(buf, &buf[i + bl], len - (i + bl));
-                    len -= i + bl;
-                    break;
-                }
-            }
-            if (!eof && len > bl) {
-                fwrite(buf, 1, len - bl, fp);
-                memmove(buf, &buf[len - bl], bl);
-                len = bl;
-            }
-        } while (!eof && (n = mg_read(conn, buf + len, sizeof(buf) - len)) > 0);
-        fclose(fp);
-        if (eof) {
-            num_uploaded_files++;
-            if (conn->ctx->callbacks.upload != NULL) {
-                conn->ctx->callbacks.upload(conn, path);
-            }
-        }
-    }
-
-    return num_uploaded_files;
-}
-
 static int is_put_or_delete_request(const struct mg_connection *conn) {
     const char *s = conn->request_info.request_method;
     return s != NULL && (!strcmp(s, "PUT") ||
@@ -3466,15 +3347,6 @@ static void close_connection(struct mg_connection *conn) {
     }
 }
 
-void mg_close_connection(struct mg_connection *conn) {
-    if (conn->client_ssl_ctx != NULL) {
-        SSL_CTX_free((SSL_CTX *) conn->client_ssl_ctx);
-    }
-
-    close_connection(conn);
-    free(conn);
-}
-
 struct mg_connection *mg_connect(const char *host, int port, int use_ssl,
                                  char *ebuf, size_t ebuf_len) {
     static struct mg_context fake_ctx;
@@ -3546,28 +3418,6 @@ static int getreq(struct mg_connection *conn, char *ebuf, size_t ebuf_len) {
         conn->birth_time = time(NULL);
     }
     return ebuf[0] == '\0';
-}
-
-struct mg_connection *mg_download(const char *host, int port, int use_ssl,
-                                  char *ebuf, size_t ebuf_len,
-                                  const char *fmt, ...) {
-    struct mg_connection *conn;
-    va_list ap;
-
-    va_start(ap, fmt);
-    ebuf[0] = '\0';
-    if ((conn = mg_connect(host, port, use_ssl, ebuf, ebuf_len)) == NULL) {
-    } else if (mg_vprintf(conn, fmt, ap) <= 0) {
-        snprintf(ebuf, ebuf_len, "%s", "Error sending request");
-    } else {
-        getreq(conn, ebuf, ebuf_len);
-    }
-    if (ebuf[0] != '\0' && conn != NULL) {
-        mg_close_connection(conn);
-        conn = NULL;
-    }
-
-    return conn;
 }
 
 static void process_new_connection(struct mg_connection *conn) {
