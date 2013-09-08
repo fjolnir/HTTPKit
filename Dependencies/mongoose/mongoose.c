@@ -18,44 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if defined(_WIN32)
-#if !defined(_CRT_SECURE_NO_WARNINGS)
-#define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
-#endif
-#else
 #ifdef __linux__
 #define _XOPEN_SOURCE 600     // For flockfile() on Linux
 #endif
 #define _LARGEFILE_SOURCE     // Enable 64-bit file offsets
 #define __STDC_FORMAT_MACROS  // <inttypes.h> wants this for C++
 #define __STDC_LIMIT_MACROS   // C++ wants that for INT64_MAX
-#endif
 
-#if defined (_MSC_VER)
-// conditional expression is constant: introduced by FD_SET(..)
-#pragma warning (disable : 4127)
-// non-constant aggregate initializer: issued due to missing C99 support
-#pragma warning (disable : 4204)
-#endif
-
-// Disable WIN32_LEAN_AND_MEAN.
-// This makes windows.h always include winsock2.h
-#ifdef WIN32_LEAN_AND_MEAN
-#undef WIN32_LEAN_AND_MEAN
-#endif
-
-#if defined(__SYMBIAN32__)
-#define NO_SSL // SSL is not supported
-#define PATH_MAX FILENAME_MAX
-#endif // __SYMBIAN32__
-
-#ifndef _WIN32_WCE // Some ANSI #includes are not available on Windows CE
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <signal.h>
 #include <fcntl.h>
-#endif // !_WIN32_WCE
 
 #include <time.h>
 #include <stdlib.h>
@@ -67,141 +41,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#if defined(_WIN32) && !defined(__SYMBIAN32__) // Windows specific
-#undef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400 // To make it link in VS2005
-#include <windows.h>
 
-#ifndef PATH_MAX
-#define PATH_MAX MAX_PATH
-#endif
-
-#ifndef _WIN32_WCE
-#include <process.h>
-#include <direct.h>
-#include <io.h>
-#else // _WIN32_WCE
-
-typedef long off_t;
-
-#define errno   GetLastError()
-#define strerror(x)  _ultoa(x, (char *) _alloca(sizeof(x) *3 ), 10)
-#endif // _WIN32_WCE
-
-#define MAKEUQUAD(lo, hi) ((uint64_t)(((uint32_t)(lo)) | \
-      ((uint64_t)((uint32_t)(hi))) << 32))
-#define RATE_DIFF 10000000 // 100 nsecs
-#define EPOCH_DIFF MAKEUQUAD(0xd53e8000, 0x019db1de)
-#define SYS2UNIX_TIME(lo, hi) \
-  (time_t) ((MAKEUQUAD((lo), (hi)) - EPOCH_DIFF) / RATE_DIFF)
-
-// Visual Studio 6 does not know __func__ or __FUNCTION__
-// The rest of MS compilers use __FUNCTION__, not C99 __func__
-// Also use _strtoui64 on modern M$ compilers
-#if defined(_MSC_VER) && _MSC_VER < 1300
-#define STRX(x) #x
-#define STR(x) STRX(x)
-#define __func__ __FILE__ ":" STR(__LINE__)
-#define strtoull(x, y, z) (unsigned __int64) _atoi64(x)
-#define strtoll(x, y, z) _atoi64(x)
-#else
-#define __func__  __FUNCTION__
-#define strtoull(x, y, z) _strtoui64(x, y, z)
-#define strtoll(x, y, z) _strtoi64(x, y, z)
-#endif // _MSC_VER
-
-#define ERRNO   GetLastError()
-#define NO_SOCKLEN_T
-#define SSL_LIB   "ssleay32.dll"
-#define CRYPTO_LIB  "libeay32.dll"
-#define O_NONBLOCK  0
-#if !defined(EWOULDBLOCK)
-#define EWOULDBLOCK  WSAEWOULDBLOCK
-#endif // !EWOULDBLOCK
-#define _POSIX_
-#define INT64_FMT  "I64d"
-
-#define WINCDECL __cdecl
-#define SHUT_WR 1
-#define snprintf _snprintf
-#define vsnprintf _vsnprintf
-#define mg_sleep(x) Sleep(x)
-
-#define pipe(x) _pipe(x, MG_BUF_LEN, _O_BINARY)
-#ifndef popen
-#define popen(x, y) _popen(x, y)
-#endif
-#ifndef pclose
-#define pclose(x) _pclose(x)
-#endif
-#define close(x) _close(x)
-#define dlsym(x,y) GetProcAddress((HINSTANCE) (x), (y))
-#define RTLD_LAZY  0
-#define fseeko(x, y, z) _lseeki64(_fileno(x), (y), (z))
-#define fdopen(x, y) _fdopen((x), (y))
-#define write(x, y, z) _write((x), (y), (unsigned) z)
-#define read(x, y, z) _read((x), (y), (unsigned) z)
-#define flockfile(x) EnterCriticalSection(&global_log_file_lock)
-#define funlockfile(x) LeaveCriticalSection(&global_log_file_lock)
-#define sleep(x) Sleep((x) * 1000)
-#define rmdir(x) _rmdir(x)
-
-#if !defined(va_copy)
-#define va_copy(x, y) x = y
-#endif // !va_copy MINGW #defines va_copy
-
-#if !defined(fileno)
-#define fileno(x) _fileno(x)
-#endif // !fileno MINGW #defines fileno
-
-typedef HANDLE pthread_mutex_t;
-typedef struct {HANDLE signal, broadcast;} pthread_cond_t;
-typedef DWORD pthread_t;
-#define pid_t HANDLE // MINGW typedefs pid_t to int. Using #define here.
-
-static int pthread_mutex_lock(pthread_mutex_t *);
-static int pthread_mutex_unlock(pthread_mutex_t *);
-static void to_unicode(const char *path, wchar_t *wbuf, size_t wbuf_len);
-struct file;
-static char *mg_fgets(char *buf, size_t size, struct file *filep, char **p);
-
-#if defined(HAVE_STDINT)
-#include <stdint.h>
-#else
-typedef unsigned int  uint32_t;
-typedef unsigned short  uint16_t;
-typedef unsigned __int64 uint64_t;
-typedef __int64   int64_t;
-#define INT64_MAX  9223372036854775807
-#endif // HAVE_STDINT
-
-// POSIX dirent interface
-struct dirent {
-  char d_name[PATH_MAX];
-};
-
-typedef struct DIR {
-  HANDLE   handle;
-  WIN32_FIND_DATAW info;
-  struct dirent  result;
-} DIR;
-
-#ifndef HAVE_POLL
-struct pollfd {
-  SOCKET fd;
-  short events;
-  short revents;
-};
-#define POLLIN 1
-#endif
-
-
-// Mark required libraries
-#ifdef _MSC_VER
-#pragma comment(lib, "Ws2_32.lib")
-#endif
-
-#else    // UNIX  specific
 #include <sys/wait.h>
 #include <sys/socket.h>
 #include <sys/poll.h>
@@ -241,9 +81,6 @@ struct pollfd {
 #define INVALID_SOCKET (-1)
 #define INT64_FMT PRId64
 typedef int SOCKET;
-#define WINCDECL
-
-#endif // End of Windows and UNIX specific includes
 
 #include "mongoose.h"
 
@@ -254,13 +91,6 @@ typedef int SOCKET;
 #define MG_BUF_LEN 8192
 #define MAX_REQUEST_SIZE 16384
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
-
-#ifdef _WIN32
-static CRITICAL_SECTION global_log_file_lock;
-static pthread_t pthread_self(void) {
-  return GetCurrentThreadId();
-}
-#endif // _WIN32
 
 #ifdef DEBUG_TRACE
 #undef DEBUG_TRACE
@@ -282,10 +112,6 @@ static pthread_t pthread_self(void) {
 #endif // DEBUG
 #endif // DEBUG_TRACE
 
-// Darwin prior to 7.0 and Win32 do not have socklen_t
-#ifdef NO_SOCKLEN_T
-typedef int socklen_t;
-#endif // NO_SOCKLEN_T
 #define _DARWIN_UNLIMITED_SELECT
 
 #define IP_ADDR_STR_LEN 50  // IPv6 hex string is 46 chars
@@ -556,14 +382,7 @@ static int is_file_opened(const struct file *filep) {
 static int mg_fopen(struct mg_connection *conn, const char *path,
                     const char *mode, struct file *filep) {
   if (!is_file_in_memory(conn, path, filep)) {
-#ifdef _WIN32
-    wchar_t wbuf[PATH_MAX], wmode[20];
-    to_unicode(path, wbuf, ARRAY_SIZE(wbuf));
-    MultiByteToWideChar(CP_UTF8, 0, mode, -1, wmode, ARRAY_SIZE(wmode));
-    filep->fp = _wfopen(wbuf, wmode);
-#else
     filep->fp = fopen(path, mode);
-#endif
   }
 
   return is_file_opened(filep);
@@ -604,10 +423,6 @@ static void sockaddr_to_string(char *buf, size_t len,
   inet_ntop(usa->sa.sa_family, usa->sa.sa_family == AF_INET ?
             (void *) &usa->sin.sin_addr :
             (void *) &usa->sin6.sin6_addr, buf, len);
-#elif defined(_WIN32)
-  // Only Windoze Vista (and newer) have inet_ntop()
-  strncpy(buf, inet_ntoa(usa->sin.sin_addr), len);
-#else
   inet_ntop(usa->sa.sa_family, (void *) &usa->sin.sin_addr, buf, len);
 #endif
 }
@@ -974,318 +789,6 @@ static void send_http_error(struct mg_connection *conn, int status,
   }
 }
 
-#if defined(_WIN32) && !defined(__SYMBIAN32__)
-static int pthread_mutex_init(pthread_mutex_t *mutex, void *unused) {
-  (void) unused;
-  *mutex = CreateMutex(NULL, FALSE, NULL);
-  return *mutex == NULL ? -1 : 0;
-}
-
-static int pthread_mutex_destroy(pthread_mutex_t *mutex) {
-  return CloseHandle(*mutex) == 0 ? -1 : 0;
-}
-
-static int pthread_mutex_lock(pthread_mutex_t *mutex) {
-  return WaitForSingleObject(*mutex, INFINITE) == WAIT_OBJECT_0? 0 : -1;
-}
-
-static int pthread_mutex_unlock(pthread_mutex_t *mutex) {
-  return ReleaseMutex(*mutex) == 0 ? -1 : 0;
-}
-
-static int pthread_cond_init(pthread_cond_t *cv, const void *unused) {
-  (void) unused;
-  cv->signal = CreateEvent(NULL, FALSE, FALSE, NULL);
-  cv->broadcast = CreateEvent(NULL, TRUE, FALSE, NULL);
-  return cv->signal != NULL && cv->broadcast != NULL ? 0 : -1;
-}
-
-static int pthread_cond_wait(pthread_cond_t *cv, pthread_mutex_t *mutex) {
-  HANDLE handles[] = {cv->signal, cv->broadcast};
-  ReleaseMutex(*mutex);
-  WaitForMultipleObjects(2, handles, FALSE, INFINITE);
-  return WaitForSingleObject(*mutex, INFINITE) == WAIT_OBJECT_0? 0 : -1;
-}
-
-static int pthread_cond_signal(pthread_cond_t *cv) {
-  return SetEvent(cv->signal) == 0 ? -1 : 0;
-}
-
-static int pthread_cond_broadcast(pthread_cond_t *cv) {
-  // Implementation with PulseEvent() has race condition, see
-  // http://www.cs.wustl.edu/~schmidt/win32-cv-1.html
-  return PulseEvent(cv->broadcast) == 0 ? -1 : 0;
-}
-
-static int pthread_cond_destroy(pthread_cond_t *cv) {
-  return CloseHandle(cv->signal) && CloseHandle(cv->broadcast) ? 0 : -1;
-}
-
-// For Windows, change all slashes to backslashes in path names.
-static void change_slashes_to_backslashes(char *path) {
-  int i;
-
-  for (i = 0; path[i] != '\0'; i++) {
-    if (path[i] == '/')
-      path[i] = '\\';
-    // i > 0 check is to preserve UNC paths, like \\server\file.txt
-    if (path[i] == '\\' && i > 0)
-      while (path[i + 1] == '\\' || path[i + 1] == '/')
-        (void) memmove(path + i + 1,
-            path + i + 2, strlen(path + i + 1));
-  }
-}
-
-// Encode 'path' which is assumed UTF-8 string, into UNICODE string.
-// wbuf and wbuf_len is a target buffer and its length.
-static void to_unicode(const char *path, wchar_t *wbuf, size_t wbuf_len) {
-  char buf[PATH_MAX], buf2[PATH_MAX];
-
-  mg_strlcpy(buf, path, sizeof(buf));
-  change_slashes_to_backslashes(buf);
-
-  // Convert to Unicode and back. If doubly-converted string does not
-  // match the original, something is fishy, reject.
-  memset(wbuf, 0, wbuf_len * sizeof(wchar_t));
-  MultiByteToWideChar(CP_UTF8, 0, buf, -1, wbuf, (int) wbuf_len);
-  WideCharToMultiByte(CP_UTF8, 0, wbuf, (int) wbuf_len, buf2, sizeof(buf2),
-                      NULL, NULL);
-  if (strcmp(buf, buf2) != 0) {
-    wbuf[0] = L'\0';
-  }
-}
-
-#if defined(_WIN32_WCE)
-static time_t time(time_t *ptime) {
-  time_t t;
-  SYSTEMTIME st;
-  FILETIME ft;
-
-  GetSystemTime(&st);
-  SystemTimeToFileTime(&st, &ft);
-  t = SYS2UNIX_TIME(ft.dwLowDateTime, ft.dwHighDateTime);
-
-  if (ptime != NULL) {
-    *ptime = t;
-  }
-
-  return t;
-}
-
-static struct tm *localtime(const time_t *ptime, struct tm *ptm) {
-  int64_t t = ((int64_t) *ptime) * RATE_DIFF + EPOCH_DIFF;
-  FILETIME ft, lft;
-  SYSTEMTIME st;
-  TIME_ZONE_INFORMATION tzinfo;
-
-  if (ptm == NULL) {
-    return NULL;
-  }
-
-  * (int64_t *) &ft = t;
-  FileTimeToLocalFileTime(&ft, &lft);
-  FileTimeToSystemTime(&lft, &st);
-  ptm->tm_year = st.wYear - 1900;
-  ptm->tm_mon = st.wMonth - 1;
-  ptm->tm_wday = st.wDayOfWeek;
-  ptm->tm_mday = st.wDay;
-  ptm->tm_hour = st.wHour;
-  ptm->tm_min = st.wMinute;
-  ptm->tm_sec = st.wSecond;
-  ptm->tm_yday = 0; // hope nobody uses this
-  ptm->tm_isdst =
-    GetTimeZoneInformation(&tzinfo) == TIME_ZONE_ID_DAYLIGHT ? 1 : 0;
-
-  return ptm;
-}
-
-static struct tm *gmtime(const time_t *ptime, struct tm *ptm) {
-  // FIXME(lsm): fix this.
-  return localtime(ptime, ptm);
-}
-
-static size_t strftime(char *dst, size_t dst_size, const char *fmt,
-                       const struct tm *tm) {
-  (void) snprintf(dst, dst_size, "implement strftime() for WinCE");
-  return 0;
-}
-#endif
-
-// Windows happily opens files with some garbage at the end of file name.
-// For example, fopen("a.cgi    ", "r") on Windows successfully opens
-// "a.cgi", despite one would expect an error back.
-// This function returns non-0 if path ends with some garbage.
-static int path_cannot_disclose_cgi(const char *path) {
-  static const char *allowed_last_characters = "_-";
-  int last = path[strlen(path) - 1];
-  return isalnum(last) || strchr(allowed_last_characters, last) != NULL;
-}
-
-static int mg_stat(struct mg_connection *conn, const char *path,
-                   struct file *filep) {
-  wchar_t wbuf[PATH_MAX];
-  WIN32_FILE_ATTRIBUTE_DATA info;
-
-  if (!is_file_in_memory(conn, path, filep)) {
-    to_unicode(path, wbuf, ARRAY_SIZE(wbuf));
-    if (GetFileAttributesExW(wbuf, GetFileExInfoStandard, &info) != 0) {
-      filep->size = MAKEUQUAD(info.nFileSizeLow, info.nFileSizeHigh);
-      filep->modification_time = SYS2UNIX_TIME(
-          info.ftLastWriteTime.dwLowDateTime,
-          info.ftLastWriteTime.dwHighDateTime);
-      filep->is_directory = info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
-      // If file name is fishy, reset the file structure and return error.
-      // Note it is important to reset, not just return the error, cause
-      // functions like is_file_opened() check the struct.
-      if (!filep->is_directory && !path_cannot_disclose_cgi(path)) {
-        memset(filep, 0, sizeof(*filep));
-      }
-    }
-  }
-
-  return filep->membuf != NULL || filep->modification_time != 0;
-}
-
-static int mg_remove(const char *path) {
-  wchar_t wbuf[PATH_MAX];
-  to_unicode(path, wbuf, ARRAY_SIZE(wbuf));
-  return DeleteFileW(wbuf) ? 0 : -1;
-}
-
-static int mg_mkdir(const char *path, int mode) {
-  char buf[PATH_MAX];
-  wchar_t wbuf[PATH_MAX];
-
-  (void) mode;
-  mg_strlcpy(buf, path, sizeof(buf));
-  change_slashes_to_backslashes(buf);
-
-  (void) MultiByteToWideChar(CP_UTF8, 0, buf, -1, wbuf, ARRAY_SIZE(wbuf));
-
-  return CreateDirectoryW(wbuf, NULL) ? 0 : -1;
-}
-
-// Implementation of POSIX opendir/closedir/readdir for Windows.
-static DIR * opendir(const char *name) {
-  DIR *dir = NULL;
-  wchar_t wpath[PATH_MAX];
-  DWORD attrs;
-
-  if (name == NULL) {
-    SetLastError(ERROR_BAD_ARGUMENTS);
-  } else if ((dir = (DIR *) malloc(sizeof(*dir))) == NULL) {
-    SetLastError(ERROR_NOT_ENOUGH_MEMORY);
-  } else {
-    to_unicode(name, wpath, ARRAY_SIZE(wpath));
-    attrs = GetFileAttributesW(wpath);
-    if (attrs != 0xFFFFFFFF &&
-        ((attrs & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY)) {
-      (void) wcscat(wpath, L"\\*");
-      dir->handle = FindFirstFileW(wpath, &dir->info);
-      dir->result.d_name[0] = '\0';
-    } else {
-      free(dir);
-      dir = NULL;
-    }
-  }
-
-  return dir;
-}
-
-static int closedir(DIR *dir) {
-  int result = 0;
-
-  if (dir != NULL) {
-    if (dir->handle != INVALID_HANDLE_VALUE)
-      result = FindClose(dir->handle) ? 0 : -1;
-
-    free(dir);
-  } else {
-    result = -1;
-    SetLastError(ERROR_BAD_ARGUMENTS);
-  }
-
-  return result;
-}
-
-static struct dirent *readdir(DIR *dir) {
-  struct dirent *result = 0;
-
-  if (dir) {
-    if (dir->handle != INVALID_HANDLE_VALUE) {
-      result = &dir->result;
-      (void) WideCharToMultiByte(CP_UTF8, 0,
-          dir->info.cFileName, -1, result->d_name,
-          sizeof(result->d_name), NULL, NULL);
-
-      if (!FindNextFileW(dir->handle, &dir->info)) {
-        (void) FindClose(dir->handle);
-        dir->handle = INVALID_HANDLE_VALUE;
-      }
-
-    } else {
-      SetLastError(ERROR_FILE_NOT_FOUND);
-    }
-  } else {
-    SetLastError(ERROR_BAD_ARGUMENTS);
-  }
-
-  return result;
-}
-
-#ifndef HAVE_POLL
-static int poll(struct pollfd *pfd, int n, int milliseconds) {
-  struct timeval tv;
-  fd_set set;
-  int i, result;
-  SOCKET maxfd = 0;
-
-  tv.tv_sec = milliseconds / 1000;
-  tv.tv_usec = (milliseconds % 1000) * 1000;
-  FD_ZERO(&set);
-
-  for (i = 0; i < n; i++) {
-    FD_SET((SOCKET) pfd[i].fd, &set);
-    pfd[i].revents = 0;
-
-    if (pfd[i].fd > maxfd) {
-        maxfd = pfd[i].fd;
-    }
-  }
-
-  if ((result = select(maxfd + 1, &set, NULL, NULL, &tv)) > 0) {
-    for (i = 0; i < n; i++) {
-      if (FD_ISSET(pfd[i].fd, &set)) {
-        pfd[i].revents = POLLIN;
-      }
-    }
-  }
-
-  return result;
-}
-#endif // HAVE_POLL
-
-static void set_close_on_exec(SOCKET sock) {
-  (void) SetHandleInformation((HANDLE) sock, HANDLE_FLAG_INHERIT, 0);
-}
-
-int mg_start_thread(mg_thread_func_t f, void *p) {
-  return (long)_beginthread((void (__cdecl *)(void *)) f, 0, p) == -1L ? -1 : 0;
-}
-
-static HANDLE dlopen(const char *dll_name, int flags) {
-  wchar_t wbuf[PATH_MAX];
-  (void) flags;
-  to_unicode(dll_name, wbuf, ARRAY_SIZE(wbuf));
-  return LoadLibraryW(wbuf);
-}
-
-static int set_non_blocking_mode(SOCKET sock) {
-  unsigned long on = 1;
-  return ioctlsocket(sock, FIONBIO, &on);
-}
-
-#else
 static int mg_stat(struct mg_connection *conn, const char *path,
                    struct file *filep) {
   struct stat st;
@@ -1332,7 +835,6 @@ static int set_non_blocking_mode(SOCKET sock) {
 
   return 0;
 }
-#endif // _WIN32
 
 // Write data to the IO channel - opened file descriptor, socket or SSL
 // descriptor. Return number of bytes written.
@@ -2535,7 +2037,7 @@ static void print_dir_entry(struct de *de) {
 // sorting directory entries by size, or name, or modification time.
 // On windows, __cdecl specification is needed in case if project is built
 // with __stdcall convention. qsort always requires __cdels callback.
-static int WINCDECL compare_dir_entries(const void *p1, const void *p2) {
+static int compare_dir_entries(const void *p1, const void *p2) {
   const struct de *a = (const struct de *) p1, *b = (const struct de *) p2;
   const char *query_string = a->conn->request_info.query_string;
   int cmp_result = 0;
@@ -2790,9 +2292,7 @@ static void construct_etag(char *buf, size_t buf_len,
 
 static void fclose_on_exec(struct file *filep) {
   if (filep != NULL && filep->fp != NULL) {
-#ifndef _WIN32
     fcntl(fileno(filep->fp), F_SETFD, FD_CLOEXEC);
-#endif
   }
 }
 
@@ -4228,7 +3728,6 @@ static int check_acl(struct mg_context *ctx, uint32_t remote_ip) {
   return allowed == '+';
 }
 
-#if !defined(_WIN32)
 static int set_uid_option(struct mg_context *ctx) {
   struct passwd *pw;
   const char *uid = ctx->config[RUN_AS_USER];
@@ -4250,7 +3749,6 @@ static int set_uid_option(struct mg_context *ctx) {
 
   return success;
 }
-#endif // !_WIN32
 
 #if !defined(NO_SSL)
 static pthread_mutex_t *ssl_mutexes;
@@ -4297,14 +3795,10 @@ static int load_dll(struct mg_context *ctx, const char *dll_name,
   }
 
   for (fp = sw; fp->name != NULL; fp++) {
-#ifdef _WIN32
-    // GetProcAddress() returns pointer to function
-    u.fp = (void (*)(void)) dlsym(dll_handle, fp->name);
-#else
     // dlsym() on UNIX returns void *. ISO C forbids casts of data pointers to
     // function pointers. We need to use a union to make a cast.
     u.p = dlsym(dll_handle, fp->name);
-#endif // _WIN32
+
     if (u.fp == NULL) {
       cry(fc(ctx), "%s: %s: cannot find %s", __func__, dll_name, fp->name);
       return 0;
@@ -4412,10 +3906,6 @@ static void reset_per_request_attributes(struct mg_connection *conn) {
 }
 
 static void close_socket_gracefully(struct mg_connection *conn) {
-#if defined(_WIN32)
-  char buf[MG_BUF_LEN];
-  int n;
-#endif
   struct linger linger;
 
   // Set linger option to avoid socket hanging out after close. This prevent
@@ -4428,17 +3918,6 @@ static void close_socket_gracefully(struct mg_connection *conn) {
   // Send FIN to the client
   shutdown(conn->client.sock, SHUT_WR);
   set_non_blocking_mode(conn->client.sock);
-
-#if defined(_WIN32)
-  // Read and discard pending incoming data. If we do not do that and close the
-  // socket, the data in the send buffer may be discarded. This
-  // behaviour is seen on Windows, when client keeps sending data
-  // when server decides to close the connection; then when client
-  // does recv() it gets no data back.
-  do {
-    n = pull(NULL, conn, buf, sizeof(buf));
-  } while (n > 0);
-#endif
 
   // Now we know that our FIN is ACK-ed, safe to close
   closesocket(conn->client.sock);
@@ -4731,13 +4210,10 @@ static void produce_socket(struct mg_context *ctx, const struct socket *sp) {
 }
 
 static int set_sock_timeout(SOCKET sock, int milliseconds) {
-#ifdef _WIN32
-  DWORD t = milliseconds;
-#else
   struct timeval t;
   t.tv_sec = milliseconds / 1000;
   t.tv_usec = (milliseconds * 1000) % 1000000;
-#endif
+
   return setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (void *) &t, sizeof(t)) ||
     setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (void *) &t, sizeof(t));
 }
@@ -4779,10 +4255,6 @@ static void *master_thread(void *thread_func_param) {
   int i;
 
   // Increase priority of the master thread
-#if defined(_WIN32)
-  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
-#endif
-
 #if defined(ISSUE_317)
   struct sched_param sched_param;
   sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
@@ -4874,10 +4346,6 @@ void mg_stop(struct mg_context *ctx) {
     (void) mg_sleep(10);
   }
   free_context(ctx);
-
-#if defined(_WIN32) && !defined(__SYMBIAN32__)
-  (void) WSACleanup();
-#endif // _WIN32
 }
 
 struct mg_context *mg_start(const struct mg_callbacks *callbacks,
@@ -4886,12 +4354,6 @@ struct mg_context *mg_start(const struct mg_callbacks *callbacks,
   struct mg_context *ctx;
   const char *name, *value, *default_value;
   int i;
-
-#if defined(_WIN32) && !defined(__SYMBIAN32__)
-  WSADATA data;
-  WSAStartup(MAKEWORD(2,2), &data);
-  InitializeCriticalSection(&global_log_file_lock);
-#endif // _WIN32
 
   // Allocate context and initialize reasonable general case defaults.
   // TODO(lsm): do proper error handling here.
@@ -4934,21 +4396,17 @@ struct mg_context *mg_start(const struct mg_callbacks *callbacks,
       !set_ssl_option(ctx) ||
 #endif
       !set_ports_option(ctx) ||
-#if !defined(_WIN32)
       !set_uid_option(ctx) ||
-#endif
       !set_acl_option(ctx)) {
     free_context(ctx);
     return NULL;
   }
 
-#if !defined(_WIN32) && !defined(__SYMBIAN32__)
   // Ignore SIGPIPE signal, so if browser cancels the request, it
   // won't kill the whole process.
   (void) signal(SIGPIPE, SIG_IGN);
   // Also ignoring SIGCHLD to let the OS to reap zombies properly.
   (void) signal(SIGCHLD, SIG_IGN);
-#endif // !_WIN32
 
   (void) pthread_mutex_init(&ctx->mutex, NULL);
   (void) pthread_cond_init(&ctx->cond, NULL);
