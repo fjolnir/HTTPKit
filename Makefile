@@ -3,7 +3,7 @@ CC = clang
 PREFIX = /usr/local
 PRODUCT_NAME = libhttpkit.so
 
-CFLAGS  = -fblocks -fobjc-nonfragile-abi -fno-constant-cfstrings -I. -Wall -g -O0 -I/usr/local/include -Idependencies -DUSE_WEBSOCKET -DNO_CGI -DDEBUG_TRACE -Wno-trigraphs
+CFLAGS  = -fblocks -fobjc-nonfragile-abi -fno-constant-cfstrings -I. -Wall -g -O0 -I/usr/local/include -Idependencies -DDEBUG_TRACE -Wno-trigraphs
 
 LIB_CFLAGS = -fPIC
 LDFLAGS=-L/usr/local/lib -lobjc -lpthread -ldispatch -lCoreFoundation -lfoundation_lite

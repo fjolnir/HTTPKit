@@ -212,7 +212,6 @@ int mg_write(struct mg_connection *, const void *buf, size_t len);
 
 // Send data to a websocket client wrapped in a websocket frame.
 // It is unsafe to read/write to this connection from another thread.
-// This function is available when mongoose is compiled with -DUSE_WEBSOCKET
 //
 // Return:
 //  0   when the connection has been closed
