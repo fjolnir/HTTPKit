@@ -356,10 +356,6 @@ int mg_start_thread(mg_thread_func_t f, void *p);
 // For unrecognized extensions, "text/plain" is returned.
 const char *mg_get_builtin_mime_type(const char *file_name);
 
-
-// Return Mongoose version.
-const char *mg_version(void);
-
 // URL-decode input buffer into destination buffer.
 // 0-terminate the destination buffer.
 // form-url-encoded data differs from URI encoding in a way that it
