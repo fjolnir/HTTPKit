@@ -77,7 +77,8 @@ static int _requestDidBegin(struct mg_connection * const aConnection)
             for(id<HTTPHandler> handler in handlers) {
                 if((result = [handler handleConnection:connection
                                                    URL:url]) != HTTPSentinel) {
-                    [connection writeString:[result description]];
+                    if(result && connection.isOpen)
+                        [connection writeString:[result description]];
                     break;
                 }
             }
