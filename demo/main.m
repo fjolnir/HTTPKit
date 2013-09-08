@@ -15,17 +15,18 @@ int main(int argc, const char * argv[])
 
         // Simplified login example
         [http handleGET:@"/login"
-                   with:^(HTTPConnection *connection) {
-                       return @"<form method=\"post\" action=\"/login\">"
-                       @"<label for=\"username\">Name:</label>"
-                       @"<input name=\"username\" type=\"text\">"
-                       @"<label for=\"password\">Password:</label>"
-                       @"<input name=\"password\" type=\"password\">"
-                       @"<input type=\"submit\" value=\"Sign in\">"
+                   with:^id (HTTPConnection *connection) {
+                       return
+                       @"<form method=\"post\" action=\"/login\">"
+                           @"<label for=\"username\">Name:</label>"
+                           @"<input name=\"username\" type=\"text\">"
+                           @"<label for=\"password\">Password:</label>"
+                           @"<input name=\"password\" type=\"password\">"
+                           @"<input type=\"submit\" value=\"Sign in\">"
                        @"</form>";
                    }];
 
-        [http handlePOST:@"/login" with:^(HTTPConnection *connection) {
+        [http handlePOST:@"/login" with:^id (HTTPConnection *connection) {
             NSLog(@"logging in user: %@ with password: %@",
                   [connection requestBodyVar:@"username"],
                   [connection requestBodyVar:@"password"]);
@@ -33,22 +34,23 @@ int main(int argc, const char * argv[])
         }];
 
         // SSE
-        [http handleGET:@"/sse" with:^(HTTPConnection *connection) {
-            return @"<script type=\"text/javascript\">"
-                   @"var source = new EventSource('/sse_events');"
-                   @"source.addEventListener('message', function(e) {"
-                       @"console.log('Got message: ' + e.data);"
-                   @"}, false);"
+        [http handleGET:@"/sse" with:^id (HTTPConnection *connection) {
+            return
+            @"<script type=\"text/javascript\">"
+                @"var source = new EventSource('/sse_events');"
+                @"source.addEventListener('message', function(e) {"
+                    @"console.log('Got message: ' + e.data);"
+                @"}, false);"
             @"</script>";
         }];
         
-        [http handleGET:@"/sse_events" with:^(HTTPConnection *connection) {
+        [http handleGET:@"/sse_events" with:^id (HTTPConnection *connection) {
             [connection makeStreaming];
             [connection setResponseHeader:@"Content-Type" to:@"text/event-stream"];
             
             NSString *lastId = [connection requestHeader:@"Last-Event-ID"];
             if(lastId)
-                NSLog(@">> Welcome back %@", lastId); // Probably lost the connection, pick up where it left off?
+                NSLog(@"Welcome back %@", lastId); // Probably lost the connection, pick up where it left off?
             
             while(connection.isOpen) {
                 [connection writeString:@"id: foo\n"
