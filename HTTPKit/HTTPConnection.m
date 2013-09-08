@@ -21,10 +21,12 @@
 {
     if(!(self = [super init]))
         return nil;
-    _status      = 200;
-    _reason      = @"OK";
-    _isOpen      = YES;
-    _isStreaming = NO;
+    _status             = 200;
+    _reason             = @"OK";
+    _isOpen             = YES;
+    _isStreaming        = NO;
+    _shouldWriteHeaders = YES;
+    _wroteHeaders       = NO;
     if(_requestLength != -1) { // Only initialize if this is not a recycled object
         _requestLength   = -1;
         _responseData    = [NSMutableData new];
@@ -73,7 +75,7 @@
 - (NSInteger)_flushAndClose:(BOOL)aShouldClose
 {
     int bytesWritten = 0;
-    if(!_wroteHeaders) {
+    if(!_wroteHeaders && _shouldWriteHeaders) {
         char date[80];
         time_t curtime = time(NULL);
         strftime(date, sizeof(date), "%a, %d %b %Y %H:%M:%S GMT", gmtime(&curtime));

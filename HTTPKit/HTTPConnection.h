@@ -19,7 +19,8 @@ typedef enum {
 @property(readonly, strong) NSData *queryString;
 @property(readonly, strong) NSURL *url;
 @property(readonly) long requestLength, remoteIp, remotePort;
-@property(readonly) BOOL requestIsMultipart, isOpen, isSSL, isStreaming;
+@property(readonly)  BOOL requestIsMultipart, isOpen, isSSL, isStreaming;
+@property(readwrite) BOOL shouldWriteHeaders;
 
 // Sends a file (with appropriate headers) and closes the connection
 - (void)serveFileAtPath:(NSString *)aPath;
