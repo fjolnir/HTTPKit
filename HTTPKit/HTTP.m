@@ -77,8 +77,12 @@ static int _requestDidBegin(struct mg_connection * const aConnection)
             for(id<HTTPHandler> handler in handlers) {
                 if((result = [handler handleConnection:connection
                                                    URL:url]) != HTTPSentinel) {
-                    if(result && connection.isOpen)
-                        [connection writeString:[result description]];
+                    if(connection.isOpen) {
+                        if([result isKindOfClass:[NSData class]])
+                            [connection writeData:result];
+                        else if(result)
+                            [connection writeString:[result description]];
+                    }
                     break;
                 }
             }
