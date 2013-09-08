@@ -32,6 +32,16 @@ int main(int argc, const char * argv[])
                   [connection requestBodyVar:@"password"]);
             return @"Welcome! I trust you so I didn't even check your password.";
         }];
+        
+        [http handleGET:@"/file"
+                   with:^id (HTTPConnection *connection) {
+                       [@"Hello!" writeToFile:@"/tmp/test.txt"
+                                   atomically:YES
+                                     encoding:NSUTF8StringEncoding
+                                        error:nil];
+                       [connection serveFileAtPath:@"/tmp/test.txt"];
+                       return nil;
+                   }];
 
         // SSE
         [http handleGET:@"/sse" with:^id (HTTPConnection *connection) {

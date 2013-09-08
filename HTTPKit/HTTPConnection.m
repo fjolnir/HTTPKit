@@ -134,6 +134,14 @@ invalidConnection:
     return -1;
 }
 
+
+- (void)serveFileAtPath:(NSString *)aPath
+{
+    NSAssert(!_wroteHeaders, @"Tried to serve a file over a connection that already has data written to it!");
+    mg_send_file(_mgConnection, [aPath fileSystemRepresentation]);
+    [self close];
+}
+
 - (NSInteger)writeData:(NSData *)aData
 {
     NSAssert(_isOpen, @"Tried to write data to a closed connection");
@@ -156,6 +164,7 @@ invalidConnection:
     va_end(args);
     return [self writeString:[str autorelease]];
 }
+
 
 #pragma mark -
 

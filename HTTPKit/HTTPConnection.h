@@ -21,6 +21,9 @@ typedef enum {
 @property(readonly) long requestLength, remoteIp, remotePort;
 @property(readonly) BOOL requestIsMultipart, isOpen, isSSL, isStreaming;
 
+// Sends a file (with appropriate headers) and closes the connection
+- (void)serveFileAtPath:(NSString *)aPath;
+
 - (NSInteger)writeData:(NSData *)aData;
 - (NSInteger)writeString:(NSString *)aString;
 - (NSInteger)writeFormat:(NSString *)aFormat, ...;
