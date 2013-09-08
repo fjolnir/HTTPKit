@@ -1308,13 +1308,6 @@ static void get_mime_type(struct mg_context *ctx, const char *path,
     vec->len = strlen(vec->ptr);
 }
 
-static int is_big_endian(void) {
-    static const int n = 1;
-    return ((char *) &n)[0] == 0;
-}
-
-
-
 // Stringify binary data. Output buffer must be twice as big as input,
 // because each byte takes 2 bytes in string representation
 static void bin2str(char *to, const unsigned char *p, size_t len) {
