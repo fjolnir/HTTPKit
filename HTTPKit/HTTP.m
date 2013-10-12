@@ -221,7 +221,7 @@ static struct mg_callbacks _MongooseCallbacks = {
 
 - (id<HTTPHandler>)_handlerFromObject:(id)aObj handlerBlock:(id)aBlock
 {
-    NSParameterAssert([aBlock isKindOfClass:NSClassFromString(@"NSBlock")]);
+    NSParameterAssert([aBlock isKindOfClass:NSClassFromString(NSBlockClassName)]);
     NSParameterAssert([aObj isKindOfClass:[NSString class]] ||
                       [aObj isKindOfClass:[OnigRegexp class]]);
 
