@@ -40,8 +40,8 @@ all: $(OBJ_NOARC) $(OBJ)
 	@$(CC) $(LDFLAGS) $(OBJ) $(OBJ_NOARC) -shared -o build/$(PRODUCT_NAME)
 
 install: all
-	@mkdir -p $(PREFIX)/include/Foundation
-	@cp Foundation/*.h $(PREFIX)/include/Foundation
+	@mkdir -p $(PREFIX)/include/HTTPKit
+	@cp HTTPKit/*.h $(PREFIX)/include/HTTPKit
 	@cp build/$(PRODUCT_NAME) $(PREFIX)/lib/$(PRODUCT_NAME)
 
 demo: all
