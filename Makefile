@@ -12,6 +12,7 @@ SRC       = HTTPKit/HTTP.m \
             $(wildcard dependencies/CocoaOniguruma/*.m)
 
 SRC_NOARC = HTTPKit/HTTPConnection.m \
+            HTTPKit/HTTPWebSocketConnection.m \
             HTTPKit/NSBlockUtilities.m \
             dependencies/mongoose/mongoose.c \
             $(wildcard dependencies/CocoaOniguruma/oniguruma/*.c)
