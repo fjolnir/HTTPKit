@@ -84,6 +84,30 @@ int main(int argc, const char * argv[])
                 [connection close];
             return [connection.requestBody capitalizedString];
         }];
+        
+        // Reverse proxy
+        [http handleGET:@"/proxy/**" with:^id (HTTPConnection *connection, NSArray *path) {
+            NSString *forwardURLStr = [NSMutableString stringWithFormat:@"http://apple.com/%@", path];
+            NSURL *forwardURL = [NSURL URLWithString:forwardURLStr];
+            NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:forwardURL];
+            
+            NSHTTPURLResponse *response;
+            NSData *responseData = [NSURLConnection sendSynchronousRequest:req
+                                                         returningResponse:&response
+                                                                     error:nil];
+            
+            connection.shouldWriteHeaders = NO;
+            NSDictionary *headers = [response allHeaderFields];
+            [connection writeFormat:@"HTTP/1.1 %lu OK\r\n", [response statusCode]];
+            for(NSString *header in headers) {
+                if(![header isEqualToString:@"Content-Encoding"]
+                   && ![header isEqualToString:@"Content-Length"])
+                [connection writeFormat:@"%@: %@\r\n", header, headers[header]];
+            }
+            [connection writeFormat:@"Content-Length: %lu\r\n\r\n", [responseData length]];
+            [connection writeData:responseData];
+            return nil;
+        }];
 
         [http listenOnPort:8081 onError:^(id reason) {
             NSLog(@"Error starting server: %@", reason);
