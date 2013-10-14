@@ -1,23 +1,22 @@
 #import <Foundation/Foundation.h>
-#import <HTTPKit/HTTP.h>
+#import <HTTPKit/HTTPServer.h>
 #import <dispatch/dispatch.h>
 #include <unistd.h>
 
 int main(int argc, const char * argv[])
 {
     @autoreleasepool {
-        HTTP *http = [HTTP new];
-        http.enableDirListing = YES;
-        http.extraMIMETypes = @{ @"json": @"application/json" };
+        HTTP.enableDirListing = YES;
+        HTTP.extraMIMETypes = @{ @"json": @"application/json" };
         
         // Simple "Hello you!" pong
-        [http handleGET:@"/hello/*"
+        [HTTP handleGET:@"/hello/*"
                    with:^(HTTPConnection *connection, NSString *name) {
                        return [NSString stringWithFormat:@"Hello %@!", name];
                   }];
 
         // Simplified login example
-        [http handleGET:@"/login"
+        [HTTP handleGET:@"/login"
                    with:^id (HTTPConnection *connection) {
                        return
                        @"<form method=\"post\" action=\"/login\">"
@@ -29,7 +28,7 @@ int main(int argc, const char * argv[])
                        @"</form>";
                    }];
 
-        [http handlePOST:@"/login" with:^id (HTTPConnection *connection) {
+        [HTTP handlePOST:@"/login" with:^id (HTTPConnection *connection) {
             NSLog(@"logging in user: %@ with password: %@",
                   [connection requestBodyVar:@"username"],
                   [connection requestBodyVar:@"password"]);
@@ -37,7 +36,7 @@ int main(int argc, const char * argv[])
         }];
 
         // SSE
-        [http handleGET:@"/sse" with:^id (HTTPConnection *connection) {
+        [HTTP handleGET:@"/sse" with:^id (HTTPConnection *connection) {
             return
             @"<script type=\"text/javascript\">"
                 @"var source = new EventSource('/sse_events');"
@@ -47,7 +46,7 @@ int main(int argc, const char * argv[])
             @"</script>";
         }];
         
-        [http handleGET:@"/sse_events" with:^id (HTTPConnection *connection) {
+        [HTTP handleGET:@"/sse_events" with:^id (HTTPConnection *connection) {
             [connection makeStreaming];
             [connection setResponseHeader:@"Content-Type" to:@"text/event-stream"];
             
@@ -65,7 +64,7 @@ int main(int argc, const char * argv[])
         }];
         
         // WebSocket
-        [http handleWebSocket:^id (HTTPConnection *connection) {
+        [HTTP handleWebSocket:^id (HTTPConnection *connection) {
             if(!connection.isOpen) {
                 NSLog(@"Socket closed");
                 return nil;
@@ -78,7 +77,7 @@ int main(int argc, const char * argv[])
 
 #ifdef __APPLE__ // These use functionality not in Foundation Lite yet
         // Reverse proxy
-        [http handleGET:@"/proxy/**" with:^id (HTTPConnection *connection, NSArray *path) {
+        [HTTP handleGET:@"/proxy/**" with:^id (HTTPConnection *connection, NSArray *path) {
             NSString *forwardURLStr = [NSMutableString stringWithFormat:@"http://apple.com/%@", path];
             NSURL *forwardURL = [NSURL URLWithString:forwardURLStr];
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:forwardURL];
@@ -101,7 +100,7 @@ int main(int argc, const char * argv[])
             return nil;
         }];
         
-        [http handleGET:@"/file.json"
+        [HTTP handleGET:@"/file.json"
                    with:^id (HTTPConnection *connection) {
             [@"{ 'foo': 'bar' }" writeToFile:@"/tmp/test.json"
                                   atomically:YES
@@ -112,7 +111,7 @@ int main(int argc, const char * argv[])
         }];
 #endif
 
-        [http listenOnPort:8081 onError:^(id reason) {
+        [HTTP listenOnPort:8081 onError:^(id reason) {
             NSLog(@"Error starting server: %@", reason);
             exit(1);
         }];

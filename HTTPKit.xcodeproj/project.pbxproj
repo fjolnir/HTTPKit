@@ -121,7 +121,7 @@
 		C7B39EA9166B72FC00D9FABD /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B39EAB166B72FC00D9FABD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C7C5F10016783AD300E9628E /* FABatching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FABatching.h; path = FABatching/FABatching.h; sourceTree = "<group>"; };
-		C7D50413180BA43C00818DBF /* HTTP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTP.h; sourceTree = "<group>"; };
+		C7D50413180BA43C00818DBF /* HTTPServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
 		C7D50414180BA43C00818DBF /* HTTPConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
 		C7D50415180BA43C00818DBF /* HTTPKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPKit.h; sourceTree = "<group>"; };
 		C7D50416180BA43C00818DBF /* HTTPWebSocketConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPWebSocketConnection.h; sourceTree = "<group>"; };
@@ -271,7 +271,7 @@
 		C7D50412180BA43C00818DBF /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				C7D50413180BA43C00818DBF /* HTTP.h */,
+				C7D50413180BA43C00818DBF /* HTTPServer.h */,
 				C7D50414180BA43C00818DBF /* HTTPConnection.h */,
 				C7D50415180BA43C00818DBF /* HTTPKit.h */,
 				C7D50416180BA43C00818DBF /* HTTPWebSocketConnection.h */,

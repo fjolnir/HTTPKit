@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@class HTTP;
+@class HTTPServer;
 
 typedef enum {
     kHTTPMethodGET,
@@ -12,7 +12,7 @@ typedef enum {
 @interface HTTPConnection : NSObject
 @property(readwrite, assign) int status;
 @property(readwrite, strong) NSString *reason;
-@property(readwrite, unsafe_unretained) HTTP *server;
+@property(readwrite, unsafe_unretained) HTTPServer *server;
 @property(readonly, strong) NSDictionary *requestMultipartSegments;
 @property(readonly, strong, nonatomic) NSData *requestBodyData;
 @property(readonly, strong) NSString *requestBody, *httpAuthUser;

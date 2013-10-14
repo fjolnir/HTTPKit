@@ -1,4 +1,4 @@
-#import <HTTPKit/HTTP.h>
+#import <HTTPKit/HTTPServer.h>
 #import <HTTPKit/HTTPConnection.h>
 #import "HTTPPrivate.h"
 #import <CocoaOniguruma/OnigRegexp.h>
@@ -43,7 +43,7 @@ static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
 }
 @end
 
-@interface HTTP () {
+@interface HTTPServer () {
     struct mg_context *_ctx;
     @public
     NSMutableArray *_GETHandlers, *_POSTHandlers, *_PUTHandlers, *_DELETEHandlers;
@@ -55,7 +55,7 @@ static int _requestDidBegin(struct mg_connection * const aConnection)
 {
     @autoreleasepool {
         const struct mg_request_info *requestInfo = mg_get_request_info(aConnection);
-        HTTP *self = (__bridge id)requestInfo->user_data;
+        HTTPServer *self = (__bridge id)requestInfo->user_data;
         HTTPConnection *connection = [HTTPConnection withMGConnection:aConnection server:self];
         
         @try {
@@ -108,7 +108,7 @@ static void _requestDidEnd(const struct mg_connection * const aConnection, int c
 {
     @autoreleasepool {
         const struct mg_request_info *requestInfo = mg_get_request_info((struct mg_connection *)aConnection);
-        HTTP *self = (__bridge id)requestInfo->user_data;
+        HTTPServer *self = (__bridge id)requestInfo->user_data;
         HTTPConnection *connection = [HTTPConnection withMGConnection:(struct mg_connection *)aConnection
                                                                server:self];
         
@@ -121,7 +121,7 @@ static int _websocketConnected(const struct mg_connection * const aConnection)
 {
 
     const struct mg_request_info *requestInfo = mg_get_request_info((struct mg_connection *)aConnection);
-    HTTP *self = (__bridge id)requestInfo->user_data;
+    HTTPServer *self = (__bridge id)requestInfo->user_data;
     if(self->_webSocketHandler)
         return 0;
     else
@@ -139,7 +139,7 @@ static int  _handleWebsocketData(struct mg_connection * const aConnection, int c
 {
     @autoreleasepool {
         const struct mg_request_info *requestInfo = mg_get_request_info((struct mg_connection *)aConnection);
-        HTTP *self = (__bridge id)requestInfo->user_data;
+        HTTPServer *self = (__bridge id)requestInfo->user_data;
         HTTPWebSocketConnection *connection = [HTTPWebSocketConnection withMGWebSocketConnection:aConnection server:self
                                                                    messageBody:[NSData dataWithBytesNoCopy:aData
                                                                                                     length:aDataLen
@@ -170,13 +170,13 @@ static struct mg_callbacks _MongooseCallbacks = {
     .websocket_data    = &_handleWebsocketData
 };
 
-@implementation HTTP
+@implementation HTTPServer
 
-+ (HTTP *)defaultServer
++ (HTTPServer *)defaultServer
 {
-    static HTTP *DefaultServer;
+    static HTTPServer *DefaultServer;
     static dispatch_once_t OnceToken;
-    dispatch_once(&OnceToken, ^{ DefaultServer = [HTTP new]; });
+    dispatch_once(&OnceToken, ^{ DefaultServer = [HTTPServer new]; });
     return DefaultServer;
 }
 
