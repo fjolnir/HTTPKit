@@ -1,6 +1,6 @@
-#import "HTTPConnection.h"
+#import <HTTPKit/HTTPConnection.h>
+#import <HTTPKit/HTTP.h>
 #import "HTTPPrivate.h"
-#import "HTTP.h"
 #import <CocoaOniguruma/OnigRegexp.h>
 #import <arpa/inet.h>
 

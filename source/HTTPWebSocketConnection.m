@@ -1,4 +1,4 @@
-#import "HTTPWebSocketConnection.h"
+#import <HTTPKit/HTTPWebSocketConnection.h>
 #import "HTTPPrivate.h"
 
 @implementation HTTPWebSocketConnection

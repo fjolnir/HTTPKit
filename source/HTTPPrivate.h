@@ -1,7 +1,7 @@
 #import <mongoose/mongoose.h>
-#import "HTTPConnection.h"
-#import "HTTPWebSocketConnection.h"
-#import "NSBlockUtilities.h"
+#import <HTTPKit/HTTPConnection.h>
+#import <HTTPKit/HTTPWebSocketConnection.h>
+#import <HTTPKit/NSBlockUtilities.h>
 #import <FABatching/FABatching.h>
 
 @interface HTTPConnection () {

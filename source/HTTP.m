@@ -1,5 +1,5 @@
-#import "HTTP.h"
-#import "HTTPConnection.h"
+#import <HTTPKit/HTTP.h>
+#import <HTTPKit/HTTPConnection.h>
 #import "HTTPPrivate.h"
 #import <CocoaOniguruma/OnigRegexp.h>
 
@@ -172,6 +172,14 @@ static struct mg_callbacks _MongooseCallbacks = {
 
 @implementation HTTP
 
++ (HTTP *)defaultServer
+{
+    static HTTP *DefaultServer;
+    static dispatch_once_t OnceToken;
+    dispatch_once(&OnceToken, ^{ DefaultServer = [HTTP new]; });
+    return DefaultServer;
+}
+
 - (id)init
 {
     if(!(self = [super init]))
@@ -216,7 +224,7 @@ static struct mg_callbacks _MongooseCallbacks = {
 - (void)dealloc
 {
     if(_ctx)
-        mg_stop(_ctx);
+        mg_stop(_ctx), _ctx = NULL;
 }
 
 - (id<HTTPHandler>)_handlerFromObject:(id)aObj handlerBlock:(id)aBlock

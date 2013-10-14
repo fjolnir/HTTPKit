@@ -1,5 +1,3 @@
-#define TRANQUIL_SUPPORT
-
 #import <Foundation/Foundation.h>
 #import "HTTPConnection.h"
 
@@ -10,7 +8,9 @@ typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 @property(readwrite, strong) NSString *publicDir;
 @property(readwrite, assign) BOOL enableDirListing, enableKeepAlive;
 @property(readwrite, assign) unsigned int numberOfThreads;
-@property(readwrite, copy) NSDictionary *extraMIMETypes;
+@property(readwrite, copy)   NSDictionary *extraMIMETypes;
+
++ (HTTP *)defaultServer;
 
 - (BOOL)listenOnPort:(NSUInteger)port onError:(HTTPErrorBlock)aErrorHandler;
 
