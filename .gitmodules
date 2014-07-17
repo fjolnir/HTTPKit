@@ -1,5 +1,5 @@
-[submodule "Dependencies/FABatching"]
-	path = Dependencies/FABatching
+[submodule "dependencies/FABatching"]
+	path = dependencies/FABatching
 	url = git://github.com/fjolnir/FABatching.git
 [submodule "dependencies/iphone-openssl"]
 	path = dependencies/iphone-openssl
