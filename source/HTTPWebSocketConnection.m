@@ -1,10 +1,10 @@
-#import "HTTPWebSocketConnection.h"
+#import <HTTPKit/HTTPWebSocketConnection.h>
 #import "HTTPPrivate.h"
 
 @implementation HTTPWebSocketConnection
 
 + (instancetype)withMGWebSocketConnection:(struct mg_connection *)aConn
-                                       server:(HTTP *)aServer
+                                       server:(HTTPServer *)aServer
                                   messageBody:(NSData *)aMsg
 {
     HTTPWebSocketConnection *ret = [self withMGConnection:aConn server:aServer];

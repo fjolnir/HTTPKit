@@ -1,6 +1,6 @@
-#import "HTTPConnection.h"
+#import <HTTPKit/HTTPConnection.h>
+#import <HTTPKit/HTTPServer.h>
 #import "HTTPPrivate.h"
-#import "HTTP.h"
 #import <CocoaOniguruma/OnigRegexp.h>
 #import <arpa/inet.h>
 
@@ -8,7 +8,7 @@
 
 @implementation HTTPConnection
 
-+ (HTTPConnection *)withMGConnection:(struct mg_connection *)aConn server:(HTTP *)aServer
++ (HTTPConnection *)withMGConnection:(struct mg_connection *)aConn server:(HTTPServer *)aServer
 {
     HTTPConnection *ret = [self new];
     ret.mgConnection = aConn;
