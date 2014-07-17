@@ -2,13 +2,6 @@
 
 @class HTTPServer;
 
-typedef enum {
-    kHTTPMethodGET,
-    kHTTPMethodPOST,
-    kHTTPMethodPUT,
-    kHTTPMethodDELETE
-} HTTPMethod;
-
 @interface HTTPConnection : NSObject
 @property(readwrite, assign) int status;
 @property(readwrite, strong) NSString *reason;

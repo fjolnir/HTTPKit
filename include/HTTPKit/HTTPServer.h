@@ -1,9 +1,22 @@
 #import <Foundation/Foundation.h>
-#import "HTTPConnection.h"
 
+@class HTTPConnection;
 #define HTTP [HTTPServer defaultServer]
 
-typedef BOOL (^HTTPAuthenticationBlock)(NSString *username, NSString *password);
+typedef enum {
+    kHTTPInvalidMethod,
+    kHTTPMethodGET,
+    kHTTPMethodPOST,
+    kHTTPMethodPUT,
+    kHTTPMethodDELETE,
+    kHTTPMethodHEAD,
+    kHTTPMethodCONNECT,
+    kHTTPMethodPROPFIND,
+    kHTTPMethodMKCOL,
+    kHTTPMethodOPTIONS
+} HTTPMethod;
+
+typedef BOOL (^HTTPAuthenticationBlock)(HTTPMethod method, NSString *username, NSString *password);
 typedef void (^HTTPErrorBlock)(id reason);
 typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 

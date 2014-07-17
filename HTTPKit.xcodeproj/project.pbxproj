@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C710B62319780FF3005BB146 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
+		C710B6461978101E005BB146 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
+		C710B64719781023005BB146 /* OnigRegexp.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2617D62A1F009675ED /* OnigRegexp.m */; };
+		C710B64819781025005BB146 /* OnigRegexpUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2817D62A1F009675ED /* OnigRegexpUtility.m */; };
+		C710B6491978102A005BB146 /* HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA34166A774300289CA9 /* HTTP.m */; };
+		C710B64B1978102A005BB146 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C799CA38166A782B00289CA9 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C710B64C1978102A005BB146 /* HTTPWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C710B64D1978102A005BB146 /* NSBlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA1C17D629EB009675ED /* NSBlockUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C791AA6317DCDC7E00DA458A /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C791AA6217DCDC7E00DA458A /* libssl.dylib */; };
 		C791AA6517DCDC8700DA458A /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C791AA6417DCDC8700DA458A /* libcrypto.dylib */; };
 		C799C7B2166A75CD00289CA9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C799C7B1166A75CD00289CA9 /* Cocoa.framework */; };
@@ -62,11 +70,35 @@
 		C7B39EA1166B6E7F00D9FABD /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = C7B39E9F166B6E7F00D9FABD /* mongoose.c */; };
 		C7B39EA2166B6E7F00D9FABD /* mongoose.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B39EA0166B6E7F00D9FABD /* mongoose.h */; };
 		C7B39EAC166B72FC00D9FABD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B39EAB166B72FC00D9FABD /* Foundation.framework */; };
+		C7E1F97B1978112500D9824D /* ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2A17D62A1F009675ED /* ascii.c */; };
+		C7E1F97C1978112500D9824D /* regcomp.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2E17D62A1F009675ED /* regcomp.c */; };
+		C7E1F97D1978112500D9824D /* regenc.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA2F17D62A1F009675ED /* regenc.c */; };
+		C7E1F97E1978112500D9824D /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3117D62A1F009675ED /* regerror.c */; };
+		C7E1F97F1978112500D9824D /* regexec.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3217D62A1F009675ED /* regexec.c */; };
+		C7E1F9801978112500D9824D /* regext.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3317D62A1F009675ED /* regext.c */; };
+		C7E1F9811978112500D9824D /* regparse.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3517D62A1F009675ED /* regparse.c */; };
+		C7E1F9821978112500D9824D /* regsyntax.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3717D62A1F009675ED /* regsyntax.c */; };
+		C7E1F9831978112500D9824D /* regtrav.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3817D62A1F009675ED /* regtrav.c */; };
+		C7E1F9841978112500D9824D /* regversion.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3917D62A1F009675ED /* regversion.c */; };
+		C7E1F9851978112500D9824D /* st.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3A17D62A1F009675ED /* st.c */; };
+		C7E1F9861978112500D9824D /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3C17D62A1F009675ED /* unicode.c */; };
+		C7E1F9871978112500D9824D /* utf16_le.c in Sources */ = {isa = PBXBuildFile; fileRef = C79CEA3D17D62A1F009675ED /* utf16_le.c */; };
+		C7E1F98A197814E300D9824D /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E1F988197814E300D9824D /* libcrypto.a */; };
+		C7E1F98B197814E300D9824D /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E1F989197814E300D9824D /* libssl.a */; };
 		C7F01D0B17DA5B500011D503 /* HTTPWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C7F01D0C17DA5D210011D503 /* HTTPWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		C710B62019780FF3005BB146 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C7B39EA7166B72FC00D9FABD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -79,6 +111,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C710B62219780FF3005BB146 /* libhttpkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhttpkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C710B63019780FF3005BB146 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		C710B63319780FF3005BB146 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C791AA6217DCDC7E00DA458A /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		C791AA6417DCDC8700DA458A /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		C799C7AE166A75CD00289CA9 /* HTTPKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HTTPKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,10 +161,22 @@
 		C7D50415180BA43C00818DBF /* HTTPKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPKit.h; sourceTree = "<group>"; };
 		C7D50416180BA43C00818DBF /* HTTPWebSocketConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTTPWebSocketConnection.h; sourceTree = "<group>"; };
 		C7D50417180BA43C00818DBF /* NSBlockUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSBlockUtilities.h; sourceTree = "<group>"; };
+		C7E1F988197814E300D9824D /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "dependencies/iphone-openssl/lib/libcrypto.a"; sourceTree = "<group>"; };
+		C7E1F989197814E300D9824D /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "dependencies/iphone-openssl/lib/libssl.a"; sourceTree = "<group>"; };
 		C7F01D0917DA5B500011D503 /* HTTPWebSocketConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPWebSocketConnection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C710B61F19780FF3005BB146 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C710B62319780FF3005BB146 /* Foundation.framework in Frameworks */,
+				C7E1F98A197814E300D9824D /* libcrypto.a in Frameworks */,
+				C7E1F98B197814E300D9824D /* libssl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C799C7AA166A75CD00289CA9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -169,6 +216,7 @@
 			children = (
 				C799C7AE166A75CD00289CA9 /* HTTPKit.framework */,
 				C7B39EA9166B72FC00D9FABD /* test */,
+				C710B62219780FF3005BB146 /* libhttpkit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -176,11 +224,15 @@
 		C799C7B0166A75CD00289CA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7E1F988197814E300D9824D /* libcrypto.a */,
+				C7E1F989197814E300D9824D /* libssl.a */,
 				C791AA6417DCDC8700DA458A /* libcrypto.dylib */,
 				C791AA6217DCDC7E00DA458A /* libssl.dylib */,
 				C799CA31166A772300289CA9 /* Security.framework */,
 				C799C7B1166A75CD00289CA9 /* Cocoa.framework */,
 				C7B39EAB166B72FC00D9FABD /* Foundation.framework */,
+				C710B63019780FF3005BB146 /* XCTest.framework */,
+				C710B63319780FF3005BB146 /* UIKit.framework */,
 				C799C7B3166A75CD00289CA9 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -303,6 +355,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		C710B62119780FF3005BB146 /* httpkit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C710B64419780FF3005BB146 /* Build configuration list for PBXNativeTarget "httpkit" */;
+			buildPhases = (
+				C710B61E19780FF3005BB146 /* Sources */,
+				C710B61F19780FF3005BB146 /* Frameworks */,
+				C710B62019780FF3005BB146 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = httpkit;
+			productName = httpkit;
+			productReference = C710B62219780FF3005BB146 /* libhttpkit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		C799C7AD166A75CD00289CA9 /* HTTPKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C799C7C3166A75CD00289CA9 /* Build configuration list for PBXNativeTarget "HTTPKit" */;
@@ -362,6 +431,7 @@
 			targets = (
 				C799C7AD166A75CD00289CA9 /* HTTPKit */,
 				C7B39EA8166B72FC00D9FABD /* test */,
+				C710B62119780FF3005BB146 /* httpkit */,
 			);
 		};
 /* End PBXProject section */
@@ -378,6 +448,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C710B61E19780FF3005BB146 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C710B6461978101E005BB146 /* mongoose.c in Sources */,
+				C710B6491978102A005BB146 /* HTTP.m in Sources */,
+				C710B64B1978102A005BB146 /* HTTPConnection.m in Sources */,
+				C710B64C1978102A005BB146 /* HTTPWebSocketConnection.m in Sources */,
+				C710B64D1978102A005BB146 /* NSBlockUtilities.m in Sources */,
+				C710B64719781023005BB146 /* OnigRegexp.m in Sources */,
+				C710B64819781025005BB146 /* OnigRegexpUtility.m in Sources */,
+				C7E1F97B1978112500D9824D /* ascii.c in Sources */,
+				C7E1F97C1978112500D9824D /* regcomp.c in Sources */,
+				C7E1F97D1978112500D9824D /* regenc.c in Sources */,
+				C7E1F97E1978112500D9824D /* regerror.c in Sources */,
+				C7E1F97F1978112500D9824D /* regexec.c in Sources */,
+				C7E1F9801978112500D9824D /* regext.c in Sources */,
+				C7E1F9811978112500D9824D /* regparse.c in Sources */,
+				C7E1F9821978112500D9824D /* regsyntax.c in Sources */,
+				C7E1F9831978112500D9824D /* regtrav.c in Sources */,
+				C7E1F9841978112500D9824D /* regversion.c in Sources */,
+				C7E1F9851978112500D9824D /* st.c in Sources */,
+				C7E1F9861978112500D9824D /* unicode.c in Sources */,
+				C7E1F9871978112500D9824D /* utf16_le.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C799C7A9166A75CD00289CA9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -437,6 +534,86 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		C710B64019780FF3005BB146 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DSTROOT = /tmp/httpkit.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HTTPKit-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					dependencies,
+					include,
+					"dependencies/iphone-openssl/include",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/dependencies/iphone-openssl/lib",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C710B64119780FF3005BB146 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DSTROOT = /tmp/httpkit.dst;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HTTPKit-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					dependencies,
+					include,
+					"dependencies/iphone-openssl/include",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/dependencies/iphone-openssl/lib",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		C799C7C1166A75CD00289CA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -461,6 +638,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					dependencies,
+					include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -485,6 +668,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					dependencies,
+					include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
@@ -498,17 +687,13 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "mac-framework/HTTPKit-Prefix.pch";
+				GCC_PREFIX_HEADER = "HTTPKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					USE_WEBSOCKET,
 					DEBUG_TRACE,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
-				HEADER_SEARCH_PATHS = (
-					dependencies,
-					include,
-				);
-				INFOPLIST_FILE = "mac-framework/HTTPKit-Info.plist";
+				INFOPLIST_FILE = "HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
@@ -535,14 +720,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "mac-framework/HTTPKit-Prefix.pch";
+				GCC_PREFIX_HEADER = "HTTPKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = USE_WEBSOCKET;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
-				HEADER_SEARCH_PATHS = (
-					dependencies,
-					include,
-				);
-				INFOPLIST_FILE = "mac-framework/HTTPKit-Info.plist";
+				INFOPLIST_FILE = "HTTPKit-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
@@ -608,6 +789,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C710B64419780FF3005BB146 /* Build configuration list for PBXNativeTarget "httpkit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C710B64019780FF3005BB146 /* Debug */,
+				C710B64119780FF3005BB146 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C799C7A7166A75CD00289CA9 /* Build configuration list for PBXProject "HTTPKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

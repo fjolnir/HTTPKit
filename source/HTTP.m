@@ -177,7 +177,22 @@ static int _handleAuthRequest(struct mg_connection * const aConnection, const ch
         const struct mg_request_info *requestInfo = mg_get_request_info((struct mg_connection *)aConnection);
         HTTPServer *self = (__bridge id)requestInfo->user_data;
         HTTPAuthenticationBlock authBlock = self->_authenticationHandler;
-        return authBlock && authBlock([NSString stringWithUTF8String:aUser], [NSString stringWithUTF8String:aPassword]);
+        if(authBlock) {
+            HTTPMethod const method =
+                  strcmp(requestInfo->request_method, "GET"     ) == 0 ? kHTTPMethodGET
+                : strcmp(requestInfo->request_method, "POST"    ) == 0 ? kHTTPMethodPOST
+                : strcmp(requestInfo->request_method, "PUT"     ) == 0 ? kHTTPMethodPUT
+                : strcmp(requestInfo->request_method, "DELETE"  ) == 0 ? kHTTPMethodDELETE
+                : strcmp(requestInfo->request_method, "HEAD"    ) == 0 ? kHTTPMethodHEAD
+                : strcmp(requestInfo->request_method, "CONNECT" ) == 0 ? kHTTPMethodCONNECT
+                : strcmp(requestInfo->request_method, "PROPFIND") == 0 ? kHTTPMethodPROPFIND
+                : strcmp(requestInfo->request_method, "MKCOL"   ) == 0 ? kHTTPMethodMKCOL
+                : strcmp(requestInfo->request_method, "OPTIONS" ) == 0 ? kHTTPMethodOPTIONS
+                :                                                        kHTTPInvalidMethod;
+            
+            return authBlock(method, [NSString stringWithUTF8String:aUser], [NSString stringWithUTF8String:aPassword]);
+        } else
+            return 0;
     }
 }
 

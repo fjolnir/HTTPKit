@@ -136,7 +136,7 @@ int main(int argc, const char * argv[])
 #endif
 
         [HTTP listenOnPort:8081
-         authenticateWith:^BOOL(NSString *username, NSString *password) {
+         authenticateWith:^BOOL(HTTPMethod method, NSString *username, NSString *password) {
              return YES;
          }
                    onError:^(id reason) {

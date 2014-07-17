@@ -6,8 +6,7 @@
 //  Copyright (c) 2013 Fjölnir Ásgeirsson. All rights reserved.
 //
 
-#import <HTTPKit/HTTPKit.h>
+#import <HTTPKit/HTTPConnection.h>
 
 @interface HTTPWebSocketConnection : HTTPConnection
-
 @end
