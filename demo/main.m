@@ -76,7 +76,7 @@ int main(int argc, const char * argv[])
         }];
         
         // Reverse proxy
-        [http handleGET:@"/proxy/**" with:^id (HTTPConnection *connection, NSArray *path) {
+        [HTTP handleGET:@"/proxy/**" with:^id (HTTPConnection *connection, NSArray *path) {
             NSString *forwardURLStr = [NSMutableString stringWithFormat:@"http://apple.com/%@", path];
             NSURL *forwardURL = [NSURL URLWithString:forwardURLStr];
             NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:forwardURL];
@@ -135,7 +135,11 @@ int main(int argc, const char * argv[])
         }];
 #endif
 
-        [HTTP listenOnPort:8081 onError:^(id reason) {
+        [HTTP listenOnPort:8081
+         authenticateWith:^BOOL(NSString *username, NSString *password) {
+             return YES;
+         }
+                   onError:^(id reason) {
             NSLog(@"Error starting server: %@", reason);
             exit(1);
         }];

@@ -163,24 +163,20 @@ struct socket {
 
 // NOTE(lsm): this enum shoulds be in sync with the config_options below.
 enum {
-    PUT_DELETE_PASSWORDS_FILE,
-    PROTECT_URI, AUTHENTICATION_DOMAIN, THROTTLE,
+    AUTHENTICATION_DOMAIN, THROTTLE,
     ACCESS_LOG_FILE, ENABLE_DIRECTORY_LISTING, ERROR_LOG_FILE,
-    GLOBAL_PASSWORDS_FILE, INDEX_FILES, ENABLE_KEEP_ALIVE, ACCESS_CONTROL_LIST,
+    INDEX_FILES, ENABLE_KEEP_ALIVE, ACCESS_CONTROL_LIST,
     EXTRA_MIME_TYPES, LISTENING_PORTS, DOCUMENT_ROOT, SSL_CERTIFICATE,
     NUM_THREADS, RUN_AS_USER, REWRITE, HIDE_FILES, REQUEST_TIMEOUT,
     NUM_OPTIONS
 };
 
 static const char *config_options[] = {
-    "put_delete_auth_file", NULL,
-    "protect_uri", NULL,
     "authentication_domain", "mydomain.com",
     "throttle", NULL,
     "access_log_file", NULL,
     "enable_directory_listing", "yes",
     "error_log_file", NULL,
-    "global_auth_file", NULL,
     "index_files", "index.html,index.htm",
     "enable_keep_alive", "no",
     "access_control_list", NULL,
@@ -245,6 +241,10 @@ struct de {
     char *file_name;
     struct file file;
 };
+
+
+static void base64_encode(const unsigned char *src, int src_len, char *dst);
+static void base64_decode(const unsigned char *src,  int src_len, char *dst);
 
 const char **mg_get_valid_option_names(void) {
     return config_options;
@@ -1291,103 +1291,28 @@ static int check_password(const char *method, const char *ha1, const char *uri,
     return strcasecmp(response, expected_response) == 0;
 }
 
-// Use the global passwords file, if specified by auth_gpass option,
-// or search for .htpasswd in the requested directory.
-static void open_auth_file(struct mg_connection *conn, const char *path,
-                           struct file *filep) {
-    char name[PATH_MAX];
-    const char *p, *e, *gpass = conn->ctx->config[GLOBAL_PASSWORDS_FILE];
-    struct file file = STRUCT_FILE_INITIALIZER;
-
-    if(gpass != NULL) {
-        // Use global passwords file
-        if(!mg_fopen(conn, gpass, "r", filep)) {
-            cry(conn, "fopen(%s): %s", gpass, strerror(errno));
-        }
-        // Important: using local struct file to test path for is_directory flag.
-        // If filep is used, mg_stat() makes it appear as if auth file was opened.
-    } else if(mg_stat(conn, path, &file) && file.is_directory) {
-        mg_snprintf(conn, name, sizeof(name), "%s%c%s",
-                                path, '/', PASSWORDS_FILE_NAME);
-        mg_fopen(conn, name, "r", filep);
-    } else {
-         // Try to find .htpasswd in requested directory.
-        for(p = path, e = p + strlen(p) - 1; e > p; e--)
-            if(e[0] == '/')
-                break;
-        mg_snprintf(conn, name, sizeof(name), "%.*s%c%s",
-                                (int) (e - p), p, '/', PASSWORDS_FILE_NAME);
-        mg_fopen(conn, name, "r", filep);
-    }
-}
-
-// Parsed Authorization header
-struct ah {
-    char *user, *uri, *cnonce, *response, *qop, *nc, *nonce;
-};
-
-// Return 1 on success. Always initializes the ah structure.
-static int parse_auth_header(struct mg_connection *conn, char *buf,
-                             size_t buf_size, struct ah *ah) {
-    char *name, *value, *s;
+// Return 1 on success.
+static int parse_auth_header(struct mg_connection *conn, char **outUsername, char **outPassword) {
     const char *auth_header;
 
-    (void) memset(ah, 0, sizeof(*ah));
     if((auth_header = mg_get_header(conn, "Authorization")) == NULL ||
-            strncasecmp(auth_header, "Digest ", 7) != 0) {
+            strncasecmp(auth_header, "Basic", 5) != 0) {
         return 0;
     }
 
-    // Make modifiable copy of the auth header
-    (void) mg_strlcpy(buf, auth_header + 7, buf_size);
-    s = buf;
-
-    // Parse authorization header
-    for(;;) {
-        // Gobble initial spaces
-        while(isspace(* (unsigned char *) s)) {
-            s++;
-        }
-        name = skip_quoted(&s, "=", " ", 0);
-        // Value is either quote-delimited, or ends at first comma or space.
-        if(s[0] == '\"') {
-            s++;
-            value = skip_quoted(&s, "\"", " ", '\\');
-            if(s[0] == ',') {
-                s++;
-            }
-        } else {
-            value = skip_quoted(&s, ", ", " ", 0);    // IE uses commas, FF uses spaces
-        }
-        if(*name == '\0') {
-            break;
-        }
-
-        if(!strcmp(name, "username")) {
-            ah->user = value;
-        } else if(!strcmp(name, "cnonce")) {
-            ah->cnonce = value;
-        } else if(!strcmp(name, "response")) {
-            ah->response = value;
-        } else if(!strcmp(name, "uri")) {
-            ah->uri = value;
-        } else if(!strcmp(name, "qop")) {
-            ah->qop = value;
-        } else if(!strcmp(name, "nc")) {
-            ah->nc = value;
-        } else if(!strcmp(name, "nonce")) {
-            ah->nonce = value;
-        }
-    }
-
-    // CGI needs it as REMOTE_USER
-    if(ah->user != NULL) {
-        conn->request_info.remote_user = strdup(ah->user);
-    } else {
+    char *auth_string = malloc((strlen(auth_header) - 6)*2 + 1);
+    base64_decode((unsigned char *)auth_header+6, strlen(auth_header) - 6 + 1, auth_string);
+    if(!auth_string)
         return 0;
+    
+    char username[1025], password[1025];
+    if(sscanf(auth_string, "%1024[^:]:%1024[^:]", username, password) == 2) {
+        conn->request_info.remote_user = strdup(username);
+        *outUsername = strdup(username);
+        *outPassword = strdup(password);
+        return 1;
     }
-
-    return 1;
+    return 0;
 }
 
 static char *mg_fgets(char *buf, size_t size, struct file *filep, char **p) {
@@ -1415,85 +1340,30 @@ static char *mg_fgets(char *buf, size_t size, struct file *filep, char **p) {
     }
 }
 
-// Authorize against the opened passwords file. Return 1 if authorized.
+// Authorize using the authorization callback. Return 1 if authorized.
 static int authorize(struct mg_connection *conn, struct file *filep) {
-    struct ah ah;
-    char line[256], f_user[256], ha1[256], f_domain[256], buf[MG_BUF_LEN], *p;
+    if(!conn->ctx->callbacks.should_authorize_request || !conn->ctx->callbacks.should_authorize_request(conn))
+        return 1;
+    if(!conn->ctx->callbacks.authorize_request)
+        return 0;
 
-    if(!parse_auth_header(conn, buf, sizeof(buf), &ah)) {
+    char *username, *password;
+    if(!parse_auth_header(conn, &username, &password)) {
         return 0;
     }
-
-    // Loop over passwords file
-    p = (char *) filep->membuf;
-    while(mg_fgets(line, sizeof(line), filep, &p) != NULL) {
-        if(sscanf(line, "%[^:]:%[^:]:%s", f_user, f_domain, ha1) != 3) {
-            continue;
-        }
-
-        if(!strcmp(ah.user, f_user) &&
-                !strcmp(conn->ctx->config[AUTHENTICATION_DOMAIN], f_domain))
-            return check_password(conn->request_info.request_method, ha1, ah.uri,
-                                                        ah.nonce, ah.nc, ah.cnonce, ah.qop, ah.response);
-    }
-
-    return 0;
-}
-
-// Return 1 if request is authorised, 0 otherwise.
-static int check_authorization(struct mg_connection *conn, const char *path) {
-    char fname[PATH_MAX];
-    struct vec uri_vec, filename_vec;
-    const char *list;
-    struct file file = STRUCT_FILE_INITIALIZER;
-    int authorized = 1;
-
-    list = conn->ctx->config[PROTECT_URI];
-    while((list = next_option(list, &uri_vec, &filename_vec)) != NULL) {
-        if(!memcmp(conn->request_info.uri, uri_vec.ptr, uri_vec.len)) {
-            mg_snprintf(conn, fname, sizeof(fname), "%.*s",
-                                    (int) filename_vec.len, filename_vec.ptr);
-            if(!mg_fopen(conn, fname, "r", &file)) {
-                cry(conn, "%s: cannot open %s: %s", __func__, fname, strerror(errno));
-            }
-            break;
-        }
-    }
-
-    if(!is_file_opened(&file)) {
-        open_auth_file(conn, path, &file);
-    }
-
-    if(is_file_opened(&file)) {
-        authorized = authorize(conn, &file);
-        mg_fclose(&file);
-    }
-
-    return authorized;
+    int result = conn->ctx->callbacks.authorize_request(conn, username, password);
+    free(username);
+    free(password);
+    return result;
 }
 
 static void send_authorization_request(struct mg_connection *conn) {
     conn->status_code = 401;
     mg_printf(conn,
-                        "HTTP/1.1 401 Unauthorized\r\n"
-                        "Content-Length: 0\r\n"
-                        "WWW-Authenticate: Digest qop=\"auth\", "
-                        "realm=\"%s\", nonce=\"%lu\"\r\n\r\n",
-                        conn->ctx->config[AUTHENTICATION_DOMAIN],
-                        (unsigned long) time(NULL));
-}
-
-static int is_authorized_for_put(struct mg_connection *conn) {
-    struct file file = STRUCT_FILE_INITIALIZER;
-    const char *passfile = conn->ctx->config[PUT_DELETE_PASSWORDS_FILE];
-    int ret = 0;
-
-    if(passfile != NULL && mg_fopen(conn, passfile, "r", &file)) {
-        ret = authorize(conn, &file);
-        mg_fclose(&file);
-    }
-
-    return ret;
+              "HTTP/1.1 401 Unauthorized\r\n"
+              "Content-Length: 0\r\n"
+              "WWW-Authenticate: Basic realm=\"%s\"\r\n\r\n",
+              conn->ctx->config[AUTHENTICATION_DOMAIN]);
 }
 
 int mg_modify_passwords_file(const char *fname, const char *domain,
@@ -2363,28 +2233,28 @@ static void handle_propfind(struct mg_connection *conn, const char *path,
 }
 
 static void base64_encode(const unsigned char *src, int src_len, char *dst) {
-    static const char *b64 =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    int i, j, a, b, c;
+    BIO *cmd, *ctx;
+    ctx = BIO_new(BIO_s_mem());
+    cmd = BIO_new(BIO_f_base64());
+    ctx = BIO_push(cmd, ctx);
+    BIO_set_flags(ctx, BIO_FLAGS_BASE64_NO_NL); //Ignore newlines - write everything in one line
+    BIO_write(ctx, src, src_len);
+    BIO_flush(ctx);
+    BIO_get_mem_data(ctx, dst);
+    BIO_free_all(ctx);
+}
 
-    for(i = j = 0; i < src_len; i += 3) {
-        a = src[i];
-        b = i + 1 >= src_len ? 0 : src[i + 1];
-        c = i + 2 >= src_len ? 0 : src[i + 2];
+static void base64_decode(const unsigned char *src,  int src_len, char *dst) {
+    BIO *cmd, *ctx;
+    ctx = BIO_new_mem_buf((void *)src, src_len);
+    cmd = BIO_new(BIO_f_base64());
+    ctx = BIO_push(cmd, ctx);
+    BIO_set_flags(ctx, BIO_FLAGS_BASE64_NO_NL); //Ignore newlines - write everything in one line
+    
+    int len = 0;
+    while ((len = BIO_read(ctx, dst+len, 2*src_len - len)) > 0);
 
-        dst[j++] = b64[a >> 2];
-        dst[j++] = b64[((a & 3) << 4) | (b >> 4)];
-        if(i + 1 < src_len) {
-            dst[j++] = b64[(b & 15) << 2 | (c >> 6)];
-        }
-        if(i + 2 < src_len) {
-            dst[j++] = b64[c & 63];
-        }
-    }
-    while(j % 4 != 0) {
-        dst[j++] = '=';
-    }
-    dst[j++] = '\0';
+    BIO_free_all(ctx);
 }
 
 static void send_websocket_handshake(struct mg_connection *conn) {
@@ -2689,8 +2559,7 @@ static void handle_request(struct mg_connection *conn) {
     if(!conn->client.is_ssl && conn->client.ssl_redir &&
         (ssl_index = get_first_ssl_listener_index(conn->ctx)) > -1) {
         redirect_to_https_port(conn, ssl_index);
-    } else if(!is_put_or_delete_request(conn) &&
-                         !check_authorization(conn, path)) {
+    } else if(!authorize(conn, NULL)) {
         send_authorization_request(conn);
     } else if(conn->ctx->callbacks.begin_request != NULL &&
             conn->ctx->callbacks.begin_request(conn)) {
@@ -2701,9 +2570,6 @@ static void handle_request(struct mg_connection *conn) {
         send_options(conn);
     } else if(conn->ctx->config[DOCUMENT_ROOT] == NULL) {
         send_http_error(conn, 404, "Not Found", "Not Found");
-    } else if(is_put_or_delete_request(conn) &&
-               (is_authorized_for_put(conn) != 1)) {
-        send_authorization_request(conn);
     } else if(!strcmp(ri->request_method, "PUT")) {
         put_file(conn, path);
     } else if(!strcmp(ri->request_method, "MKCOL")) {
@@ -3048,16 +2914,6 @@ static void uninitialize_ssl(struct mg_context *ctx) {
         CRYPTO_set_locking_callback(NULL);
         CRYPTO_set_id_callback(NULL);
     }
-}
-
-static int set_gpass_option(struct mg_context *ctx) {
-    struct file file = STRUCT_FILE_INITIALIZER;
-    const char *path = ctx->config[GLOBAL_PASSWORDS_FILE];
-    if(path != NULL && !mg_stat(fc(ctx), path, &file)) {
-        cry(fc(ctx), "Cannot open %s: %s", path, strerror(errno));
-        return 0;
-    }
-    return 1;
 }
 
 static int set_acl_option(struct mg_context *ctx) {
@@ -3513,8 +3369,7 @@ struct mg_context *mg_start(const struct mg_callbacks *callbacks,
 
     // NOTE(lsm): order is important here. SSL certificates must
     // be initialized before listening ports. UID must be set last.
-    if(!set_gpass_option(ctx) ||
-       !set_ssl_option(ctx)   ||
+    if(!set_ssl_option(ctx)   ||
        !set_ports_option(ctx) ||
        !set_uid_option(ctx)   ||
        !set_acl_option(ctx)) {

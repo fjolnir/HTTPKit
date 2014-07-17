@@ -48,6 +48,7 @@ static NSString *HTTPSentinel = @" __HTTPSentinel__ ";
     @public
     NSMutableArray *_GETHandlers, *_POSTHandlers, *_PUTHandlers, *_DELETEHandlers;
     HTTPHandlerBlock _webSocketHandler;
+    HTTPAuthenticationBlock _authenticationHandler;
 }
 @end
 
@@ -161,13 +162,33 @@ static int  _handleWebsocketData(struct mg_connection * const aConnection, int c
     }
 }
 
+static int _requestRequiresAuthentication(struct mg_connection * const aConnection)
+{
+    @autoreleasepool {
+        const struct mg_request_info *requestInfo = mg_get_request_info((struct mg_connection *)aConnection);
+        HTTPServer *self = (__bridge id)requestInfo->user_data;
+        return self->_authenticationHandler != nil;
+    }
+}
+
+static int _handleAuthRequest(struct mg_connection * const aConnection, const char * const aUser, const char *aPassword)
+{
+    @autoreleasepool {
+        const struct mg_request_info *requestInfo = mg_get_request_info((struct mg_connection *)aConnection);
+        HTTPServer *self = (__bridge id)requestInfo->user_data;
+        HTTPAuthenticationBlock authBlock = self->_authenticationHandler;
+        return authBlock && authBlock([NSString stringWithUTF8String:aUser], [NSString stringWithUTF8String:aPassword]);
+    }
+}
 
 static struct mg_callbacks _MongooseCallbacks = {
     .begin_request     = &_requestDidBegin,
     .end_request       = &_requestDidEnd,
     .websocket_connect = &_websocketConnected,
     .websocket_ready   = &_websocketReady,
-    .websocket_data    = &_handleWebsocketData
+    .websocket_data    = &_handleWebsocketData,
+    .should_authorize_request = &_requestRequiresAuthentication,
+    .authorize_request = &_handleAuthRequest
 };
 
 @implementation HTTPServer
@@ -192,16 +213,24 @@ static struct mg_callbacks _MongooseCallbacks = {
     return self;
 }
 
-- (BOOL)listenOnPort:(NSUInteger)port onError:(HTTPErrorBlock)aErrorHandler
+- (BOOL)listenOnPort:(NSUInteger)aPort onError:(HTTPErrorBlock)aErrorHandler
+{
+    return [self listenOnPort:aPort authenticateWith:nil onError:aErrorHandler];
+}
+- (BOOL)listenOnPort:(NSUInteger)aPort
+    authenticateWith:(HTTPAuthenticationBlock)aAuthBlock
+             onError:(HTTPErrorBlock)aErrorHandler
 {
     char threadStr[5], portStr[8];
-    sprintf(portStr,   "%ld", (unsigned long)port);
+    sprintf(portStr,   "%ld", (unsigned long)aPort);
     sprintf(threadStr, "%d",  _numberOfThreads);
     
     NSMutableString *mimeTypes = [NSMutableString new];
     for(NSString *extension in _extraMIMETypes) {
         [mimeTypes appendFormat:@".%@=%@,", extension, _extraMIMETypes[extension]];
     }
+    
+    _authenticationHandler = [aAuthBlock copy];
     
     const char *opts[] = {
         "listening_ports",          portStr,

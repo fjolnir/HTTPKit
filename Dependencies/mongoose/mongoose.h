@@ -67,6 +67,13 @@ struct mg_callbacks {
 
   // Called when mongoose has finished processing request.
   void (*end_request)(const struct mg_connection *, int reply_status_code);
+    
+  // Determines whether a given connection needs to be authorized
+  int (*should_authorize_request)(struct mg_connection *);
+    
+  // Called when mongoose needs to authorize a connection
+  // should return the password the given username
+  int (*authorize_request)(struct mg_connection *, const char *username, const char *password);
 
   // Called when mongoose is about to log a message. If callback returns
   // non-zero, mongoose does not log anything.

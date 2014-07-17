@@ -3,6 +3,7 @@
 
 #define HTTP [HTTPServer defaultServer]
 
+typedef BOOL (^HTTPAuthenticationBlock)(NSString *username, NSString *password);
 typedef void (^HTTPErrorBlock)(id reason);
 typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 
@@ -15,6 +16,9 @@ typedef id (^HTTPHandlerBlock)(HTTPConnection *, ...);
 + (HTTPServer *)defaultServer;
 
 - (BOOL)listenOnPort:(NSUInteger)port onError:(HTTPErrorBlock)aErrorHandler;
+- (BOOL)listenOnPort:(NSUInteger)port
+    authenticateWith:(HTTPAuthenticationBlock)aAuthBlock
+             onError:(HTTPErrorBlock)aErrorHandler;
 
 - (void)handleGET:(id)aRoute    with:(id)aHandler;
 - (void)handlePOST:(id)aRoute   with:(id)aHandler;
