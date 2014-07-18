@@ -2163,6 +2163,30 @@ static void put_file(struct mg_connection *conn, const char *path) {
     }
 }
 
+static void delete_file(struct mg_connection *conn, const char *path) {
+    struct de de;
+    memset(&de.file, 0, sizeof(de.file));
+    if(!mg_stat(conn, path, &de.file)) {
+        send_http_error(conn, 404, "Not Found", "%s", "File not found");
+    } else {
+        if(de.file.modification_time) {
+            if(de.file.is_directory) {
+                remove_directory(conn, path);
+                send_http_error(conn, 204, "No Content", "%s", "");
+            } else if(remove(path) == 0) {
+                send_http_error(conn, 204, "No Content", "%s", "");
+            } else {
+                send_http_error(conn, 423, "Locked", "remove(%s): %s", path,
+                                strerror(errno));
+            }
+        }
+        else {
+            send_http_error(conn, 500, http_500_error, "remove(%s): %s", path,
+                            strerror(errno));
+        }
+    }
+}
+
 static void send_options(struct mg_connection *conn) {
     conn->status_code = 200;
 
@@ -2573,27 +2597,7 @@ static void handle_request(struct mg_connection *conn) {
     } else if(!strcmp(ri->request_method, "MKCOL")) {
         mkcol(conn, path);
     } else if(!strcmp(ri->request_method, "DELETE")) {
-        struct de de;
-        memset(&de.file, 0, sizeof(de.file));
-        if(!mg_stat(conn, path, &de.file)) {
-            send_http_error(conn, 404, "Not Found", "%s", "File not found");
-        } else {
-            if(de.file.modification_time) {
-                if(de.file.is_directory) {
-                    remove_directory(conn, path);
-                    send_http_error(conn, 204, "No Content", "%s", "");
-                } else if(remove(path) == 0) {
-                    send_http_error(conn, 204, "No Content", "%s", "");
-                } else {
-                    send_http_error(conn, 423, "Locked", "remove(%s): %s", path,
-                                    strerror(errno));
-                }
-            }
-            else {
-                send_http_error(conn, 500, http_500_error, "remove(%s): %s", path,
-                                strerror(errno));
-            }
-        }
+        delete_file(conn, path);
     } else if((file.membuf == NULL && file.modification_time == (time_t) 0) ||
                          must_hide_file(conn, path)) {
         send_http_error(conn, 404, "Not Found", "%s", "File not found");
