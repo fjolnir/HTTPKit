@@ -70,7 +70,7 @@ typedef int SOCKET;
 
 #include "mongoose.h"
 
-#define PASSWORDS_FILE_NAME ".htpasswd"
+
 #define MG_BUF_LEN 8192
 #define MAX_REQUEST_SIZE 16384
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
@@ -1542,10 +1542,8 @@ static int compare_dir_entries(const void *p1, const void *p2) {
 }
 
 static int must_hide_file(struct mg_connection *conn, const char *path) {
-    const char *pw_pattern = "**" PASSWORDS_FILE_NAME "$";
     const char *pattern = conn->ctx->config[HIDE_FILES];
-    return match_prefix(pw_pattern, strlen(pw_pattern), path) > 0 ||
-        (pattern != NULL && match_prefix(pattern, strlen(pattern), path) > 0);
+    return pattern != NULL && match_prefix(pattern, strlen(pattern), path) > 0;
 }
 
 static int scan_directory(struct mg_connection *conn, const char *dir,
