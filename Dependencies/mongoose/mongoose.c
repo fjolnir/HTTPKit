@@ -1263,33 +1263,6 @@ char *mg_md5(char buf[33], ...) {
     return buf;
 }
 
-// Check the user's password, return 1 if OK
-static int check_password(const char *method, const char *ha1, const char *uri,
-                          const char *nonce, const char *nc, const char *cnonce,
-                          const char *qop, const char *response) {
-    char ha2[32 + 1], expected_response[32 + 1];
-
-    // Some of the parameters may be NULL
-    if(method == NULL || nonce == NULL || nc == NULL || cnonce == NULL ||
-            qop == NULL || response == NULL) {
-        return 0;
-    }
-
-    // NOTE(lsm): due to a bug in MSIE, we do not compare the URI
-    // TODO(lsm): check for authentication timeout
-    if(// strcmp(dig->uri, c->ouri) != 0 ||
-            strlen(response) != 32
-            // || now - strtoul(dig->nonce, NULL, 10) > 3600
-            ) {
-        return 0;
-    }
-
-    mg_md5(ha2, method, ":", uri, NULL);
-    mg_md5(expected_response, ha1, ":", nonce, ":", nc,
-            ":", cnonce, ":", qop, ":", ha2, NULL);
-
-    return strcasecmp(response, expected_response) == 0;
-}
 
 // Return 1 on success.
 static int parse_auth_header(struct mg_connection *conn, char **outUsername, char **outPassword) {
@@ -1364,69 +1337,6 @@ static void send_authorization_request(struct mg_connection *conn) {
               "Content-Length: 0\r\n"
               "WWW-Authenticate: Basic realm=\"%s\"\r\n\r\n",
               conn->ctx->config[AUTHENTICATION_DOMAIN]);
-}
-
-int mg_modify_passwords_file(const char *fname, const char *domain,
-                             const char *user, const char *pass) {
-    int found;
-    char line[512], u[512], d[512], ha1[33], tmp[PATH_MAX];
-    FILE *fp, *fp2;
-
-    found = 0;
-    fp = fp2 = NULL;
-
-    // Regard empty password as no password - remove user record.
-    if(pass != NULL && pass[0] == '\0') {
-        pass = NULL;
-    }
-
-    (void) snprintf(tmp, sizeof(tmp), "%s.tmp", fname);
-
-    // Create the file if does not exist
-    if((fp = fopen(fname, "a+")) != NULL) {
-        (void) fclose(fp);
-    }
-
-    // Open the given file and temporary file
-    if((fp = fopen(fname, "r")) == NULL) {
-        return 0;
-    } else if((fp2 = fopen(tmp, "w+")) == NULL) {
-        fclose(fp);
-        return 0;
-    }
-
-    // Copy the stuff to temporary file
-    while(fgets(line, sizeof(line), fp) != NULL) {
-        if(sscanf(line, "%[^:]:%[^:]:%*s", u, d) != 2) {
-            continue;
-        }
-
-        if(!strcmp(u, user) && !strcmp(d, domain)) {
-            found++;
-            if(pass != NULL) {
-                mg_md5(ha1, user, ":", domain, ":", pass, NULL);
-                fprintf(fp2, "%s:%s:%s\n", user, domain, ha1);
-            }
-        } else {
-            fprintf(fp2, "%s", line);
-        }
-    }
-
-    // If new user, just add it
-    if(!found && pass != NULL) {
-        mg_md5(ha1, user, ":", domain, ":", pass, NULL);
-        fprintf(fp2, "%s:%s:%s\n", user, domain, ha1);
-    }
-
-    // Close files
-    fclose(fp);
-    fclose(fp2);
-
-    // Put the temp file in place of real file
-    remove(fname);
-    rename(tmp, fname);
-
-    return 1;
 }
 
 static SOCKET conn2(const char *host, int port, int use_ssl,
