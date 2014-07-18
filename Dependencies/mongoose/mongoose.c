@@ -2525,12 +2525,6 @@ static uint32_t get_remote_ip(const struct mg_connection *conn) {
     return ntohl(* (uint32_t *) &conn->client.rsa.sin.sin_addr);
 }
 
-static int is_put_or_delete_request(const struct mg_connection *conn) {
-    const char *s = conn->request_info.request_method;
-    return s != NULL && (!strcmp(s, "PUT")    ||
-                         !strcmp(s, "DELETE") ||
-                         !strcmp(s, "MKCOL"));
-}
 
 static int get_first_ssl_listener_index(const struct mg_context *ctx) {
     int i, index = -1;
