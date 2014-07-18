@@ -606,9 +606,11 @@ static void send_http_error(struct mg_connection *conn, int status,
             len = mg_snprintf(conn, buf, sizeof(buf), "Error %d: %s", status, reason);
             buf[len++] = '\n';
 
-            va_start(ap, fmt);
-            len += mg_vsnprintf(conn, buf + len, sizeof(buf) - len, fmt, ap);
-            va_end(ap);
+            if(fmt) {
+                va_start(ap, fmt);
+                len += mg_vsnprintf(conn, buf + len, sizeof(buf) - len, fmt, ap);
+                va_end(ap);
+            }
         }
         DEBUG_TRACE(("[%s]", buf));
 
@@ -1665,6 +1667,28 @@ static int parse_range_header(const char *header, int64_t *a, int64_t *b) {
     return sscanf(header, "bytes=%" INT64_FMT "-%" INT64_FMT, a, b);
 }
 
+static int parse_destination_header(struct mg_connection *conn, const char *header,
+                                    char *buf, int buf_len, struct file *file)
+{
+    const char *host = mg_get_header(conn, "Host");
+    // We only support URLs pointing to us
+    if(strlen(header) < 7 || strncmp(host, header + 7, strlen(host)) != 0) {
+        return -1;
+    }
+    
+    char destination_uri[1024];
+    struct file destination_file = STRUCT_FILE_INITIALIZER;
+    mg_url_decode(header + 7 + strlen(host),
+                  strlen(header) - 7 - strlen(host),
+                  destination_uri, sizeof(destination_uri), 0);
+    remove_double_dots_and_double_slashes(destination_uri);
+    convert_uri_to_file_name(conn, destination_uri,
+                             buf, buf_len,
+                             &destination_file);
+    *file = destination_file;
+    return 0;
+}
+
 static void gmt_time_string(char *buf, size_t buf_len, time_t *t) {
     strftime(buf, buf_len, "%a, %d %b %Y %H:%M:%S GMT", gmtime(t));
 }
@@ -1788,8 +1812,9 @@ static int is_valid_http_method(const char *method) {
     return !strcmp(method, "GET") || !strcmp(method, "POST") ||
         !strcmp(method, "HEAD") || !strcmp(method, "CONNECT") ||
         !strcmp(method, "PUT") || !strcmp(method, "DELETE") ||
-        !strcmp(method, "OPTIONS") || !strcmp(method, "PROPFIND")
-        || !strcmp(method, "MKCOL")
+        !strcmp(method, "OPTIONS") || !strcmp(method, "PROPFIND") ||
+        !strcmp(method, "MKCOL") || !strcmp(method, "MOVE") ||
+        !strcmp(method, "COPY")
                     ;
 }
 
@@ -2097,11 +2122,58 @@ static void delete_file(struct mg_connection *conn, const char *path) {
     }
 }
 
+static int copy_file(struct mg_connection *conn, const char *src_path, const char *dst_path, int allow_overwrite) {
+    struct file src_file = STRUCT_FILE_INITIALIZER;
+    struct file dst_file = STRUCT_FILE_INITIALIZER;
+    
+    if(!mg_stat(conn, src_path, &src_file)) {
+        send_http_error(conn, 404, "Not Found", "%s", "File not found");
+        return -1;
+    } else if(src_file.is_directory) {
+        send_http_error(conn, 500, http_500_error,
+                        "copying directories is not supported");
+        return -1;
+    } else if(mg_stat(conn, dst_path, &dst_file)) {
+        if(!allow_overwrite) {
+            send_http_error(conn, 412, "Precondition Failed", NULL);
+            return -1;
+        } else if(dst_file.is_directory) {
+            remove_directory(conn, dst_path);
+        } else if(remove(dst_path) != 0) {
+            send_http_error(conn, 423, "Locked", "remove(%s): %s", dst_path,
+                            strerror(errno));
+            return -1;
+        }
+    }
+    
+    if(!mg_fopen(conn, src_path, "rb", &src_file) || src_file.fp == NULL) {
+        send_http_error(conn, 500, http_500_error,
+                        "fopen(%s): %s", src_path, strerror(errno));
+        return -1;
+    } else if(!mg_fopen(conn, dst_path, "wb+", &dst_file) || dst_file.fp == NULL) {
+        mg_fclose(&src_file);
+        send_http_error(conn, 500, http_500_error,
+                        "fopen(%s): %s", dst_path, strerror(errno));
+        return -1;
+    }
+    
+    char buf[1024];
+    int len;
+    while((len = pull(src_file.fp, conn, buf, sizeof(buf))) > 0) {
+        push(dst_file.fp, 0, NULL, buf, len);
+    }
+    mg_fclose(&src_file);
+    mg_fclose(&dst_file);
+    return 0;
+}
+
+
+
 static void send_options(struct mg_connection *conn) {
     conn->status_code = 200;
 
     mg_printf(conn, "%s", "HTTP/1.1 200 OK\r\n"
-                    "Allow: GET, POST, HEAD, CONNECT, PUT, DELETE, OPTIONS, PROPFIND, MKCOL\r\n"
+                    "Allow: GET, POST, HEAD, CONNECT, PUT, DELETE, COPY, MOVE, OPTIONS, PROPFIND, MKCOL\r\n"
                     "DAV: 1\r\n\r\n");
 }
 
@@ -2502,6 +2574,19 @@ static void handle_request(struct mg_connection *conn) {
         mkcol(conn, path);
     } else if(!strcmp(ri->request_method, "DELETE")) {
         delete_file(conn, path);
+    } else if(!strcmp(ri->request_method, "COPY") || !strcmp(ri->request_method, "MOVE")) {
+        char destination_path[PATH_MAX];
+        struct file destination_file = STRUCT_FILE_INITIALIZER;
+        if(!parse_destination_header(conn, mg_get_header(conn, "Destination"),
+                                    destination_path, sizeof(destination_path), &destination_file)) {
+            int overwriting_forbidden = mg_get_header(conn, "Overwrite")
+                                     && !strcmp("F", mg_get_header(conn, "Overwrite"));
+            
+            int copy_result = copy_file(conn, path, destination_path, !overwriting_forbidden);
+            if(!copy_result && !strcmp(ri->request_method, "MOVE"))
+                delete_file(conn, path);
+        } else
+            send_http_error(conn, 500, http_500_error, "");
     } else if((file.membuf == NULL && file.modification_time == (time_t) 0) ||
                          must_hide_file(conn, path)) {
         send_http_error(conn, 404, "Not Found", "%s", "File not found");
