@@ -998,10 +998,10 @@ int mg_get_cookie(const char *cookie_header, const char *var_name,
     return len;
 }
 
-static void convert_uri_to_file_name(struct mg_connection *conn, char *buf,
+static void convert_uri_to_file_name(struct mg_connection *conn, const char *uri, char *buf,
                                      size_t buf_len, struct file *filep) {
     struct vec a, b;
-    const char *rewrite, *uri = conn->request_info.uri,
+    const char *rewrite,
                 *root = conn->ctx->config[DOCUMENT_ROOT];
     int match_len;
     char gz_path[PATH_MAX];
@@ -2547,7 +2547,7 @@ static void handle_request(struct mg_connection *conn) {
     uri_len = (int) strlen(ri->uri);
     mg_url_decode(ri->uri, uri_len, (char *) ri->uri, uri_len + 1, 0);
     remove_double_dots_and_double_slashes((char *) ri->uri);
-    convert_uri_to_file_name(conn, path, sizeof(path), &file);
+    convert_uri_to_file_name(conn, ri->uri, path, sizeof(path), &file);
     conn->throttle = set_throttle(conn->ctx->config[THROTTLE],
                                   get_remote_ip(conn), ri->uri);
 
