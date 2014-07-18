@@ -2241,7 +2241,7 @@ static void base64_encode(const unsigned char *src, int src_len, char *dst) {
     ctx = BIO_new(BIO_s_mem());
     cmd = BIO_new(BIO_f_base64());
     ctx = BIO_push(cmd, ctx);
-    BIO_set_flags(ctx, BIO_FLAGS_BASE64_NO_NL); //Ignore newlines - write everything in one line
+    BIO_set_flags(ctx, BIO_FLAGS_BASE64_NO_NL);
     BIO_write(ctx, src, src_len);
     BIO_flush(ctx);
     BIO_get_mem_data(ctx, dst);
@@ -2253,7 +2253,7 @@ static void base64_decode(const unsigned char *src,  int src_len, char *dst) {
     ctx = BIO_new_mem_buf((void *)src, src_len);
     cmd = BIO_new(BIO_f_base64());
     ctx = BIO_push(cmd, ctx);
-    BIO_set_flags(ctx, BIO_FLAGS_BASE64_NO_NL); //Ignore newlines - write everything in one line
+    BIO_set_flags(ctx, BIO_FLAGS_BASE64_NO_NL);
     
     int len = 0;
     while ((len = BIO_read(ctx, dst+len, 2*src_len - len)) > 0);
