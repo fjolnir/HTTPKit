@@ -4181,7 +4181,7 @@ parse_char_class(Node** np, OnigToken* tok, UChar** src, UChar* end,
   CClassNode work_cc;
 
   enum CCSTATE state;
-  enum CCVALTYPE val_type, in_type;
+  enum CCVALTYPE val_type = 0, in_type = 0;
   int val_israw, in_israw;
 
   prev_cc = (CClassNode* )NULL;

@@ -2296,7 +2296,7 @@ static void read_websocket(struct mg_connection *conn) {
     // Loop continuously, reading messages from the socket, invoking the callback,
     // and waiting repeatedly until an error occurs.
     while(!stop) {
-        header_len = 0;
+        header_len = data_len = mask_len = 0;
         // body_len is the length of the entire queue in bytes
         // len is the length of the current message
         // data_len is the length of the current message's data payload
