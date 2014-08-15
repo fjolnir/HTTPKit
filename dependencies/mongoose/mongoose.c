@@ -79,7 +79,7 @@ typedef int SOCKET;
     #undef DEBUG_TRACE
     #define DEBUG_TRACE(x)
 #else
-    #ifdef DEBUG
+    #ifdef MONGOOSE_DEBUG
         #define DEBUG_TRACE(x) do { \
             flockfile(stdout); \
             printf("*** %lu.%p.%s.%d: ", \
