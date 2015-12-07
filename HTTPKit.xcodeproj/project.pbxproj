@@ -555,18 +555,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					dependencies,
-					include,
-					"dependencies/iphone-openssl/include",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/dependencies/iphone-openssl/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SDKROOT)/usr/lib/system\"";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -592,18 +582,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					dependencies,
-					include,
-					"dependencies/iphone-openssl/include",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/dependencies/iphone-openssl/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SDKROOT)/usr/lib/system\"";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -640,6 +620,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					dependencies,
 					include,
+					"dependencies/iphone-openssl/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
@@ -669,6 +650,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					dependencies,
 					include,
+					"dependencies/iphone-openssl/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
@@ -690,10 +672,6 @@
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				INFOPLIST_FILE = "HTTPKit-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SDKROOT)/usr/lib/system\"",
-				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-lcrypto",
@@ -720,10 +698,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_WEBSOCKET;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				INFOPLIST_FILE = "HTTPKit-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SDKROOT)/usr/lib/system\"",
-				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-lcrypto",
@@ -748,10 +722,6 @@
 					USE_WEBSOCKET,
 					NO_CGI,
 				);
-				HEADER_SEARCH_PATHS = (
-					dependencies,
-					include,
-				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = (
@@ -768,10 +738,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					USE_WEBSOCKET,
 					NO_CGI,
-				);
-				HEADER_SEARCH_PATHS = (
-					dependencies,
-					include,
 				);
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
