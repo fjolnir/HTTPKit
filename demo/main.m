@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <HTTPKit/HTTPServer.h>
+#import <HTTPKit/HTTPConnection.h>
 #import <dispatch/dispatch.h>
 #include <unistd.h>
 
