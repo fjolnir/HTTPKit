@@ -2,6 +2,12 @@
 
 HTTPKit is a lightweight framework for building webservers in Objective-C or [Tranquil](http://github.com/fjolnir/tranquil).
 
+## Build steps
+* `git clone --recursive https://github.com/fjolnir/HTTPKit.git`
+* Edit the SDKVERSION in dependencies/iphone-openssl/build-libssl.sh to match your current Xcode's SDK version.
+* execute `build-libssl.sh`
+* Open Xcode project and hit build.
+
 ## Basic usage
 
     #import <HTTPKit.h>
